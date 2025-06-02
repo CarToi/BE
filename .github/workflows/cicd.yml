@@ -10,7 +10,9 @@ jobs:
     steps:
     # - uses: actions/checkout@v4
     - name: Test step
-      run : echo "깃헙액션 테스트, 오늘은 $(date)"
+      run : |
+          echo "깃헙액션 테스트, 현재 시간은:"
+          TZ=Asia/Seoul date
       # uses: actions/setup-java@v4
       # with:
       #   java-version: '17'
