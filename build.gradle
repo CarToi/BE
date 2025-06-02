@@ -21,6 +21,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // selenium
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+    implementation("org.seleniumhq.selenium:selenium-java:4.33.0")
+    // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
+    implementation("io.github.bonigarcia:webdrivermanager:6.1.0")
+    // https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-corenlp
+    implementation("edu.stanford.nlp:stanford-corenlp:4.5.9")
 }
 
 tasks.named('test') {
