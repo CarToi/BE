@@ -1,62 +1,33 @@
 package org.jun.saemangeum.peristalsis;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 public class SeleniumTest {
 
-    WebDriver driver;
-    String SDIA_LINK = "https://www.saemangeum.go.kr/sda/content.do?key=2010083672101";
-
-    @BeforeEach
-    void setup() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new"); // GUI 없으니 헤드리스 설정
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage"); // 공유 메모리 공간 작으니
-
-        driver = new ChromeDriver(options);
-    }
-
-    @Test
-    @DisplayName("공식 문서 기반 간단한 동작 테스트")
-    void test1() {
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
-
-        String title = driver.getTitle();
-        assertEquals("Web form", title);
-
-        WebElement textBox = driver.findElement(By.name("my-text"));
-        WebElement submitButton = driver.findElement(By.cssSelector("button"));
-
-        textBox.sendKeys("Selenium");
-        submitButton.click();
-
-        WebElement message = driver.findElement(By.id("message"));
-        String value = message.getText();
-        assertEquals("Received!", value);
-    }
+    @Autowired
+    private WebDriver webDriver;
 
     @Test
     @DisplayName("새만금 개발청 링크 활용한 테스트")
-    void test2() {
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-        driver.get(SDIA_LINK);
+    void test() {
+        // 시간 초과되면 NoSuchElementException throw
+        webDriver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        webDriver.get("https://www.saemangeum.go.kr/sda/content.do?key=2010083672101");
 
-        List<WebElement> items = driver.findElements(By.cssSelector("li.flo_right, li.flo_left"));
+        List<WebElement> items = webDriver.findElements(By.cssSelector("li.flo_left, li.flo_right"));
         assertEquals(items.size(), 10);
 
         for (WebElement item : items) {
@@ -64,13 +35,9 @@ public class SeleniumTest {
             List<WebElement> dts = item.findElements(By.cssSelector("dt"));
             List<WebElement> dds = item.findElements(By.cssSelector("dd"));
 
-            StringBuilder info = new StringBuilder();
-
-            for (int i = 0; i < dts.size(); i++) {
-                String label = dts.get(i).getText();
-                String value = dds.get(i).getText();
-                info.append(label).append(": ").append(value).append("\n");
-            }
+            Assertions.assertNotNull(title);
+            Assertions.assertEquals(dts.size(), 3);
+            Assertions.assertEquals(dds.size(), 3);
 
             String imageUrl = item.findElement(
                     By.cssSelector(".thumb img.disp_pc")).getDomProperty("src");
@@ -81,20 +48,13 @@ public class SeleniumTest {
                 homepage = homeLinks.getFirst().getDomProperty("href");
             }
 
-            System.out.println("==================================");
-            System.out.println("제목: " + title);
-            System.out.println("이미지: " + imageUrl);
-            System.out.println(info);
-
-            assert homepage != null;
-            if (!homepage.isEmpty()) {
-                System.out.println("홈페이지: " + homepage);
-            }
+            Assertions.assertNotNull(imageUrl);
+            Assertions.assertNotNull(homepage);
         }
     }
 
     @AfterEach
     void teardown() {
-        driver.quit();
+        webDriver.quit();
     }
 }
