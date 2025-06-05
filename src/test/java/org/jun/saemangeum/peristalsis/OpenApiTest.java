@@ -24,10 +24,18 @@ public class OpenApiTest {
                         .queryParam("perPage", 10)
                         .build())
                 .retrieve()
+//                .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
+//                        clientResponse.bodyToMono(ErrorResponse.class).flatMap(body ->
+//                                Mono.error(new IllegalArgumentException(body.msg())))
+//                )
+//                .onStatus(HttpStatusCode::is5xxServerError,  clientResponse ->
+//                        clientResponse.bodyToMono(ErrorResponse.class).flatMap(body ->
+//                                Mono.error(new IllegalArgumentException(body.msg())))
+//                )
                 .bodyToMono(FestivalResponse.class)
                 .block();
 
-        assert response != null;
+        Assertions.assertNotNull(response);
         Assertions.assertEquals(8, response.data().size());
     }
 }
