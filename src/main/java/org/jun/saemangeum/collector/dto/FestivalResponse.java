@@ -1,4 +1,4 @@
-package org.jun.saemangeum.dto;
+package org.jun.saemangeum.collector.dto;
 
 import java.util.List;
 

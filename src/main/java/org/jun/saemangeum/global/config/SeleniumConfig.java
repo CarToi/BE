@@ -1,4 +1,4 @@
-package org.jun.saemangeum.config;
+package org.jun.saemangeum.global.config;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
