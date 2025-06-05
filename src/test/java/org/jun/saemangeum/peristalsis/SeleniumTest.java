@@ -1,4 +1,4 @@
-package org.jun.saemangeum;
+package org.jun.saemangeum.peristalsis;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
