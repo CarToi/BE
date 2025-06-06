@@ -8,7 +8,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public abstract class SeleniumCollector implements Collector {
-    private final WebDriver webDriver;
+    protected final WebDriver webDriver;
 
     @Override
     public List<RefinedDataDTO> collectData() {

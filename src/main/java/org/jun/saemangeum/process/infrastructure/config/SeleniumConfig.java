@@ -6,6 +6,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.Duration;
+
 @Configuration
 public class SeleniumConfig {
     @Bean
@@ -15,6 +17,9 @@ public class SeleniumConfig {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage"); // 공유 메모리 공간 작으니
 
-        return new ChromeDriver(options);
+        WebDriver webDriver = new ChromeDriver(options);
+        // 시간 초과되면 NoSuchElementException throw
+        webDriver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        return webDriver;
     }
 }

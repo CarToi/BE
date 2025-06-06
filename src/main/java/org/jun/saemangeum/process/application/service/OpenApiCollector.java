@@ -8,7 +8,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public abstract class OpenApiCollector implements Collector {
-    private final WebClient webClient;
+    protected final WebClient webClient;
 
     @Override
     public List<RefinedDataDTO> collectData() {
