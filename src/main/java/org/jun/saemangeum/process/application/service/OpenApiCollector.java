@@ -1,14 +1,16 @@
 package org.jun.saemangeum.process.application.service;
 
-import lombok.RequiredArgsConstructor;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 public abstract class OpenApiCollector implements Collector {
     protected final WebClient webClient;
+
+    public OpenApiCollector(WebClient webClient) {
+        this.webClient = webClient;
+    }
 
     @Override
     public List<RefinedDataDTO> collectData() {

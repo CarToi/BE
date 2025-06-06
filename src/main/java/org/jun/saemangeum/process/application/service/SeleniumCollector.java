@@ -1,14 +1,16 @@
 package org.jun.saemangeum.process.application.service;
 
-import lombok.RequiredArgsConstructor;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 public abstract class SeleniumCollector implements Collector {
     protected final WebDriver webDriver;
+
+    public SeleniumCollector(WebDriver webDriver) {
+        this.webDriver = webDriver;
+    }
 
     @Override
     public List<RefinedDataDTO> collectData() {
