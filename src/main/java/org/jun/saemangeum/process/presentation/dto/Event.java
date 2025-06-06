@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class Festival {
+public class Event {
     @JsonProperty("축제명")
     private String name;
 
