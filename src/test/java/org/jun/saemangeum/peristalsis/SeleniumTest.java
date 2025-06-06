@@ -23,8 +23,6 @@ public class SeleniumTest {
     @Test
     @DisplayName("새만금 개발청 링크 활용한 테스트")
     void test() {
-        // 시간 초과되면 NoSuchElementException throw
-        webDriver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
         webDriver.get("https://www.saemangeum.go.kr/sda/content.do?key=2010083672101");
 
         List<WebElement> items = webDriver.findElements(By.cssSelector("li.flo_left, li.flo_right"));
