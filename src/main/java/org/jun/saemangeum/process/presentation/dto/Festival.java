@@ -1,4 +1,4 @@
-package org.jun.saemangeum.process.dto;
+package org.jun.saemangeum.process.presentation.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,4 +1,4 @@
-package org.jun.saemangeum.global.config;
+package org.jun.saemangeum.process.infrastructure.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

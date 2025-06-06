@@ -1,6 +1,6 @@
 package org.jun.saemangeum.peristalsis;
 
-import org.jun.saemangeum.process.dto.FestivalResponse;
+import org.jun.saemangeum.process.presentation.dto.FestivalResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
