@@ -1,4 +1,4 @@
-package org.jun.saemangeum.process.application.service;
+package org.jun.saemangeum.process.application.service.base;
 
 import org.jun.saemangeum.global.persistence.domain.Content;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
@@ -26,5 +26,5 @@ public abstract class OpenApiCollector implements Refiner {
     }
 
     // 각 OpenAPI 호출과 관련된 추상메소드들
-    abstract List<RefinedDataDTO> collectData();
+    public abstract List<RefinedDataDTO> collectData();
 }
