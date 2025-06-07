@@ -1,5 +1,6 @@
-package org.jun.saemangeum.service.api;
+package org.jun.saemangeum.service;
 
+import org.jun.saemangeum.process.application.service.api.EventCollector;
 import org.jun.saemangeum.process.application.service.api.FestivalCollector;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.junit.jupiter.api.Assertions;
@@ -11,18 +12,29 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-public class FestivalCollectorTest {
+public class OpenApiCollectorTest {
 
     @Autowired
     private FestivalCollector festivalCollector;
 
+    @Autowired
+    private EventCollector eventCollector;
+
     @Test
     @DisplayName("공공데이터 축제 정보 정제 테스트")
-    void test() {
+    void testFestivalCollector() {
         List<RefinedDataDTO> data = festivalCollector.collectData();
-
         System.out.println(data);
 
         Assertions.assertEquals(40, data.size());
+    }
+
+    @Test
+    @DisplayName("공공데이터 공연행사 정보 정제 테스트")
+    void testEventCollector() {
+        List<RefinedDataDTO> data = eventCollector.collectData();
+        System.out.println(data);
+
+        Assertions.assertEquals(51, data.size());
     }
 }
