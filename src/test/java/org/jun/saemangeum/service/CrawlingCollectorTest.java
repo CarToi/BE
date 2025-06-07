@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-public class SeawallTourCollectorTest {
+public class CrawlingCollectorTest {
 
     @Autowired
     private SeawallTourCollector seawallTourCollector;
