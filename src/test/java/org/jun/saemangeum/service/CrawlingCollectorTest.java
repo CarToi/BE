@@ -1,6 +1,6 @@
 package org.jun.saemangeum.service;
 
-import org.jun.saemangeum.process.application.service.crawl.GunsanTourCollector;
+import org.jun.saemangeum.process.application.service.crawl.CityTourCollector;
 import org.jun.saemangeum.process.application.service.crawl.SeawallTourCollector;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +18,7 @@ public class CrawlingCollectorTest {
     private SeawallTourCollector seawallTourCollector;
 
     @Autowired
-    private GunsanTourCollector gunsanTourCollector;
+    private CityTourCollector cityTourCollector;
 
     @Test
     @DisplayName("새만금 개발청 방조제 정보 크롤링 테스트")
@@ -28,9 +28,9 @@ public class CrawlingCollectorTest {
     }
 
     @Test
-    @DisplayName("새만금 개발청 군산 관광지 크롤링 테스트")
-    void testGunsanTourCollector() {
-        List<RefinedDataDTO> data = gunsanTourCollector.collectData();
-        Assertions.assertEquals(data.size(), 8);
+    @DisplayName("새만금 개발청 도시 관광지 크롤링 테스트")
+    void testCityTourCollector() {
+        List<RefinedDataDTO> data = cityTourCollector.collectData();
+        Assertions.assertEquals(data.size(), 41);
     }
 }
