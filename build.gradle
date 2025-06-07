@@ -38,6 +38,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
     implementation("org.seleniumhq.selenium:selenium-java:4.33.0")
 
+    // JSoup
+    implementation 'org.jsoup:jsoup:1.20.1'
+
     // AI
 //    implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
 //    implementation 'org.springframework.ai:spring-ai-starter-model-openai'
