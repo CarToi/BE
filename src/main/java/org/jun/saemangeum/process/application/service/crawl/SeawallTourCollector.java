@@ -31,10 +31,8 @@ public class SeawallTourCollector extends CrawlingCollector {
             Elements panels = doc.select(".tabpanel");
 
             for (int i = 0; i < tabs.size(); i++) {
-                String name = tabs.get(i).text().trim();
-                if ("쉼터(포토존)".equals(name)) continue;
-
-                String address = "전북특별자치도 " + name;
+                String title = tabs.get(i).text().trim();
+                if ("쉼터(포토존)".equals(title)) continue;
 
                 Element panel = panels.get(i);
 
@@ -48,7 +46,7 @@ public class SeawallTourCollector extends CrawlingCollector {
                 }
 
                 String rawHtml = panel.html();
-                String description = rawHtml
+                String introduction = rawHtml
                         .replaceAll("(?s)<img[^>]*>", "")
                         .replaceAll("(?i)<br\\s*/?>", "\n")
                         .replaceAll("<[^>]+>", "")
@@ -56,16 +54,17 @@ public class SeawallTourCollector extends CrawlingCollector {
                         .replace("&#39;", "'")
                         .trim();
 
-                System.out.println("이름: " + name);
-                System.out.println("주소: " + address);
-                System.out.println("이미지: " + imgSrc);
-                System.out.println("설명: " + description);
-                System.out.println("--------------------------------------------------");
+//                System.out.println("이름: " + name);
+//                System.out.println("주소: " + address);
+//                System.out.println("이미지: " + imgSrc);
+//                System.out.println("설명: " + description);
+//                System.out.println("--------------------------------------------------");
 
-                data.add(new RefinedDataDTO(name, address, Category.TOUR, imgSrc, description));
+                data.add(new RefinedDataDTO(title, "전북특별자치도 " + title, Category.TOUR, imgSrc, introduction));
             }
 
         } catch (IOException e) {
+            // 어떤 폴백 전략을 세울 수 있을까?
             log.error(e.getMessage());
         }
 
