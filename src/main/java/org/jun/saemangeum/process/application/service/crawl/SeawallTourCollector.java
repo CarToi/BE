@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class SeawallCollector extends SeleniumCollector {
+public class SeawallTourCollector extends SeleniumCollector {
 
     private static final String PATH = "https://www.saemangeum.go.kr/sda/content.do?key=2010083671336";
 
-    public SeawallCollector(WebDriver webDriver) {
+    public SeawallTourCollector(WebDriver webDriver) {
         super(webDriver);
     }
 
