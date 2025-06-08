@@ -45,7 +45,7 @@ public class GunsanFestivalCollector extends CrawlingCollector {
                 String introduction = introductionEl.text().trim();
 
                 data.add(new RefinedDataDTO(
-                        title, position, Category.FESTIVAL, imgSrc, introduction.toString()));
+                        title, position, Category.FESTIVAL, imgSrc, introduction));
             } catch (IOException e) {
                 log.error(e.getMessage());
             }

@@ -1,7 +1,7 @@
 package org.jun.saemangeum.service;
 
-import org.jun.saemangeum.process.application.service.api.EventCollector;
-import org.jun.saemangeum.process.application.service.api.FestivalCollector;
+import org.jun.saemangeum.process.application.service.api.SmgEventCollector;
+import org.jun.saemangeum.process.application.service.api.SmgFestivalCollector;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,15 +15,15 @@ import java.util.List;
 public class OpenApiCollectorTest {
 
     @Autowired
-    private FestivalCollector festivalCollector;
+    private SmgFestivalCollector smgFestivalCollector;
 
     @Autowired
-    private EventCollector eventCollector;
+    private SmgEventCollector smgEventCollector;
 
     @Test
     @DisplayName("공공데이터 축제 정보 정제 테스트")
     void testFestivalCollector() {
-        List<RefinedDataDTO> data = festivalCollector.collectData();
+        List<RefinedDataDTO> data = smgFestivalCollector.collectData();
         System.out.println(data);
 
         Assertions.assertEquals(40, data.size());
@@ -32,7 +32,7 @@ public class OpenApiCollectorTest {
     @Test
     @DisplayName("공공데이터 공연행사 정보 정제 테스트")
     void testEventCollector() {
-        List<RefinedDataDTO> data = eventCollector.collectData();
+        List<RefinedDataDTO> data = smgEventCollector.collectData();
         System.out.println(data);
 
         Assertions.assertEquals(51, data.size());

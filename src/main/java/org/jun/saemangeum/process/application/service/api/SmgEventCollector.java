@@ -13,11 +13,11 @@ import java.util.List;
  * 공공데이터 API 행사 CSV 받아오기
  */
 @Service
-public class EventCollector extends OpenApiCollector {
+public class SmgEventCollector extends OpenApiCollector {
 
     private static final String LAST_PATH = "/15006173/v1/uddi:f353f7f5-589e-4354-9b3e-ef6923273b55";
 
-    public EventCollector(RestTemplateClient restTemplateClient) {
+    public SmgEventCollector(RestTemplateClient restTemplateClient) {
         super(restTemplateClient);
     }
 
