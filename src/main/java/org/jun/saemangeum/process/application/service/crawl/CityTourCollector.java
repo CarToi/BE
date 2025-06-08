@@ -71,12 +71,6 @@ public class CityTourCollector extends CrawlingCollector {
                         }
                     }
                     if (position == null) position = "전라북도 " + entry.getKey() + " " + title;
-
-                    System.out.println("지명: " + title);
-                    System.out.println("주소: " + position);
-                    System.out.println("이미지: " + imgSrc);
-                    System.out.println("설명: " + introduction);
-                    System.out.println();
                     
                     data.add(new RefinedDataDTO(
                             title,
@@ -87,6 +81,7 @@ public class CityTourCollector extends CrawlingCollector {
                 }
             } catch (IOException e) {
                 log.error(e.getMessage());
+                return data;
             }
         }
 

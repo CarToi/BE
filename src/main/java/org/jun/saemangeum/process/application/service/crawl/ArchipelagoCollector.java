@@ -35,20 +35,13 @@ public class ArchipelagoCollector extends CrawlingCollector {
                 String position = item.select(".txt_box p.loc").text();
                 String imgSrc = item.select(".img_box img").attr("src");
 
-                if (!imgSrc.startsWith("http")) {
-                    imgSrc = URL + imgSrc;
-                }
-
-                System.out.println("title: " + title);
-                System.out.println("introduction: " + introduction);
-                System.out.println("position: " + position);
-                System.out.println("img: " + imgSrc);
-                System.out.println("--------------------");
+                if (!imgSrc.startsWith("http")) imgSrc = URL + imgSrc;
 
                 data.add(new RefinedDataDTO(title, position, Category.TOUR, imgSrc, introduction));
             }
         } catch (IOException e) {
             log.error(e.getMessage());
+            return data;
         }
 
         return data;

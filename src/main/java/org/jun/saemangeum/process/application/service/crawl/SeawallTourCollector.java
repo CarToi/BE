@@ -54,18 +54,13 @@ public class SeawallTourCollector extends CrawlingCollector {
                         .replace("&#39;", "'")
                         .trim();
 
-//                System.out.println("이름: " + name);
-//                System.out.println("주소: " + address);
-//                System.out.println("이미지: " + imgSrc);
-//                System.out.println("설명: " + description);
-//                System.out.println("--------------------------------------------------");
-
                 data.add(new RefinedDataDTO(title, "전북특별자치도 " + title, Category.TOUR, imgSrc, introduction));
             }
 
         } catch (IOException e) {
             // 어떤 폴백 전략을 세울 수 있을까?
             log.error(e.getMessage());
+            return data;
         }
 
         return data;

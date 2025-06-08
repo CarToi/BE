@@ -2,6 +2,7 @@ package org.jun.saemangeum.service;
 
 import org.jun.saemangeum.process.application.service.crawl.ArchipelagoCollector;
 import org.jun.saemangeum.process.application.service.crawl.CityTourCollector;
+import org.jun.saemangeum.process.application.service.crawl.GunsanFestivalCollector;
 import org.jun.saemangeum.process.application.service.crawl.SeawallTourCollector;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.junit.jupiter.api.Assertions;
@@ -24,6 +25,9 @@ public class CrawlingCollectorTest {
     @Autowired
     private ArchipelagoCollector archipelagoCollector;
 
+    @Autowired
+    private GunsanFestivalCollector gunsanFestivalCollector;
+
     @Test
     @DisplayName("새만금 개발청 방조제 정보 크롤링 테스트")
     void testSeawallTourCollector() {
@@ -43,5 +47,12 @@ public class CrawlingCollectorTest {
     void testArchipelagoCollector() {
         List<RefinedDataDTO> data = archipelagoCollector.collectData();
         Assertions.assertEquals(data.size(), 6);
+    }
+
+    @Test
+    @DisplayName("군산시 문화관광 축제행사 크롤링 테스트")
+    void testGunsanFestivalCollector() {
+        List<RefinedDataDTO> data = gunsanFestivalCollector.collectData();
+        Assertions.assertEquals(data.size(), 10);
     }
 }
