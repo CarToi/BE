@@ -41,26 +41,43 @@ public class ContentCollectServiceBenchmark {
         Mockito.when(mockRepo.saveAll(Mockito.anyList()))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
+        // Refiner마다 고유의 지연 시간 (ms)을 지정
         int[] contentCounts = {
                 40, // 공공데이터 기반 축제 정보
                 51, // 공공데이터 기반 공연행사 정보
-                9, // 새만금개발청 방조제 관광지
-                41, // 새만금개발청 인접도시 관광지 (3개 도시 합산)
-                6, // 새만금개발공사 군도 관광지
-                10 // 군산시 문화관광 축제행사 정보
+                9,  // 새만금개발청 방조제 관광지
+                41, // 새만금개발청 인접도시 관광지
+                6,  // 새만금개발공사 군도 관광지
+                10  // 군산시 문화관광 축제행사 정보
         };
 
-        // 각 팩토리 구현체마다 수집하는 현재 데이터 개수 반영
-        List<Refiner> mockRefiners = Arrays.stream(contentCounts).mapToObj(contentCount -> {
-                    List<Content> mockContent = IntStream.range(0, contentCount)
+        int[] simulatedDelays = {
+                300, // 축제 정보 API 지연
+                350, // 공연행사 API 지연
+                200, // 방조제 크롤링 지연
+                800, // 인접도시 크롤링 지연
+                600, // 군도 크롤링 지연
+                150  // 군산시 페이지 크롤링 지연
+        };
+
+        List<Refiner> mockRefiners = IntStream.range(0, contentCounts.length)
+                .mapToObj(i -> {
+                    List<Content> mockContent = IntStream.range(0, contentCounts[i])
                             .mapToObj(j -> Mockito.mock(Content.class))
                             .collect(Collectors.toList());
 
                     Refiner refiner = Mockito.mock(Refiner.class);
-                    Mockito.when(refiner.refine()).thenReturn(mockContent);
+                    Mockito.when(refiner.refine()).thenAnswer(invocation -> {
+                        try {
+                            Thread.sleep(simulatedDelays[i]); // 지연 시뮬레이션
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt(); // 인터럽트 복구
+                        }
+                        return mockContent;
+                    });
                     return refiner;
                 })
-                .collect(Collectors.toList());
+                .toList();
 
         contentCollectService = new ContentCollectService(mockRefiners, mockRepo);
     }
