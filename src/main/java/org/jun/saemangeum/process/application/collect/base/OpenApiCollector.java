@@ -1,11 +1,22 @@
-package org.jun.saemangeum.process.application.service.base;
+package org.jun.saemangeum.process.application.collect.base;
 
 import org.jun.saemangeum.global.persistence.domain.Content;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
+import org.jun.saemangeum.process.infrastructure.api.RestTemplateClient;
 
 import java.util.List;
 
-public abstract class CrawlingCollector implements Refiner {
+public abstract class OpenApiCollector implements Refiner {
+//    protected final WebClient webClient;
+    protected final RestTemplateClient restTemplateClient;
+
+//    public OpenApiCollector(WebClient webClient) {
+//        this.webClient = webClient;
+//    }
+
+    public OpenApiCollector(RestTemplateClient restTemplateClient) {
+        this.restTemplateClient = restTemplateClient;
+    }
 
     @Override
     public List<Content> refine() {
@@ -15,6 +26,6 @@ public abstract class CrawlingCollector implements Refiner {
         return data.stream().map(Content::create).toList();
     }
 
-    // 각 페이지 크롤링과 관련된 추상메소드들
+    // 각 OpenAPI 호출과 관련된 추상메소드들
     public abstract List<RefinedDataDTO> collectData();
 }

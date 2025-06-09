@@ -1,6 +1,6 @@
-package org.jun.saemangeum.process.application.service.api;
+package org.jun.saemangeum.process.application.collect.api;
 
-import org.jun.saemangeum.process.application.service.base.OpenApiCollector;
+import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.RestTemplateClient;
 import org.jun.saemangeum.process.presentation.dto.Festival;

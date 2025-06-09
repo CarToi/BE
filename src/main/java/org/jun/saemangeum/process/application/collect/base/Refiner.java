@@ -1,4 +1,4 @@
-package org.jun.saemangeum.process.application.service.base;
+package org.jun.saemangeum.process.application.collect.base;
 
 import org.jun.saemangeum.global.persistence.domain.Content;
 

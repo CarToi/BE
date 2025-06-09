@@ -1,7 +1,7 @@
 package org.jun.saemangeum.service;
 
-import org.jun.saemangeum.process.application.service.api.SmgEventCollector;
-import org.jun.saemangeum.process.application.service.api.SmgFestivalCollector;
+import org.jun.saemangeum.process.application.collect.api.SmgEventCollector;
+import org.jun.saemangeum.process.application.collect.api.SmgFestivalCollector;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
