@@ -24,15 +24,16 @@ public class ContentCollectService {
         refiners.stream()
                 .map(Refiner::refine)
                 .map(refiner -> refiner.stream().peek(
-                        e -> {
-                            log.info("각 구현체들 전처리 예정");
-                            try {
-                                Thread.sleep(1200); // 중복 처리, 벡터 임베딩 등등 고려?
-                            } catch (InterruptedException ex) {
-                                log.error(ex.getMessage()); // AI 외적 이슈 고려
-                                Thread.currentThread().interrupt();
-                            }
-                        }
+                        e -> log.info("각 구현체들 전처리 예정")
+                ).toList())
+                .forEach(contentRepository::saveAll);
+    }
+    @Transactional
+    public void collectAndSaveByParallelStream() {
+        refiners.parallelStream()
+                .map(Refiner::refine)
+                .map(refiner -> refiner.stream().peek(
+                        e -> log.info("각 구현체들 전처리 예정")
                 ).toList())
                 .forEach(contentRepository::saveAll);
     }
