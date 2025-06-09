@@ -1,16 +1,11 @@
 package org.jun.saemangeum.process.application.service.base;
 
 import org.jun.saemangeum.global.persistence.domain.Content;
-import org.openqa.selenium.WebDriver;
+import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 
 import java.util.List;
 
-public abstract class SeleniumCollector implements Refiner {
-    protected final WebDriver webDriver;
-
-    public SeleniumCollector(WebDriver webDriver) {
-        this.webDriver = webDriver;
-    }
+public abstract class CrawlingCollector implements Refiner {
 
     @Override
     public List<Content> refine() {
@@ -20,4 +15,5 @@ public abstract class SeleniumCollector implements Refiner {
     }
 
     // 각 페이지 크롤링과 관련된 추상메소드들
+    public abstract List<RefinedDataDTO> collectData();
 }

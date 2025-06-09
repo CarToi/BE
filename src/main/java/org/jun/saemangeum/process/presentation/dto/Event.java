@@ -2,30 +2,34 @@ package org.jun.saemangeum.process.presentation.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import org.jun.saemangeum.global.persistence.domain.Category;
+import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 
 @Getter
 public class Event {
-    @JsonProperty("축제명")
+    @JsonProperty("행사명")
     private String name;
 
-    @JsonProperty("축제시작일")
+    @JsonProperty("행사시작일")
     private String startDate;
 
-    @JsonProperty("축제종료일")
+    @JsonProperty("행사종료일")
     private String endDate;
 
-    @JsonProperty("장소(지역)")
+    @JsonProperty("행사 장소")
     private String location;
 
-    @JsonProperty("주관기관")
+    @JsonProperty("주최")
     private String organizer;
 
-    @JsonProperty("행사내용")
+    @JsonProperty("행사 내용")
     private String description;
 
-    @JsonProperty("전화번호")
-    private String phone;
+    @JsonProperty("문의처")
+    private String contact;
 
-    @JsonProperty("비고")
-    private String note;
+    public RefinedDataDTO convertToDTO() {
+        return new RefinedDataDTO(
+                this.name, this.location, Category.EVENT, null, this.description);
+    }
 }
