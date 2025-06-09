@@ -2,6 +2,7 @@ package org.jun.saemangeum.process.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jun.saemangeum.global.persistence.domain.Content;
 import org.jun.saemangeum.global.persistence.repository.ContentRepository;
 import org.jun.saemangeum.process.application.collect.base.Refiner;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,10 @@ public class ContentCollectService {
         refiners.stream()
                 .peek(e -> log.info("각 구현체들 전처리 예정"))
                 .forEach(refiner -> contentRepository.saveAll(refiner.refine()));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Content> getContents() {
+        return contentRepository.findAll();
     }
 }

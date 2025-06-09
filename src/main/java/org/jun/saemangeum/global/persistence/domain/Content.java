@@ -29,6 +29,7 @@ public class Content {
     @Column
     private String image;
 
+    @Lob // MySQL 등에서는 TEXT 등으로
     @Column
     private String introduction;
 
