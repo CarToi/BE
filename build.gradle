@@ -2,6 +2,9 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.0'
     id 'io.spring.dependency-management' version '1.1.7'
+
+    // jmh
+    id "me.champeau.jmh" version "0.7.3"
 }
 
 ext {
@@ -48,6 +51,11 @@ dependencies {
     // AI
 //    implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
 //    implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+
+    // jmh
+    jmh 'org.openjdk.jmh:jmh-core:1.37'
+    jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
+    jmh 'org.openjdk.jmh:jmh-generator-bytecode:1.37'
 }
 
 dependencyManagement {
@@ -58,4 +66,16 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jmh {
+    warmupIterations = 2 // 워밍업 반복 횟수
+    iterations = 5 // 측정 반복 횟수
+    fork = 1 // 포크 수
+    failOnError = true
+    resultFormat = 'JSON' // 결과 포맷
+    resultsFile = project.file("${project.buildDir}/reports/jmh/results.json") // 결과 파일 위치
+    timeOnIteration = '1s' // 각 반복당 실행 시간
+    timeUnit = 'ms' // 시간 단위
+    includes = ['.*Benchmark.*'] // 벤치마크 클래스 패턴
 }
