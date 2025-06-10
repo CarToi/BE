@@ -1,6 +1,6 @@
 package org.jun.saemangeum.service;
 
-import org.jun.saemangeum.global.persistence.domain.Content;
+import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.process.application.service.ContentCollectService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

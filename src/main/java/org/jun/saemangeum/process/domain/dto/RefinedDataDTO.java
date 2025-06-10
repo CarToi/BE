@@ -1,6 +1,6 @@
 package org.jun.saemangeum.process.domain.dto;
 
-import org.jun.saemangeum.global.persistence.domain.Category;
+import org.jun.saemangeum.global.domain.Category;
 
 public record RefinedDataDTO(
         String title,

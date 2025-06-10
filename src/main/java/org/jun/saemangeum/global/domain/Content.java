@@ -1,4 +1,4 @@
-package org.jun.saemangeum.global.persistence.domain;
+package org.jun.saemangeum.global.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

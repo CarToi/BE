@@ -1,7 +1,7 @@
-package org.jun.saemangeum.global.persistence.repository;
+package org.jun.saemangeum.global.repository;
 
-import org.jun.saemangeum.global.persistence.domain.Category;
-import org.jun.saemangeum.global.persistence.domain.Content;
+import org.jun.saemangeum.global.domain.Category;
+import org.jun.saemangeum.global.domain.Content;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

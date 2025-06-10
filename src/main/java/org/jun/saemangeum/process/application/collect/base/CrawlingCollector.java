@@ -1,6 +1,6 @@
 package org.jun.saemangeum.process.application.collect.base;
 
-import org.jun.saemangeum.global.persistence.domain.Content;
+import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 
 import java.util.List;
