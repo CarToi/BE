@@ -1,9 +1,9 @@
 package org.jun.saemangeum.service;
 
-import org.jun.saemangeum.process.application.service.crawl.ArchipelagoCollector;
-import org.jun.saemangeum.process.application.service.crawl.CityTourCollector;
-import org.jun.saemangeum.process.application.service.crawl.GunsanFestivalCollector;
-import org.jun.saemangeum.process.application.service.crawl.SeawallTourCollector;
+import org.jun.saemangeum.process.application.collect.crawl.ArchipelagoCollector;
+import org.jun.saemangeum.process.application.collect.crawl.CityTourCollector;
+import org.jun.saemangeum.process.application.collect.crawl.GunsanFestivalCollector;
+import org.jun.saemangeum.process.application.collect.crawl.SeawallTourCollector;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

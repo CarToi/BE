@@ -1,4 +1,4 @@
-package org.jun.saemangeum.process.application.service.crawl;
+package org.jun.saemangeum.process.application.collect.crawl;
 
 import lombok.Getter;
 

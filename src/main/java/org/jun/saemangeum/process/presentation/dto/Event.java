@@ -2,7 +2,7 @@ package org.jun.saemangeum.process.presentation.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import org.jun.saemangeum.global.persistence.domain.Category;
+import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 
 @Getter

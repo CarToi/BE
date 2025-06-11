@@ -1,12 +1,12 @@
-package org.jun.saemangeum.process.application.service.crawl;
+package org.jun.saemangeum.process.application.collect.crawl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.jun.saemangeum.global.persistence.domain.Category;
-import org.jun.saemangeum.process.application.service.base.CrawlingCollector;
+import org.jun.saemangeum.global.domain.Category;
+import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
 

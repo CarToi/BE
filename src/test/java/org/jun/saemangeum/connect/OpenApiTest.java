@@ -1,4 +1,4 @@
-package org.jun.saemangeum.peristalsis;
+package org.jun.saemangeum.connect;
 
 import org.jun.saemangeum.process.infrastructure.api.RestTemplateClient;
 import org.jun.saemangeum.process.presentation.dto.FestivalResponse;
