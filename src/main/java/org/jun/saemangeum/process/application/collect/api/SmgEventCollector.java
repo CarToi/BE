@@ -1,6 +1,7 @@
 package org.jun.saemangeum.process.application.collect.api;
 
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
+import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.RestTemplateClient;
 import org.jun.saemangeum.process.presentation.dto.Event;
@@ -18,8 +19,9 @@ public class SmgEventCollector extends OpenApiCollector {
     private static final String LAST_PATH = "/15006173/v1/uddi:f353f7f5-589e-4354-9b3e-ef6923273b55";
     private static final String URL = "https://www.saemangeum.go.kr/sda/content.do?key=2010083672101";
 
-    public SmgEventCollector(RestTemplateClient restTemplateClient) {
-        super(restTemplateClient);
+    public SmgEventCollector(
+            RestTemplateClient restTemplateClient, TitleDuplicateChecker titleDuplicateChecker) {
+        super(restTemplateClient, titleDuplicateChecker);
     }
 
     @Override

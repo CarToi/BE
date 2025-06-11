@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
+import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,10 @@ public class CityTourCollector extends CrawlingCollector {
     );
 
     private static final String PATH = "https://www.saemangeum.go.kr/sda/content.do?key=";
+
+    public CityTourCollector(TitleDuplicateChecker titleDuplicateChecker) {
+        super(titleDuplicateChecker);
+    }
 
     @Override
     public List<RefinedDataDTO> collectData() {

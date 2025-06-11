@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
+import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,10 @@ public class GunsanFestivalCollector extends CrawlingCollector {
     private static final List<String> PAGES = List.of(
             "/3304137?", "/1504859?", "/1449917?", "/1448120?", "/306508?",
             "/306507?", "/306505?", "/306504?", "/306503?", "/306502?");
+
+    public GunsanFestivalCollector(TitleDuplicateChecker titleDuplicateChecker) {
+        super(titleDuplicateChecker);
+    }
 
     @Override
     public List<RefinedDataDTO> collectData() {

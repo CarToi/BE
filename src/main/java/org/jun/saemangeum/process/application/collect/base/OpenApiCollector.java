@@ -1,6 +1,7 @@
 package org.jun.saemangeum.process.application.collect.base;
 
 import org.jun.saemangeum.global.domain.Content;
+import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.RestTemplateClient;
 
@@ -9,13 +10,15 @@ import java.util.List;
 public abstract class OpenApiCollector implements Refiner {
 //    protected final WebClient webClient;
     protected final RestTemplateClient restTemplateClient;
+    protected final TitleDuplicateChecker titleDuplicateChecker;
 
 //    public OpenApiCollector(WebClient webClient) {
 //        this.webClient = webClient;
 //    }
 
-    public OpenApiCollector(RestTemplateClient restTemplateClient) {
+    public OpenApiCollector(RestTemplateClient restTemplateClient, TitleDuplicateChecker titleDuplicateChecker) {
         this.restTemplateClient = restTemplateClient;
+        this.titleDuplicateChecker = titleDuplicateChecker;
     }
 
     @Override

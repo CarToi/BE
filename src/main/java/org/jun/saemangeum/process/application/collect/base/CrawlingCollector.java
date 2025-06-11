@@ -1,11 +1,18 @@
 package org.jun.saemangeum.process.application.collect.base;
 
 import org.jun.saemangeum.global.domain.Content;
+import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 
 import java.util.List;
 
 public abstract class CrawlingCollector implements Refiner {
+
+    protected final TitleDuplicateChecker titleDuplicateChecker;
+
+    public CrawlingCollector(TitleDuplicateChecker titleDuplicateChecker) {
+        this.titleDuplicateChecker = titleDuplicateChecker;
+    }
 
     @Override
     public List<Content> refine() {
