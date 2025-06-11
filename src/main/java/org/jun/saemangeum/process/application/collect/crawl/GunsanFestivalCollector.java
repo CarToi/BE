@@ -20,6 +20,7 @@ import java.util.Objects;
 public class GunsanFestivalCollector extends CrawlingCollector {
 
     private static final String URL = "https://www.gunsan.go.kr";
+    private static final String MENU = "/tour/m2081";
     private static final List<String> PAGES = List.of(
             "/3304137?", "/1504859?", "/1449917?", "/1448120?", "/306508?",
             "/306507?", "/306505?", "/306504?", "/306503?", "/306502?");
@@ -71,7 +72,7 @@ public class GunsanFestivalCollector extends CrawlingCollector {
                 log.info(introduction);
 
                 data.add(new RefinedDataDTO(
-                        title, position, Category.FESTIVAL, imgSrc, introduction));
+                        title, position, Category.FESTIVAL, imgSrc, introduction, URL + MENU));
             } catch (IOException e) {
                 log.error(e.getMessage());
             }

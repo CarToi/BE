@@ -80,7 +80,8 @@ public class CityTourCollector extends CrawlingCollector {
                             position,
                             Category.TOUR,
                             imgSrc,
-                            introduction));
+                            introduction,
+                            PATH + city.getValue()));
                 }
             } catch (IOException e) {
                 log.error(e.getMessage());

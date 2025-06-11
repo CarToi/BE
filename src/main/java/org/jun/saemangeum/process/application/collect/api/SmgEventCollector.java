@@ -16,6 +16,7 @@ import java.util.List;
 public class SmgEventCollector extends OpenApiCollector {
 
     private static final String LAST_PATH = "/15006173/v1/uddi:f353f7f5-589e-4354-9b3e-ef6923273b55";
+    private static final String URL = "https://www.saemangeum.go.kr/sda/content.do?key=2010083672101";
 
     public SmgEventCollector(RestTemplateClient restTemplateClient) {
         super(restTemplateClient);
@@ -29,6 +30,6 @@ public class SmgEventCollector extends OpenApiCollector {
                 q -> q.queryParam("page", 1).queryParam("perPage", 100)
         );
 
-        return response.data().stream().map(Event::convertToDTO).toList();
+        return response.data().stream().map(e -> RefinedDataDTO.to(e, URL)).toList();
     }
 }

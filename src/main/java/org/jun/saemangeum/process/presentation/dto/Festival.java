@@ -30,9 +30,4 @@ public class Festival {
 
     @JsonProperty("비고")
     private String note;
-
-    public RefinedDataDTO convertToDTO() {
-        return new RefinedDataDTO(
-                this.name, this.location, Category.FESTIVAL, null, this.description);
-    }
 }

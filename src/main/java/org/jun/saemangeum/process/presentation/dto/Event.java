@@ -27,9 +27,4 @@ public class Event {
 
     @JsonProperty("문의처")
     private String contact;
-
-    public RefinedDataDTO convertToDTO() {
-        return new RefinedDataDTO(
-                this.name, this.location, Category.EVENT, null, this.description);
-    }
 }

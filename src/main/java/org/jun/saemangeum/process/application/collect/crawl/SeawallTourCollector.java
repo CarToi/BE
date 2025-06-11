@@ -56,7 +56,7 @@ public class SeawallTourCollector extends CrawlingCollector {
 
                 log.info(introduction);
 
-                data.add(new RefinedDataDTO(title, "전북특별자치도 " + title, Category.TOUR, imgSrc, introduction));
+                data.add(new RefinedDataDTO(title, "전북특별자치도 " + title, Category.TOUR, imgSrc, introduction, PATH));
             }
 
         } catch (IOException e) {
