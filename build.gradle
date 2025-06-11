@@ -78,4 +78,5 @@ jmh {
     timeOnIteration = '1s' // 각 반복당 실행 시간
     timeUnit = 'ms' // 시간 단위
     includes = ['.*Benchmark.*'] // 벤치마크 클래스 패턴
+    profilers = ['gc']
 }

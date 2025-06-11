@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.collect.base.Refiner;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 public class ContentCollectService {
 
     private final List<Refiner> refiners;
+    private final TaskExecutor virtualThreadExecutor;
     private final ContentService contentService;
     // ...+ 전처리용 서비스 로직 추가?
 
@@ -84,7 +86,6 @@ public class ContentCollectService {
     /**
      * 개별 수집기의 전체 플로우 처리 (수집 → AI 전처리 → 저장)
      */
-    @Async("virtualThreadExecutor")
     public CompletableFuture<Void> processRefinerFlow(Refiner refiner) {
         return CompletableFuture.runAsync(() -> {
             String refinerName = refiner.getClass().getSimpleName();
@@ -111,6 +112,6 @@ public class ContentCollectService {
                 // 개별 수집기 실패가 전체에 영향주지 않도록 예외를 던지지 않음
                 // 필요시 재시도 로직이나 알림 로직 추가 가능
             }
-        });
+        }, virtualThreadExecutor);
     }
 }
