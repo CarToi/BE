@@ -50,9 +50,12 @@ public class CityTourCollector extends CrawlingCollector {
                     Elements descElements = item.select("div.info_spot > p");
                     StringBuilder descBuilder = new StringBuilder();
                     for (Element p : descElements) {
+                        if (descBuilder.length() > 300) break;
                         descBuilder.append(p.text().trim()).append("\n");
                     }
                     String introduction = descBuilder.toString().trim();
+
+                    log.info(introduction);
 
                     // 이미지 URL
                     Element imgEl = item.selectFirst("div.thumb img");

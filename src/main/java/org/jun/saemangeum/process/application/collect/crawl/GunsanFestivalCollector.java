@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -43,6 +44,31 @@ public class GunsanFestivalCollector extends CrawlingCollector {
 
                 Elements introductionEl = doc.select(".conText");
                 String introduction = introductionEl.text().trim();
+
+                if (introduction.length() > 650) {
+
+                    List<String> contentBlocks = new ArrayList<>();
+
+                    for (Element child : Objects.requireNonNull(introductionEl.first()).children()) {
+                        String text = child.text().trim();
+
+                        // 너무 짧은 건 무시 (ex: 제목, 공백 등)
+                        if (text.length() > 30 && text.length() < 200) {
+                            contentBlocks.add(text);
+                        }
+                    }
+
+                    if (!contentBlocks.isEmpty()) {
+                        if (contentBlocks.size() >= 2) {
+                            introduction =
+                                    contentBlocks.get(contentBlocks.size() - 2) + contentBlocks.getLast();
+                        } else {
+                            introduction = contentBlocks.getFirst();
+                        }
+                    }
+                }
+
+                log.info(introduction);
 
                 data.add(new RefinedDataDTO(
                         title, position, Category.FESTIVAL, imgSrc, introduction));

@@ -37,6 +37,8 @@ public class ArchipelagoCollector extends CrawlingCollector {
 
                 if (!imgSrc.startsWith("http")) imgSrc = URL + imgSrc;
 
+                log.info(introduction);
+
                 data.add(new RefinedDataDTO(title, position, Category.TOUR, imgSrc, introduction));
             }
         } catch (IOException e) {
