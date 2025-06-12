@@ -13,7 +13,7 @@ public class TitleDuplicateChecker {
 
     public boolean isDuplicate(String title) {
         // 중복이면 true, 아니면 false
-        return !seenTitles.add(title);
+        return !seenTitles.add(title.replaceAll("\\d|\\s", ""));
     }
 
     public void reset() {
