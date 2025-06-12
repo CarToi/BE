@@ -23,7 +23,7 @@ public abstract class OpenApiCollector implements Refiner {
         // 생성한 것들을 바탕으로 프로세스까지 처리하는 걸 여기에 책임을 부여하자(팩토리 메서드 취지)
         List<RefinedDataDTO> data = collectData();
         return data.stream()
-                .filter(e -> !titleDuplicateChecker.isDuplicate(e.title()))
+                .filter(e -> titleDuplicateChecker.isDuplicate(e.title()))
                 .map(Content::create).toList();
     }
 
