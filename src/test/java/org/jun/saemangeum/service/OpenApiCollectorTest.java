@@ -1,5 +1,6 @@
 package org.jun.saemangeum.service;
 
+import org.jun.saemangeum.process.application.collect.api.GunsanCultureCollector;
 import org.jun.saemangeum.process.application.collect.api.SmgEventCollector;
 import org.jun.saemangeum.process.application.collect.api.SmgFestivalCollector;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
@@ -20,6 +21,9 @@ public class OpenApiCollectorTest {
     @Autowired
     private SmgEventCollector smgEventCollector;
 
+    @Autowired
+    private GunsanCultureCollector gunsanCultureCollector;
+
     @Test
     @DisplayName("공공데이터 축제 정보 정제 테스트")
     void testFestivalCollector() {
@@ -36,5 +40,14 @@ public class OpenApiCollectorTest {
         System.out.println(data);
 
         Assertions.assertEquals(51, data.size());
+    }
+
+    @Test
+    @DisplayName("공공데이터 군산시 문화시설 정보 정제 테스트")
+    void testGunsanCultureCollector() {
+        List<RefinedDataDTO> data = gunsanCultureCollector.collectData();
+        System.out.println(data);
+
+        Assertions.assertEquals(50, data.size());
     }
 }

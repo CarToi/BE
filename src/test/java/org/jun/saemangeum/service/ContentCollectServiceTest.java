@@ -26,8 +26,8 @@ public class ContentCollectServiceTest {
         contentCollectService.collectAndSave();
         List<Content> contents = contentService.getContents();
 
-        // 현재까지 수집한 데이터들이 157개긴한데 얘는 나중에 폐기해야 할듯
-        Assertions.assertTrue(contents.size() < 157, "제목 필터링으로 예상치보다 적어질 것");
+        // 현재까지 수집한 데이터들이 207개긴한데 얘는 나중에 폐기해야 할듯
+        Assertions.assertTrue(contents.size() < 207, "제목 필터링으로 예상치보다 적어질 것");
         Assertions.assertEquals(contents.getFirst().getClass(), Content.class);
     }
 
@@ -37,8 +37,8 @@ public class ContentCollectServiceTest {
         contentCollectService.collectAndSaveAsync().join(); // 비동기식 저장이므로 저장 끝날때까지 기다리기
         List<Content> contents = contentService.getContents();
 
-        // 현재까지 수집한 데이터들이 157개긴한데 얘는 나중에 폐기해야 할듯
-        Assertions.assertTrue(contents.size() < 157, "제목 필터링으로 예상치보다 적어질 것");
+        // 현재까지 수집한 데이터들이 207개긴한데 얘는 나중에 폐기해야 할듯
+        Assertions.assertTrue(contents.size() < 207, "제목 필터링으로 예상치보다 적어질 것");
         Assertions.assertEquals(contents.getFirst().getClass(), Content.class);
     }
 }
