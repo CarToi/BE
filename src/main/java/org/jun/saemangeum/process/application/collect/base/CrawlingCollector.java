@@ -1,5 +1,6 @@
 package org.jun.saemangeum.process.application.collect.base;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
@@ -10,13 +11,10 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Slf4j
+@RequiredArgsConstructor
 public abstract class CrawlingCollector implements Refiner {
 
     private final TitleDuplicateChecker titleDuplicateChecker;
-
-    public CrawlingCollector(TitleDuplicateChecker titleDuplicateChecker) {
-        this.titleDuplicateChecker = titleDuplicateChecker;
-    }
 
     @Override
     public List<Content> refine() {
