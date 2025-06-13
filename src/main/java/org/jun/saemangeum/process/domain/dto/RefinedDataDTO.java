@@ -1,7 +1,8 @@
 package org.jun.saemangeum.process.domain.dto;
 
 import org.jun.saemangeum.global.domain.Category;
-import org.jun.saemangeum.process.presentation.dto.Culture;
+import org.jun.saemangeum.process.presentation.dto.GimjeCulture;
+import org.jun.saemangeum.process.presentation.dto.GunsanCulture;
 import org.jun.saemangeum.process.presentation.dto.Event;
 import org.jun.saemangeum.process.presentation.dto.Festival;
 
@@ -35,10 +36,21 @@ public record RefinedDataDTO(
         );
     }
 
-    public static RefinedDataDTO to(Culture culture, String url) {
+    public static RefinedDataDTO to(GunsanCulture gunsanCulture, String url) {
         return new RefinedDataDTO(
-                culture.getName(),
-                culture.getPosition(),
+                gunsanCulture.getName(),
+                gunsanCulture.getPosition(),
+                Category.CULTURE,
+                null,
+                null,
+                url
+        );
+    }
+
+    public static RefinedDataDTO to(GimjeCulture gimjeCulture, String url) {
+        return new RefinedDataDTO(
+                gimjeCulture.getName(),
+                gimjeCulture.getPosition(),
                 Category.CULTURE,
                 null,
                 null,

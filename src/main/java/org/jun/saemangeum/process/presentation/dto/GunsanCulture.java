@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class Culture {
+public class GunsanCulture {
     @JsonProperty("구분")
     private String category;
 

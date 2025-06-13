@@ -2,12 +2,12 @@ package org.jun.saemangeum.process.presentation.dto;
 
 import java.util.List;
 
-public record CultureResponse(
+public record GimjeCultureResponse(
         int page,
         int perPage,
         int totalCount,
         int currentCount,
         int matchCount,
-        List<Culture> data
+        List<GimjeCulture> data
 ) {
 }
