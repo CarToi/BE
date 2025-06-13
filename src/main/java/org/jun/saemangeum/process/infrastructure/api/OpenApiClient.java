@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 @Component
 public class OpenApiClient {
 
-    @Value("${dev.baseUrl}")
+    @Value("${crawling.baseUrl}")
     private String baseUrl;
 
     private final RestTemplate openApiTemplate;

@@ -13,9 +13,9 @@ import java.net.URI;
 import java.util.List;
 
 @Configuration
-public class RestTemplateConfig {
+public class OpenApiConfig {
 
-    @Value("${dev.openApiKey}")
+    @Value("${crawling.openApiKey}")
     private String apiKey;
 
     @Bean(name = "openApiTemplate")
