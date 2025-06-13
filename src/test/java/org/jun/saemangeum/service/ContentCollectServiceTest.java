@@ -27,7 +27,7 @@ public class ContentCollectServiceTest {
         List<Content> contents = contentService.getContents();
 
         // 현재까지 수집한 데이터들이 157개긴한데 얘는 나중에 폐기해야 할듯
-        Assertions.assertEquals(contents.size(), 157);
+        Assertions.assertTrue(contents.size() < 157, "제목 필터링으로 예상치보다 적어질 것");
         Assertions.assertEquals(contents.getFirst().getClass(), Content.class);
     }
 
@@ -38,7 +38,7 @@ public class ContentCollectServiceTest {
         List<Content> contents = contentService.getContents();
 
         // 현재까지 수집한 데이터들이 157개긴한데 얘는 나중에 폐기해야 할듯
-        Assertions.assertEquals(contents.size(), 157);
+        Assertions.assertTrue(contents.size() < 157, "제목 필터링으로 예상치보다 적어질 것");
         Assertions.assertEquals(contents.getFirst().getClass(), Content.class);
     }
 }
