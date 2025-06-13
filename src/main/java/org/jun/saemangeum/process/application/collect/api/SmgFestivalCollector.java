@@ -3,8 +3,7 @@ package org.jun.saemangeum.process.application.collect.api;
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
-import org.jun.saemangeum.process.infrastructure.api.RestTemplateClient;
-import org.jun.saemangeum.process.presentation.dto.Festival;
+import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
 import org.jun.saemangeum.process.presentation.dto.FestivalResponse;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +19,13 @@ public class SmgFestivalCollector extends OpenApiCollector {
     private static final String URL = "https://www.saemangeum.go.kr/sda/content.do?key=2010083672101";
 
     public SmgFestivalCollector(
-            RestTemplateClient restTemplateClient, TitleDuplicateChecker titleDuplicateChecker) {
-        super(restTemplateClient, titleDuplicateChecker);
+            OpenApiClient openApiClient, TitleDuplicateChecker titleDuplicateChecker) {
+        super(openApiClient, titleDuplicateChecker);
     }
 
     @Override
     public List<RefinedDataDTO> collectData() {
-        FestivalResponse response = restTemplateClient.get(
+        FestivalResponse response = openApiClient.get(
                 LAST_PATH,
                 FestivalResponse.class,
                 q -> q.queryParam("page", 1).queryParam("perPage", 100)

@@ -3,8 +3,7 @@ package org.jun.saemangeum.process.application.collect.api;
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
-import org.jun.saemangeum.process.infrastructure.api.RestTemplateClient;
-import org.jun.saemangeum.process.presentation.dto.Event;
+import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
 import org.jun.saemangeum.process.presentation.dto.EventResponse;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +19,13 @@ public class SmgEventCollector extends OpenApiCollector {
     private static final String URL = "https://www.saemangeum.go.kr/sda/content.do?key=2010083672101";
 
     public SmgEventCollector(
-            RestTemplateClient restTemplateClient, TitleDuplicateChecker titleDuplicateChecker) {
-        super(restTemplateClient, titleDuplicateChecker);
+            OpenApiClient openApiClient, TitleDuplicateChecker titleDuplicateChecker) {
+        super(openApiClient, titleDuplicateChecker);
     }
 
     @Override
     public List<RefinedDataDTO> collectData() {
-        EventResponse response = restTemplateClient.get(
+        EventResponse response = openApiClient.get(
                 LAST_PATH,
                 EventResponse.class,
                 q -> q.queryParam("page", 1).queryParam("perPage", 100)

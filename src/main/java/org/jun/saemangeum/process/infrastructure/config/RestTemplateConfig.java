@@ -18,8 +18,8 @@ public class RestTemplateConfig {
     @Value("${dev.openApiKey}")
     private String apiKey;
 
-    @Bean
-    public RestTemplate restTemplate() {
+    @Bean(name = "openApiTemplate")
+    public RestTemplate openApiTemplate() {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(5000);
         requestFactory.setReadTimeout(5000);

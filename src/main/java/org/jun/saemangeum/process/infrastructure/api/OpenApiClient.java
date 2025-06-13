@@ -9,15 +9,15 @@ import java.net.URI;
 import java.util.function.Consumer;
 
 @Component
-public class RestTemplateClient {
+public class OpenApiClient {
 
     @Value("${dev.baseUrl}")
     private String baseUrl;
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate openApiTemplate;
 
-    public RestTemplateClient(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public OpenApiClient(RestTemplate openApiTemplate) {
+        this.openApiTemplate = openApiTemplate;
     }
 
     public <T> T get(String path, Class<T> responseType, Consumer<UriComponentsBuilder> extraQuery) {
@@ -26,6 +26,6 @@ public class RestTemplateClient {
         if (extraQuery != null) extraQuery.accept(builder);
 
         URI uri = builder.build(true).toUri();
-        return restTemplate.getForObject(uri, responseType);
+        return openApiTemplate.getForObject(uri, responseType);
     }
 }

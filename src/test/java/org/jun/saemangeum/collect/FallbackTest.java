@@ -5,7 +5,7 @@ import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
-import org.jun.saemangeum.process.infrastructure.api.RestTemplateClient;
+import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 public class FallbackTest {
 
     @Autowired
-    private RestTemplateClient restTemplateClient;
+    private OpenApiClient openApiClient;
 
     private TitleDuplicateChecker titleChecker;
 
@@ -87,7 +87,7 @@ public class FallbackTest {
     @Test
     @DisplayName("API 호출에서 3번 재시도 결과 빈 배열을 반환하게 됨")
     void testApiFallbackRetry() {
-        OpenApiCollector openApiCollector = new OpenApiCollector(restTemplateClient, titleChecker) {
+        OpenApiCollector openApiCollector = new OpenApiCollector(openApiClient, titleChecker) {
             @Override
             public List<RefinedDataDTO> collectData() {
                 throw new RestClientException("임의의 RestClient 예외 발생");
@@ -112,7 +112,7 @@ public class FallbackTest {
             int callCount = 0;
 
             public CountingOpenApiCollector(
-                    RestTemplateClient client, TitleDuplicateChecker checker) {
+                    OpenApiClient client, TitleDuplicateChecker checker) {
                 super(client, checker);
             }
 
@@ -127,7 +127,7 @@ public class FallbackTest {
         }
 
         CountingOpenApiCollector collector =
-                new CountingOpenApiCollector(restTemplateClient, titleChecker);
+                new CountingOpenApiCollector(openApiClient, titleChecker);
         List<Content> result = collector.refine();
 
         assertEquals(3, collector.callCount);
