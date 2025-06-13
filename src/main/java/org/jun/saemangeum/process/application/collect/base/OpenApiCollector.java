@@ -40,7 +40,7 @@ public abstract class OpenApiCollector implements Refiner {
 
         for (int i = 1; i <= MAX_RETRY; i++) {
             try {
-                return supplier.get();
+                return supplier.get(); // 실질적으로 collectData()가 동작하는 곳
             } catch (Exception e) {
                 log.warn("재시도 {}/{} 실패", i, MAX_RETRY);
             }
