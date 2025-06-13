@@ -41,7 +41,7 @@ dependencies {
 
     // selenium
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-    implementation("org.seleniumhq.selenium:selenium-java:4.33.0")
+//    implementation("org.seleniumhq.selenium:selenium-java:4.33.0")
 
     // JSoup
     implementation 'org.jsoup:jsoup:1.20.1'
