@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
@@ -20,7 +22,7 @@ public class EmbeddingTest {
     void test() {
         String mockData = "오늘 기분이 좋지 않아";
         EmbeddingResponse embeddingResponse = vectorClient.get(mockData);
-        System.out.println(embeddingResponse.result().embedding());
+        System.out.println(Arrays.toString(embeddingResponse.result().embedding()));
         assertNotNull(embeddingResponse.result().embedding());
     }
 }

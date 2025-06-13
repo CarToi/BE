@@ -60,7 +60,7 @@ public class ContentDataProcessService {
                         .peek(content -> simulateAiPreprocessing())
                         .toList();
 
-                // 3단계: 데이터베이스 저장
+                // 3단계: 데이터베이스 저장(db에 먼저 저장하고 AI 전처리..?)
                 contentService.saveContents(processedContents);
 
             } catch (Exception e) {

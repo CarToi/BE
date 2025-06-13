@@ -19,7 +19,7 @@ public class Vector {
 
     @Lob
     @Column
-    private String vector;
+    private byte[] vector;
 
     @OneToOne
     @JoinColumn(name = "content_id")
