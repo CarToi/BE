@@ -22,12 +22,18 @@ public class Content {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    private String position;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category;
 
     @Column
     private String image;
+
+    @Column
+    private String url;
 
     @Lob // MySQL 등에서는 TEXT 등으로
     @Column
@@ -40,9 +46,11 @@ public class Content {
     public static Content create(RefinedDataDTO dto) {
         return Content.builder()
                 .title(dto.title())
+                .position(dto.position())
                 .category(dto.category())
                 .image(dto.image())
                 .introduction(dto.introduction())
+                .url(dto.url())
                 .build();
     }
 }

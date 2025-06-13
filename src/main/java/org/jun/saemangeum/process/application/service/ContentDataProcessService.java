@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.collect.base.Refiner;
+import org.jun.saemangeum.process.application.embed.EmbeddingVectorService;
+import org.jun.saemangeum.process.presentation.dto.TestDTO;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class ContentDataProcessService {
     private final List<Refiner> refiners;
     private final TaskExecutor virtualThreadExecutor;
     private final ContentService contentService;
+    private final EmbeddingVectorService embeddingVectorService;
 
     public CompletableFuture<Void> collectAndSaveAsync() {
         log.info("Virtual Thread 기반 데이터 수집 시작 - 총 {}개 수집기", refiners.size());
@@ -42,27 +45,22 @@ public class ContentDataProcessService {
     /**
      * 개별 수집기의 전체 플로우 처리 (수집 → AI 전처리 → 저장)
      */
-    public CompletableFuture<Void> processRefinerFlow(Refiner refiner) {
+    private CompletableFuture<Void> processRefinerFlow(Refiner refiner) {
         return CompletableFuture.runAsync(() -> {
             String refinerName = refiner.getClass().getSimpleName();
 
             try {
                 // 1단계: 데이터 수집
-                List<Content> rawContents = refiner.refine();
+                List<Content> contents = refiner.refine();
 
-                if (rawContents.isEmpty()) {
+                if (contents.isEmpty()) {
                     log.warn("수집된 데이터 없음: {}", refinerName);
                     return;
                 }
 
-                // 2단계: AI 전처리 (각 항목별로 처리)
-                List<Content> processedContents = rawContents.stream()
-                        .peek(content -> simulateAiPreprocessing())
-                        .toList();
-
                 // 3단계: 데이터베이스 저장(db에 먼저 저장하고 AI 전처리..?)
-                contentService.saveContents(processedContents);
-
+                contentService.saveContents(contents);
+                embeddingVectorService.embeddingVector(contents);
             } catch (Exception e) {
                 log.error("플로우 실패: {} - 오류: {}", refinerName, e.getMessage(), e);
                 // 개별 수집기 실패가 전체에 영향주지 않도록 예외를 던지지 않음
@@ -71,12 +69,8 @@ public class ContentDataProcessService {
         }, virtualThreadExecutor);
     }
 
-    // 실제 AI 연동 전처리 지연 시뮬레이션
-    private void simulateAiPreprocessing() {
-        try {
-            Thread.sleep(100); // 항목당 100ms 지연 (AI 응답 시간 가정)
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+    public List<TestDTO> suggestContent(String text) {
+        List<Content> contents = embeddingVectorService.calculateSimilarity(text);
+        return contents.stream().map(TestDTO::of).toList();
     }
 }

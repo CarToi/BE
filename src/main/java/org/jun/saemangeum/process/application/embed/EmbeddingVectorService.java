@@ -80,9 +80,9 @@ public class EmbeddingVectorService {
     record ContentSimilarity(Content content, double similarity)
             implements Comparable<ContentSimilarity> {
         @Override
-            public int compareTo(ContentSimilarity o) {
-                // 유사도 기준 오름차순 정렬
-                return Double.compare(this.similarity, o.similarity);
-            }
+        public int compareTo(ContentSimilarity o) {
+            // 유사도 기준 오름차순 정렬
+            return Double.compare(this.similarity, o.similarity);
         }
+    }
 }
