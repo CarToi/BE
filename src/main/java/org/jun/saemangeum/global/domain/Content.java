@@ -39,10 +39,6 @@ public class Content {
     @Column
     private String introduction;
 
-    @OneToOne
-    @JoinColumn(name = "vector_id")
-    private Vector vector;
-
     public static Content create(RefinedDataDTO dto) {
         return Content.builder()
                 .title(dto.title())

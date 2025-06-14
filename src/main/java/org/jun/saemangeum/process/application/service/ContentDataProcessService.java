@@ -23,7 +23,7 @@ public class ContentDataProcessService {
     private final ContentService contentService;
     private final EmbeddingVectorService embeddingVectorService;
 
-    public CompletableFuture<Void> collectAndSaveAsync() {
+    public void collectAndSaveAsync() {
         log.info("Virtual Thread 기반 데이터 수집 시작 - 총 {}개 수집기", refiners.size());
 
         // 모든 수집기를 독립적인 플로우로 실행
@@ -32,7 +32,9 @@ public class ContentDataProcessService {
                 .toList();
 
         // 모든 플로우 완료 대기
-        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+        // allOf 메소드가 리스트 타입을 파라미터로 안 받아서 배열로 바꿈
+        // 빈 배열 생성 후 toArray 호출해서 리스트 크기에 맞춘 배열 생성
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
                 .whenComplete((result, throwable) -> {
                     if (throwable != null) {
                         log.error("일부 수집기에서 오류 발생", throwable);

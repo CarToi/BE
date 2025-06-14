@@ -39,6 +39,6 @@ public class VectorCalculator {
             return 0;  // 0으로 나누는 상황 방지
         }
 
-        return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+        return dotProduct / (Math.sqrt(normA * normB));
     }
 }
