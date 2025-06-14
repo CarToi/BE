@@ -24,7 +24,6 @@ public class EmbeddingWorkerService {
     public void stopWorker() {
         if (worker != null) {
             worker.stop();
-            workerThread.interrupt();
         }
     }
 }

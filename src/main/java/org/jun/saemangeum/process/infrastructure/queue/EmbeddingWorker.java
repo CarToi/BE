@@ -3,6 +3,7 @@ package org.jun.saemangeum.process.infrastructure.queue;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.process.application.embed.EmbeddingVectorService;
 import org.jun.saemangeum.process.infrastructure.dto.EmbeddingJob;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Slf4j
 public class EmbeddingWorker implements Runnable {
@@ -26,11 +27,32 @@ public class EmbeddingWorker implements Runnable {
             try {
                 EmbeddingJob job = queue.poll();
                 if (job != null) {
-                    service.embeddingVector(job.content());
-                    log.info("임베딩 벡터 성공: {}", job.content().getId());
+                    boolean success = false;
+                    int attempts = 0;
+
+                    while (!success && attempts < 3) {
+                        try {
+                            service.embeddingVector(job.content());
+                            success = true;
+                            Thread.sleep(500); // 호출 속도 조절
+                        } catch (HttpClientErrorException.TooManyRequests e) {
+                            // 0.5초 -> 1초 -> 2초
+                            long delay = (long) Math.pow(2, attempts) * 500;
+                            log.warn("429 호출 속도 과다: {}", job.content().getId());
+                            Thread.sleep(delay);
+                            attempts++;
+                        } catch (HttpClientErrorException.BadRequest e) {
+                            log.error("토큰 길이 초과: {}", job.content().getId());
+                        }
+                    }
+
+                    if (!success) {
+                        log.error("최대 재시도 실패, 해당 컨텐츠는 벡터 임베딩 생략: {}", job.content().getId());
+                    }
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                log.error("스레드 인터럽팅");
                 break;
             } catch (Exception e) {
                 log.error(e.getMessage(), e);

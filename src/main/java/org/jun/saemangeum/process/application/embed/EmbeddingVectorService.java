@@ -23,20 +23,33 @@ public class EmbeddingVectorService {
     private final VectorService vectorService;
 
     // AI 전처리 로직
-    public void embeddingVector(List<Content> contents) {
-        List<Vector> vectors = contents.stream().map(content -> {
-            String text = content.getTitle() + " " + content.getIntroduction();
-            EmbeddingResponse response = vectorClient.get(text);
-            byte[] vectorBytes = floatToByte(response);
-
-            return Vector.builder().vector(vectorBytes).content(content).build();
-        }).toList();
-
-        vectorService.saveVectors(vectors);
-    }
+//    public void embeddingVector(List<Content> contents) {
+//        List<Vector> vectors = contents.stream().map(content -> {
+//            String text = content.getTitle() + " " + content.getIntroduction();
+//            EmbeddingResponse response = vectorClient.get(text);
+//            byte[] vectorBytes = floatToByte(response);
+//
+//            return Vector.builder().vector(vectorBytes).content(content).build();
+//        }).toList();
+//
+//        vectorService.saveVectors(vectors);
+//    }
 
     public void embeddingVector(Content content) {
         String text = content.getTitle() + " " + content.getIntroduction();
+
+        // 설명 뒷부분 일부를 잘라서라도 토큰 조건 맞추기
+        if (text.length() > 1200) {
+            String[] sentences = text.split("(?<=[.!?\\n])");
+            StringBuilder sb = new StringBuilder();
+            for (String sentence : sentences) {
+                if (sb.length() + sentence.length() > 1200) break;
+                sb.append(sentence);
+            }
+
+            text = sb.toString().trim();
+        };
+
         EmbeddingResponse response = vectorClient.get(text);
         byte[] vectorBytes = floatToByte(response);
         Vector vector = Vector.builder().vector(vectorBytes).content(content).build();
