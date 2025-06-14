@@ -4,34 +4,33 @@ import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
-import org.jun.saemangeum.process.application.dto.FestivalResponse;
-import org.springframework.stereotype.Component;
+import org.jun.saemangeum.process.application.dto.GunsanCultureResponse;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * 공공데이터 API 축제 CSV 받아오기
+ * 공공데이터 군산 문화시설 API
  */
-@Component
-public class SmgFestivalCollector extends OpenApiCollector {
+@Service
+public class GunsanCultureCollector extends OpenApiCollector {
 
-    private static final String LAST_PATH = "/15006172/v1/uddi:ede8925d-bfbd-49fc-9f3c-abf1ead5b402";
-    private static final String URL = "https://www.saemangeum.go.kr/sda/content.do?key=2010083672101";
+    private static final String LAST_PATH = "/15041531/v1/uddi:282417f2-01d9-4bff-9d8c-dcc80d78b20e";
+    private static final String URL = "https://www.ktriptips.com/kor/culture?&s_ac=37&s_sc=2";
 
-    public SmgFestivalCollector(
+    public GunsanCultureCollector(
             OpenApiClient openApiClient, TitleDuplicateChecker titleDuplicateChecker) {
         super(openApiClient, titleDuplicateChecker);
     }
 
     @Override
     public List<RefinedDataDTO> collectData() {
-        FestivalResponse response = openApiClient.get(
+        GunsanCultureResponse response = openApiClient.get(
                 LAST_PATH,
-                FestivalResponse.class,
+                GunsanCultureResponse.class,
                 q -> q.queryParam("page", 1).queryParam("perPage", 100)
         );
 
-        return response.data().stream().map(f -> RefinedDataDTO.to(f, URL)).toList();
+        return response.data().stream().map(e -> RefinedDataDTO.to(e, URL)).toList();
     }
-
 }

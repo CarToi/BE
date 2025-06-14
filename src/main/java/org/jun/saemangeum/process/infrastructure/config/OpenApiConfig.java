@@ -13,13 +13,13 @@ import java.net.URI;
 import java.util.List;
 
 @Configuration
-public class RestTemplateConfig {
+public class OpenApiConfig {
 
-    @Value("${dev.openApiKey}")
+    @Value("${crawling.openApiKey}")
     private String apiKey;
 
-    @Bean
-    public RestTemplate restTemplate() {
+    @Bean(name = "openApiTemplate")
+    public RestTemplate openApiTemplate() {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(5000);
         requestFactory.setReadTimeout(5000);

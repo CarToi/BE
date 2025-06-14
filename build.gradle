@@ -26,7 +26,6 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     implementation 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -34,7 +33,6 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // H2 DB & JPA
@@ -43,7 +41,7 @@ dependencies {
 
     // selenium
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-    implementation("org.seleniumhq.selenium:selenium-java:4.33.0")
+//    implementation("org.seleniumhq.selenium:selenium-java:4.33.0")
 
     // JSoup
     implementation 'org.jsoup:jsoup:1.20.1'
@@ -56,6 +54,10 @@ dependencies {
     jmh 'org.openjdk.jmh:jmh-core:1.37'
     jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
     jmh 'org.openjdk.jmh:jmh-generator-bytecode:1.37'
+}
+
+test {
+    systemProperty "spring.profiles.active", "test"
 }
 
 dependencyManagement {

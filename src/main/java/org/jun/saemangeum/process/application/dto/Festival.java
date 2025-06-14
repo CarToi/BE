@@ -1,9 +1,7 @@
-package org.jun.saemangeum.process.presentation.dto;
+package org.jun.saemangeum.process.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import org.jun.saemangeum.global.domain.Category;
-import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 
 @Getter
 public class Festival {
@@ -30,9 +28,4 @@ public class Festival {
 
     @JsonProperty("비고")
     private String note;
-
-    public RefinedDataDTO convertToDTO() {
-        return new RefinedDataDTO(
-                this.name, this.location, Category.FESTIVAL, null, this.description);
-    }
 }

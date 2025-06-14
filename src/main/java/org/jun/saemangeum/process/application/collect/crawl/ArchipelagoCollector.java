@@ -7,7 +7,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
-import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
+import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
+import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,29 +22,29 @@ public class ArchipelagoCollector extends CrawlingCollector {
     private static final String URL = "https://www.sdco.or.kr";
     private static final String PATH = "/menu.es?mid=a10104000000";
 
+    public ArchipelagoCollector(TitleDuplicateChecker titleDuplicateChecker) {
+        super(titleDuplicateChecker);
+    }
+
     @Override
-    public List<RefinedDataDTO> collectData() {
+    public List<RefinedDataDTO> collectData() throws IOException {
         List<RefinedDataDTO> data = new ArrayList<>();
 
-        try {
-            Document doc = Jsoup.connect(URL + PATH).timeout(5 * 1000).get();
-            Elements items = doc.select(".list6 .item");
+        Document doc = Jsoup.connect(URL + PATH).timeout(5 * 1000).get();
+        Elements items = doc.select(".list6 .item");
 
-            for (Element item : items) {
-                String title = item.select(".txt_box h5.title1").text();
-                String introduction = item.select(".txt_box p.t1").text();
-                String position = item.select(".txt_box p.loc").text();
-                String imgSrc = item.select(".img_box img").attr("src");
+        for (Element item : items) {
+            String title = item.select(".txt_box h5.title1").text();
+            String introduction = item.select(".txt_box p.t1").text();
+            String position = item.select(".txt_box p.loc").text();
+            String imgSrc = item.select(".img_box img").attr("src");
 
-                if (!imgSrc.startsWith("http")) imgSrc = URL + imgSrc;
+            if (!imgSrc.startsWith("http")) imgSrc = URL + imgSrc;
 
-                data.add(new RefinedDataDTO(title, position, Category.TOUR, imgSrc, introduction));
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            return data;
+            log.info(introduction);
+
+            data.add(new RefinedDataDTO(title, position, Category.TOUR, imgSrc, introduction, URL + PATH));
         }
-
         return data;
     }
 }
