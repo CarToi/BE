@@ -6,6 +6,9 @@ import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.collect.base.Refiner;
 import org.jun.saemangeum.process.application.embed.EmbeddingVectorService;
+import org.jun.saemangeum.process.infrastructure.dto.EmbeddingJob;
+import org.jun.saemangeum.process.infrastructure.queue.EmbeddingJobQueue;
+import org.jun.saemangeum.process.infrastructure.queue.EmbeddingWorkerService;
 import org.jun.saemangeum.process.presentation.TestDTO;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
@@ -22,9 +25,12 @@ public class ContentDataProcessService {
     private final TaskExecutor virtualThreadExecutor;
     private final ContentService contentService;
     private final EmbeddingVectorService embeddingVectorService;
+    private final EmbeddingWorkerService embeddingWorkerService;
+    private final EmbeddingJobQueue embeddingJobQueue;
 
     public void collectAndSaveAsync() {
         log.info("Virtual Thread 기반 데이터 수집 시작 - 총 {}개 수집기", refiners.size());
+        embeddingWorkerService.startWorker();
 
         // 모든 수집기를 독립적인 플로우로 실행
         List<CompletableFuture<Void>> futures = refiners.stream()
@@ -40,6 +46,21 @@ public class ContentDataProcessService {
                         log.error("일부 수집기에서 오류 발생", throwable);
                     } else {
                         log.info("모든 데이터 수집 완료");
+
+                        Thread.ofVirtual().start(
+                                () -> {
+                                    try {
+                                        while (!embeddingJobQueue.isEmpty()) {
+                                            Thread.sleep(300); // 큐 소비 기다리기
+                                        }
+                                        embeddingWorkerService.stopWorker();
+                                        log.info("임베딩 워커 종료 완료");
+                                    } catch (InterruptedException e) {
+                                        Thread.currentThread().interrupt();
+                                        log.warn("워커 종료 스레드 인터럽트 발생");
+                                    }
+                                }
+                        );
                     }
                 });
     }
@@ -69,7 +90,14 @@ public class ContentDataProcessService {
 
 
                 // 이 사이에 블로킹 큐가 필요할 것 같다
-                embeddingVectorService.embeddingVector(contents);
+//                embeddingVectorService.embeddingVector(contents);
+                contents.forEach(e -> {
+                    try {
+                        embeddingJobQueue.offer(new EmbeddingJob(e));
+                    } catch (InterruptedException ex) {
+                        log.warn("워커 큐 삽입 실패: {}", e.getId());
+                    }
+                });
             } catch (Exception e) {
                 log.error("플로우 실패: {} - 오류: {}", refinerName, e.getMessage(), e);
                 // 개별 수집기 실패가 전체에 영향주지 않도록 예외를 던지지 않음

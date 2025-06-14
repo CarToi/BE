@@ -19,6 +19,11 @@ public class VectorService {
         vectorRepository.saveAll(vectors);
     }
 
+    @Transactional
+    public void saveVector(Vector vector) {
+        vectorRepository.save(vector);
+    }
+
     @Transactional(readOnly = true)
     public List<Vector> getVectors() {
         return vectorRepository.findAll();

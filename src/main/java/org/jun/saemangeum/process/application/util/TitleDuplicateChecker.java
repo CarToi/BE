@@ -9,7 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TitleDuplicateChecker {
 
     // 스레드 안전 Set 생성
-    private final Set<String> seenTitles = ConcurrentHashMap.newKeySet();
+    private final Set<String> seenTitles;
+
+    public TitleDuplicateChecker() {
+        this.seenTitles = ConcurrentHashMap.newKeySet();;
+    }
 
     public boolean isDuplicate(String title) {
         // 중복이면 true, 아니면 false

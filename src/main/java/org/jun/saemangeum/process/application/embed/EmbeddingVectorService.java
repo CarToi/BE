@@ -35,6 +35,15 @@ public class EmbeddingVectorService {
         vectorService.saveVectors(vectors);
     }
 
+    public void embeddingVector(Content content) {
+        String text = content.getTitle() + " " + content.getIntroduction();
+        EmbeddingResponse response = vectorClient.get(text);
+        byte[] vectorBytes = floatToByte(response);
+        Vector vector = Vector.builder().vector(vectorBytes).content(content).build();
+
+        vectorService.saveVector(vector);
+    }
+
     // 유사도 계산
     public List<Content> calculateSimilarity(String text) {
         EmbeddingResponse response = vectorClient.get(text);
