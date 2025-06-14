@@ -1,5 +1,6 @@
 package org.jun.saemangeum.process.infrastructure.queue;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.process.infrastructure.dto.EmbeddingJob;
 import org.springframework.stereotype.Component;
 
@@ -7,6 +8,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Component
 public class EmbeddingJobQueue {
 
@@ -17,17 +19,25 @@ public class EmbeddingJobQueue {
     }
 
     // 시간적 텀을 줘서 큐 공간 확보할 대기시간 확보
-    public boolean offer(EmbeddingJob job) throws InterruptedException {
-        return this.queue.offer(job, 150, TimeUnit.MILLISECONDS);
+    public boolean offerQueue(EmbeddingJob job) {
+        boolean result = false;
+
+        try {
+            result = queue.offer(job, 150, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException ex) {
+            log.warn("큐 삽입 실패: {}", job.content().getId());
+        }
+
+        return result;
     }
 
     // 시간적 텀을 줘서 큐 채워질 대기시간 확보
-    public EmbeddingJob poll() throws InterruptedException {
+    public EmbeddingJob pollQueue() throws InterruptedException {
         return this.queue.poll(150, TimeUnit.MILLISECONDS);
     }
 
     // 비었는지 확인
-    public boolean isEmpty() {
+    public boolean isEmptyQueue() {
         return this.queue.isEmpty();
     }
 }

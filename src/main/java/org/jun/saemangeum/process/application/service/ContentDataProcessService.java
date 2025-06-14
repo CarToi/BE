@@ -24,13 +24,10 @@ public class ContentDataProcessService {
     private final List<Refiner> refiners;
     private final TaskExecutor virtualThreadExecutor;
     private final ContentService contentService;
-    private final EmbeddingVectorService embeddingVectorService;
     private final EmbeddingWorkerService embeddingWorkerService;
-    private final EmbeddingJobQueue embeddingJobQueue;
 
     public void collectAndSaveAsync() {
         log.info("Virtual Thread 기반 데이터 수집 시작 - 총 {}개 수집기", refiners.size());
-        embeddingWorkerService.startWorker();
 
         // 모든 수집기를 독립적인 플로우로 실행
         List<CompletableFuture<Void>> futures = refiners.stream()
@@ -46,21 +43,23 @@ public class ContentDataProcessService {
                         log.error("일부 수집기에서 오류 발생", throwable);
                     } else {
                         log.info("모든 데이터 수집 완료");
+                        embeddingWorkerService.startWorker(); // 위치가 여기인가 밖인가...
 
-                        Thread.ofVirtual().start(
-                                () -> {
-                                    try {
-                                        while (!embeddingJobQueue.isEmpty()) {
-                                            Thread.sleep(300); // 큐 소비 기다리기
-                                        }
-                                        embeddingWorkerService.stopWorker();
-                                        log.info("임베딩 워커 종료 완료");
-                                    } catch (InterruptedException e) {
-                                        Thread.currentThread().interrupt();
-                                        log.warn("워커 종료 스레드 인터럽트 발생");
-                                    }
+                        Thread.ofVirtual().start(() -> {
+                            try {
+                                while (!embeddingWorkerService.isEmpty()) {
+                                    Thread.sleep(300); // 큐 소비 기다리기
                                 }
-                        );
+                                embeddingWorkerService.stopWorker();
+                                log.info("임베딩 워커 종료 완료");
+
+                                // 여기에 재시도 하드코딩?
+                                Thread.ofVirtual().start(this::retryFailedJobs);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                                log.warn("워커 종료 스레드 인터럽트 발생");
+                            }
+                        });
                     }
                 });
     }
@@ -87,17 +86,7 @@ public class ContentDataProcessService {
 
                 // 3단계: 데이터베이스 저장(db에 먼저 저장하고 AI 전처리..?)
                 contentService.saveContents(contents);
-
-
-                // 이 사이에 블로킹 큐가 필요할 것 같다
-//                embeddingVectorService.embeddingVector(contents);
-                contents.forEach(e -> {
-                    try {
-                        embeddingJobQueue.offer(new EmbeddingJob(e));
-                    } catch (InterruptedException ex) {
-                        log.warn("워커 큐 삽입 실패: {}", e.getId());
-                    }
-                });
+                contents.forEach(e -> embeddingWorkerService.offerEmbeddingJobQueue(new EmbeddingJob(e)));
             } catch (Exception e) {
                 log.error("플로우 실패: {} - 오류: {}", refinerName, e.getMessage(), e);
                 // 개별 수집기 실패가 전체에 영향주지 않도록 예외를 던지지 않음
@@ -106,8 +95,35 @@ public class ContentDataProcessService {
         }, virtualThreadExecutor);
     }
 
-    public List<TestDTO> suggestContent(String text) {
-        List<Content> contents = embeddingVectorService.calculateSimilarity(text);
-        return contents.stream().map(TestDTO::of).toList();
+    /**
+     * 실패 작업 재시도
+     */
+    private void retryFailedJobs() {
+        try {
+            List<Content> failed = embeddingWorkerService.getFailedContents();
+            if (failed.isEmpty()) {
+                log.info("재시도할 콘텐츠 없음");
+                return;
+            }
+
+            log.info("재시도 대기 중 (10초)");
+            Thread.sleep(15_000); // 유예 시간 15초
+
+            log.info("재시도 시작 - {}개 실패 콘텐츠", failed.size());
+            failed.forEach(content ->
+                    embeddingWorkerService.offerEmbeddingJobQueue(new EmbeddingJob(content)));
+
+            embeddingWorkerService.startWorker();
+
+            while (!embeddingWorkerService.isEmpty()) {
+                Thread.sleep(300);
+            }
+
+            embeddingWorkerService.stopWorker();
+            log.info("재시도 워커 종료 완료");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.warn("재시도 스레드 인터럽트 발생");
+        }
     }
 }

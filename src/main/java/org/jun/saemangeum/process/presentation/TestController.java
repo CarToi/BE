@@ -1,6 +1,8 @@
 package org.jun.saemangeum.process.presentation;
 
 import lombok.RequiredArgsConstructor;
+import org.jun.saemangeum.global.domain.Content;
+import org.jun.saemangeum.process.application.embed.EmbeddingVectorService;
 import org.jun.saemangeum.process.application.service.ContentDataProcessService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import java.util.List;
 public class TestController {
 
     private final ContentDataProcessService contentDataProcessService;
+    private final EmbeddingVectorService embeddingVectorService;
 
     @GetMapping
     public String testProcess() {
@@ -24,6 +27,7 @@ public class TestController {
 
     @GetMapping("/{text}")
     public List<TestDTO> testUseCase(@PathVariable String text) {
-        return contentDataProcessService.suggestContent(text);
+        List<Content> contents = embeddingVectorService.calculateSimilarity(text);
+        return contents.stream().map(TestDTO::of).toList();
     }
 }

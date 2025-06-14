@@ -41,12 +41,12 @@ public class EmbeddingVectorService {
         String text = content.getTitle() + " " + content.getIntroduction();
 
         // 설명 뒷부분 일부를 잘라서라도 토큰 조건 맞추기
-        if (text.length() > 1000) {
+        if (text.length() > 800) {
             log.info("길이 증가한 놈: {} // \n{}", content.getId(), content.getTitle() + " " + content.getIntroduction());
             String[] sentences = text.split("(?<=[.!?\\n])");
             StringBuilder sb = new StringBuilder();
             for (String sentence : sentences) {
-                if (sb.length() + sentence.length() > 1000) break;
+                if (sb.length() + sentence.length() > 800) break;
                 sb.append(sentence);
             }
 

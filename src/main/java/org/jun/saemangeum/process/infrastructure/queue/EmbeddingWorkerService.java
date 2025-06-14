@@ -1,8 +1,12 @@
 package org.jun.saemangeum.process.infrastructure.queue;
 
 import lombok.RequiredArgsConstructor;
+import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.process.application.embed.EmbeddingVectorService;
+import org.jun.saemangeum.process.infrastructure.dto.EmbeddingJob;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +25,21 @@ public class EmbeddingWorkerService {
         }
     }
 
+    public void offerEmbeddingJobQueue(EmbeddingJob job) {
+        embeddingJobQueue.offerQueue(job);
+    }
+
+    public boolean isEmpty() {
+        return embeddingJobQueue.isEmptyQueue();
+    }
+
     public void stopWorker() {
         if (worker != null) {
             worker.stop();
         }
+    }
+
+    public List<Content> getFailedContents() {
+        return worker != null ? worker.getFailedContents() : List.of();
     }
 }
