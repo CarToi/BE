@@ -1,6 +1,7 @@
 package org.jun.saemangeum.process.application.embed;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.domain.Vector;
 import org.jun.saemangeum.global.service.VectorService;
@@ -15,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmbeddingVectorService {
@@ -39,11 +41,12 @@ public class EmbeddingVectorService {
         String text = content.getTitle() + " " + content.getIntroduction();
 
         // 설명 뒷부분 일부를 잘라서라도 토큰 조건 맞추기
-        if (text.length() > 1200) {
+        if (text.length() > 1000) {
+            log.info("길이 증가한 놈: {} // \n{}", content.getId(), content.getTitle() + " " + content.getIntroduction());
             String[] sentences = text.split("(?<=[.!?\\n])");
             StringBuilder sb = new StringBuilder();
             for (String sentence : sentences) {
-                if (sb.length() + sentence.length() > 1200) break;
+                if (sb.length() + sentence.length() > 1000) break;
                 sb.append(sentence);
             }
 

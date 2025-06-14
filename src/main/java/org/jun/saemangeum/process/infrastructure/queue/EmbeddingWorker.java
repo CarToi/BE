@@ -47,6 +47,7 @@ public class EmbeddingWorker implements Runnable {
                     }
 
                     if (!success) {
+                        // 재시도 큐를 구축하자
                         log.error("최대 재시도 실패, 해당 컨텐츠는 벡터 임베딩 생략: {}", job.content().getId());
                     }
                 }
