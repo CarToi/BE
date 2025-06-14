@@ -1,4 +1,4 @@
-package org.jun.saemangeum.process.presentation.dto;
+package org.jun.saemangeum.process.presentation;
 
 import org.jun.saemangeum.global.domain.Content;
 

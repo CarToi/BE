@@ -4,7 +4,7 @@ import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
-import org.jun.saemangeum.process.presentation.dto.EventResponse;
+import org.jun.saemangeum.process.application.dto.EventResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

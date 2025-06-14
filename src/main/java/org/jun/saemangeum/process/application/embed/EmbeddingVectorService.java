@@ -40,7 +40,7 @@ public class EmbeddingVectorService {
         EmbeddingResponse response = vectorClient.get(text);
         float[] requestVec = VectorCalculator.addNoise(response.result().embedding());
 
-        List<Vector> vectors = vectorService.getVectors();
+        List<Vector> vectors = vectorService.getVectors(); // 이거 캐싱 대상이겠는데?
         PriorityQueue<ContentSimilarity> pq = new PriorityQueue<>();
 
         for (Vector vec : vectors) {

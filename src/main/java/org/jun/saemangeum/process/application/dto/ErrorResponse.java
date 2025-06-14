@@ -1,4 +1,4 @@
-package org.jun.saemangeum.process.presentation.dto;
+package org.jun.saemangeum.process.application.dto;
 
 public record ErrorResponse(int code, String msg) {
 }

@@ -1,10 +1,10 @@
 package org.jun.saemangeum.process.domain.dto;
 
 import org.jun.saemangeum.global.domain.Category;
-import org.jun.saemangeum.process.presentation.dto.GimjeCulture;
-import org.jun.saemangeum.process.presentation.dto.GunsanCulture;
-import org.jun.saemangeum.process.presentation.dto.Event;
-import org.jun.saemangeum.process.presentation.dto.Festival;
+import org.jun.saemangeum.process.application.dto.GimjeCulture;
+import org.jun.saemangeum.process.application.dto.GunsanCulture;
+import org.jun.saemangeum.process.application.dto.Event;
+import org.jun.saemangeum.process.application.dto.Festival;
 
 public record RefinedDataDTO(
         String title,

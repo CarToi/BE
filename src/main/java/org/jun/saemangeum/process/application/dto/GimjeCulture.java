@@ -1,4 +1,4 @@
-package org.jun.saemangeum.process.presentation.dto;
+package org.jun.saemangeum.process.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

@@ -1,13 +1,13 @@
-package org.jun.saemangeum.process.presentation.dto;
+package org.jun.saemangeum.process.application.dto;
 
 import java.util.List;
 
-public record GunsanCultureResponse(
+public record EventResponse(
         int page,
         int perPage,
         int totalCount,
         int currentCount,
         int matchCount,
-        List<GunsanCulture> data
+        List<Event> data
 ) {
 }

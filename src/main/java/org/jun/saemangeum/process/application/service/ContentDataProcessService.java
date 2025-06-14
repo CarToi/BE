@@ -6,7 +6,7 @@ import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.collect.base.Refiner;
 import org.jun.saemangeum.process.application.embed.EmbeddingVectorService;
-import org.jun.saemangeum.process.presentation.dto.TestDTO;
+import org.jun.saemangeum.process.presentation.TestDTO;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +52,10 @@ public class ContentDataProcessService {
             String refinerName = refiner.getClass().getSimpleName();
 
             try {
+                // 뭔가 Refiner 인터페이스에 데이터 개수 변화를 감지하는 추상 메소드도 넣어야 할 것 같은데..?
+                // 어차피 자식은 추상이니 넘기고 손자 구현체들에서 구현하면 될 것 같은데...
+                // 근데 기존의 구현체별 수집 데이터 개수를 어딘가에 저장해야 할 텐데.... 흠...
+
                 // 1단계: 데이터 수집
                 List<Content> contents = refiner.refine();
 
@@ -62,6 +66,9 @@ public class ContentDataProcessService {
 
                 // 3단계: 데이터베이스 저장(db에 먼저 저장하고 AI 전처리..?)
                 contentService.saveContents(contents);
+
+
+                // 이 사이에 블로킹 큐가 필요할 것 같다
                 embeddingVectorService.embeddingVector(contents);
             } catch (Exception e) {
                 log.error("플로우 실패: {} - 오류: {}", refinerName, e.getMessage(), e);
