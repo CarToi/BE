@@ -1,7 +1,7 @@
 package org.jun.saemangeum.service;
 
 import org.jun.saemangeum.process.application.collect.crawl.*;
-import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
+import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

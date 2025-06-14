@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
-import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
+import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
 
 import java.util.List;

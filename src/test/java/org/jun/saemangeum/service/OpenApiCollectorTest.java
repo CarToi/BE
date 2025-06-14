@@ -4,7 +4,7 @@ import org.jun.saemangeum.process.application.collect.api.GimjeCultureCollector;
 import org.jun.saemangeum.process.application.collect.api.GunsanCultureCollector;
 import org.jun.saemangeum.process.application.collect.api.SmgEventCollector;
 import org.jun.saemangeum.process.application.collect.api.SmgFestivalCollector;
-import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
+import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

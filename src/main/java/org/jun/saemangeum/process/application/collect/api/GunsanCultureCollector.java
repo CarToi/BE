@@ -2,7 +2,7 @@ package org.jun.saemangeum.process.application.collect.api;
 
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
-import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
+import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
 import org.jun.saemangeum.process.application.dto.GunsanCultureResponse;
 import org.springframework.stereotype.Service;

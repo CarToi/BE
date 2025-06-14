@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+// 테스트용 h2는 임베디드가 아니라 인메모리로 세팅해야겠네
 @SpringBootTest
 public class ContentCollectServiceTest {
 

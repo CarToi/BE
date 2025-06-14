@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.jun.saemangeum.process.domain.dto.RefinedDataDTO;
+import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 
 // H2의 엔티티로 쓰이게 될 클래스
 @Entity
