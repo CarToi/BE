@@ -5,11 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.collect.base.Refiner;
-import org.jun.saemangeum.process.application.embed.EmbeddingVectorService;
 import org.jun.saemangeum.process.infrastructure.dto.EmbeddingJob;
-import org.jun.saemangeum.process.infrastructure.queue.EmbeddingJobQueue;
 import org.jun.saemangeum.process.infrastructure.queue.EmbeddingWorkerService;
-import org.jun.saemangeum.process.presentation.TestDTO;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +23,15 @@ public class ContentDataProcessService {
     private final ContentService contentService;
     private final EmbeddingWorkerService embeddingWorkerService;
 
+    /**
+     * 전체 플로우 (수집 → AI 전처리(+ 재시도) → 저장)
+     */
     public void collectAndSaveAsync() {
         log.info("Virtual Thread 기반 데이터 수집 시작 - 총 {}개 수집기", refiners.size());
 
         // 모든 수집기를 독립적인 플로우로 실행
         List<CompletableFuture<Void>> futures = refiners.stream()
-                .map(this::processRefinerFlow)
+                .map(this::processCollectingAndRefiningFlow)
                 .toList();
 
         // 모든 플로우 완료 대기
@@ -43,31 +43,15 @@ public class ContentDataProcessService {
                         log.error("일부 수집기에서 오류 발생", throwable);
                     } else {
                         log.info("모든 데이터 수집 완료");
-                        embeddingWorkerService.startWorker(); // 위치가 여기인가 밖인가...
-
-                        Thread.ofVirtual().start(() -> {
-                            try {
-                                while (!embeddingWorkerService.isEmpty()) {
-                                    Thread.sleep(300); // 큐 소비 기다리기
-                                }
-                                embeddingWorkerService.stopWorker();
-                                log.info("임베딩 워커 종료 완료");
-
-                                // 여기에 재시도 하드코딩?
-                                Thread.ofVirtual().start(this::retryFailedJobs);
-                            } catch (InterruptedException e) {
-                                Thread.currentThread().interrupt();
-                                log.warn("워커 종료 스레드 인터럽트 발생");
-                            }
-                        });
+                        processEmbeddingVectorFlow();
                     }
                 });
     }
 
     /**
-     * 개별 수집기의 전체 플로우 처리 (수집 → AI 전처리 → 저장)
+     * 개별 수집기의 전체 플로우 처리
      */
-    private CompletableFuture<Void> processRefinerFlow(Refiner refiner) {
+    private CompletableFuture<Void> processCollectingAndRefiningFlow(Refiner refiner) {
         return CompletableFuture.runAsync(() -> {
             String refinerName = refiner.getClass().getSimpleName();
 
@@ -101,9 +85,32 @@ public class ContentDataProcessService {
     }
 
     /**
-     * 실패 작업 재시도
+     * 임베딩 벡터 워커플로우 진입
      */
-    private void retryFailedJobs() {
+    private void processEmbeddingVectorFlow() {
+        embeddingWorkerService.startWorker(); // 위치가 여기인가 밖인가...
+
+        Thread.ofVirtual().start(() -> {
+            try {
+                while (!embeddingWorkerService.isEmpty()) {
+                    Thread.sleep(300); // 큐 소비 기다리기
+                }
+                embeddingWorkerService.stopWorker();
+                log.info("임베딩 워커 종료 완료");
+
+                // 여기에 재시도 하드코딩?
+                Thread.ofVirtual().start(this::retryFailedEmbeddingVectorJobs);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                log.warn("워커 종료 스레드 인터럽트 발생");
+            }
+        });
+    }
+
+    /**
+     * 임베딩 벡터 실패 작업 재시도
+     */
+    private void retryFailedEmbeddingVectorJobs() {
         try {
             List<Content> failed = embeddingWorkerService.getFailedContents();
             if (failed.isEmpty()) {
