@@ -35,7 +35,10 @@ public class SmgFestivalCollector extends OpenApiCollector {
                 q -> q.queryParam("page", 1).queryParam("perPage", 100)
         );
 
-        return response.data().stream().map(f -> RefinedDataDTO.to(f, URL, CollectSource.SMGFEAP)).toList();
+        if (super.isNeedToUpdate(response.totalCount(), CollectSource.SMGFEAP))
+            return response.data().stream().map(f -> RefinedDataDTO.to(f, URL, CollectSource.SMGFEAP)).toList();
+
+        return List.of();
     }
 
 }

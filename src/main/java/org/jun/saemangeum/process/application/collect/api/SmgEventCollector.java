@@ -35,6 +35,9 @@ public class SmgEventCollector extends OpenApiCollector {
                 q -> q.queryParam("page", 1).queryParam("perPage", 100)
         );
 
-        return response.data().stream().map(e -> RefinedDataDTO.to(e, URL, CollectSource.SMGEVAP)).toList();
+        if (isNeedToUpdate(response.totalCount(), CollectSource.SMGEVAP))
+            return response.data().stream().map(e -> RefinedDataDTO.to(e, URL, CollectSource.SMGEVAP)).toList();
+
+        return List.of();
     }
 }

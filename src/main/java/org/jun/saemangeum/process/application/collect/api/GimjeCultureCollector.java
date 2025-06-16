@@ -32,7 +32,11 @@ public class GimjeCultureCollector extends OpenApiCollector {
                 q -> q.queryParam("page", 1).queryParam("perPage", 100)
         );
 
-        return response.data().stream().map(e -> RefinedDataDTO.to(e, URL, CollectSource.GJCUAP)).toList();
+        if (super.isNeedToUpdate(response.totalCount(), CollectSource.GJCUAP)) {
+            return response.data().stream().map(e -> RefinedDataDTO.to(e, URL, CollectSource.GJCUAP)).toList();
+        }
+
+        return List.of();
     }
 
 }

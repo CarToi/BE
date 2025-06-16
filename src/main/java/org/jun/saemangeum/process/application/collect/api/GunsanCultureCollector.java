@@ -35,6 +35,9 @@ public class GunsanCultureCollector extends OpenApiCollector {
                 q -> q.queryParam("page", 1).queryParam("perPage", 100)
         );
 
-        return response.data().stream().map(e -> RefinedDataDTO.to(e, URL, CollectSource.GSCUAP)).toList();
+        if (super.isNeedToUpdate(response.totalCount(), CollectSource.GSCUAP))
+            return response.data().stream().map(e -> RefinedDataDTO.to(e, URL, CollectSource.GSCUAP)).toList();
+
+        return List.of();
     }
 }

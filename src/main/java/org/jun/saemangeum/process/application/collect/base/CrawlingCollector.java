@@ -50,6 +50,9 @@ public abstract class CrawlingCollector implements Refiner {
     // 데이터 업데이트 감지 목적 카운팅 메소드
     @Override
     public boolean isNeedToUpdate(int size, CollectSource collectSource) {
-        return size != contentRepository.countByCollectSource(collectSource);
+        if (size != contentRepository.countByCollectSource(collectSource))
+            contentRepository.deleteByCollectSource(collectSource);
+
+        return true;
     }
 }
