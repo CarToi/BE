@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
+import org.jun.saemangeum.process.application.util.CollectSource;
 
-// H2의 엔티티로 쓰이게 될 클래스
 @Entity
 @Builder
 @Table(name = "contents")
@@ -39,6 +39,9 @@ public class Content {
     @Column
     private String introduction;
 
+    @Column
+    private CollectSource collectSource;
+
     @OneToOne(mappedBy = "content", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "vector_id")
     private Vector vector;
@@ -51,6 +54,7 @@ public class Content {
                 .image(dto.image())
                 .introduction(dto.introduction())
                 .url(dto.url())
+                .collectSource(dto.collectSource())
                 .build();
     }
 
