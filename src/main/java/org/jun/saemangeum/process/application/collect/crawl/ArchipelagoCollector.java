@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
+import org.jun.saemangeum.global.repository.ContentRepository;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
@@ -23,8 +24,10 @@ public class ArchipelagoCollector extends CrawlingCollector {
     private static final String URL = "https://www.sdco.or.kr";
     private static final String PATH = "/menu.es?mid=a10104000000";
 
-    public ArchipelagoCollector(TitleDuplicateChecker titleDuplicateChecker) {
-        super(titleDuplicateChecker);
+    public ArchipelagoCollector(
+            TitleDuplicateChecker titleDuplicateChecker,
+            ContentRepository contentRepository) {
+        super(titleDuplicateChecker, contentRepository);
     }
 
     @Override

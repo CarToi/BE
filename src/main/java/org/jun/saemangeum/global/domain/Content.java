@@ -43,7 +43,7 @@ public class Content {
     private CollectSource collectSource;
 
     @OneToOne(mappedBy = "content", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "vector_id")
+//    @JoinColumn(name = "vector_id") // 연관관계 주인이 벡터인데 굳이 얜 필요없겠네
     private Vector vector;
 
     public static Content create(RefinedDataDTO dto) {

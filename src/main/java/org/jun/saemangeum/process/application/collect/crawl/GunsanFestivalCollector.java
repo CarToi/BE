@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
+import org.jun.saemangeum.global.repository.ContentRepository;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
@@ -27,8 +28,10 @@ public class GunsanFestivalCollector extends CrawlingCollector {
             "/3304137?", "/1504859?", "/1449917?", "/1448120?", "/306508?",
             "/306507?", "/306505?", "/306504?", "/306503?", "/306502?");
 
-    public GunsanFestivalCollector(TitleDuplicateChecker titleDuplicateChecker) {
-        super(titleDuplicateChecker);
+    public GunsanFestivalCollector(
+            TitleDuplicateChecker titleDuplicateChecker,
+            ContentRepository contentRepository) {
+        super(titleDuplicateChecker, contentRepository);
     }
 
     @Override

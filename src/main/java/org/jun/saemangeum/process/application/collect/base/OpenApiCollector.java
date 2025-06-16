@@ -3,6 +3,8 @@ package org.jun.saemangeum.process.application.collect.base;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
+import org.jun.saemangeum.global.repository.ContentRepository;
+import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
@@ -15,6 +17,7 @@ public abstract class OpenApiCollector implements Refiner {
 
     protected final OpenApiClient openApiClient;
     private final TitleDuplicateChecker titleDuplicateChecker;
+    private final ContentRepository contentRepository;
 
     @Override
     public List<Content> refine() {
@@ -43,5 +46,11 @@ public abstract class OpenApiCollector implements Refiner {
         }
 
         return List.of(); // 모든 시도 실패
+    }
+
+    // 데이터 업데이트 감지 목적 카운팅 메소드
+    @Override
+    public boolean isNeedToUpdate(int size, CollectSource collectSource) {
+        return size != contentRepository.countByCollectSource(collectSource);
     }
 }

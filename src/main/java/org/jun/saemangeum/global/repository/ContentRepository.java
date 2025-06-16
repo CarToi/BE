@@ -11,4 +11,5 @@ import java.util.List;
 public interface ContentRepository extends JpaRepository<Content, Long> {
     List<Content> findByCollectSource(CollectSource collectSource);
     void deleteByCollectSource(CollectSource collectSource);
+    int countByCollectSource(CollectSource collectSource);
 } 

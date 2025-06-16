@@ -2,11 +2,13 @@ package org.jun.saemangeum.service;
 
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.global.domain.Content;
+import org.jun.saemangeum.global.repository.ContentRepository;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +16,18 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TitleDuplicateCheckerTest {
+
     @Test
     @DisplayName("타이틀 기반 수집 데이터 중복 필터링 체크, 숫자와 공백 배제")
     void testTitleDuplicateChecker() {
         TitleDuplicateChecker checker = new TitleDuplicateChecker();
 
-        OpenApiCollector apiCollector = new OpenApiCollector(null, checker) {
+        OpenApiCollector apiCollector = new OpenApiCollector(null, checker, null) {
             @Override
             public List<RefinedDataDTO> collectData() {
                 return List.of(
@@ -32,7 +38,7 @@ public class TitleDuplicateCheckerTest {
             }
         };
 
-        CrawlingCollector crawlingCollector = new CrawlingCollector(checker) {
+        CrawlingCollector crawlingCollector = new CrawlingCollector(checker, null) {
             @Override
             public List<RefinedDataDTO> collectData() {
                 return List.of(

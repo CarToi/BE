@@ -1,5 +1,6 @@
 package org.jun.saemangeum.process.application.collect.api;
 
+import org.jun.saemangeum.global.repository.ContentRepository;
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
 import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
@@ -20,8 +21,10 @@ public class GunsanCultureCollector extends OpenApiCollector {
     private static final String URL = "https://www.ktriptips.com/kor/culture?&s_ac=37&s_sc=2";
 
     public GunsanCultureCollector(
-            OpenApiClient openApiClient, TitleDuplicateChecker titleDuplicateChecker) {
-        super(openApiClient, titleDuplicateChecker);
+            OpenApiClient openApiClient,
+            TitleDuplicateChecker titleDuplicateChecker,
+            ContentRepository contentRepository) {
+        super(openApiClient, titleDuplicateChecker, contentRepository);
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
+import org.jun.saemangeum.global.repository.ContentRepository;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
@@ -32,10 +33,11 @@ public class CityTourCollector extends CrawlingCollector {
 
     private static final String PATH = "https://www.saemangeum.go.kr/sda/content.do?key=";
 
-    public CityTourCollector(TitleDuplicateChecker titleDuplicateChecker) {
-        super(titleDuplicateChecker);
+    public CityTourCollector(
+            TitleDuplicateChecker titleDuplicateChecker,
+            ContentRepository contentRepository) {
+        super(titleDuplicateChecker, contentRepository);
     }
-
     @Override
     public List<RefinedDataDTO> collectData() throws IOException {
         List<RefinedDataDTO> data = new ArrayList<>();
