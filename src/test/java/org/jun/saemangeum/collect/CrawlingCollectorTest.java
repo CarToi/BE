@@ -1,13 +1,9 @@
-package org.jun.saemangeum.service;
+package org.jun.saemangeum.collect;
 
-import org.jun.saemangeum.global.service.ContentService;
-import org.jun.saemangeum.global.service.CountService;
-import org.jun.saemangeum.global.service.VectorService;
 import org.jun.saemangeum.process.application.collect.crawl.*;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.junit.jupiter.api.*;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,8 +14,6 @@ import org.springframework.context.annotation.Primary;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class CrawlingCollectorTest {
