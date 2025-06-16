@@ -9,6 +9,7 @@ import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.service.CountService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,9 @@ public class GunsanFestivalCollector extends CrawlingCollector {
             "/306507?", "/306505?", "/306504?", "/306503?", "/306502?");
 
     public GunsanFestivalCollector(
-            TitleDuplicateChecker titleDuplicateChecker,
-            ContentService contentService,
-            CountService countService) {
-        super(titleDuplicateChecker, contentService, countService);
+            DataCountUpdateService dataCountUpdateService,
+            TitleDuplicateChecker titleDuplicateChecker) {
+        super(dataCountUpdateService, titleDuplicateChecker);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class GunsanFestivalCollector extends CrawlingCollector {
         if (countEl != null) {
             int count = Integer.parseInt(countEl.text());
 
-            if (!super.isNeedToUpdate(count, CollectSource.GSFECR))
+            if (!dataCountUpdateService.isNeedToUpdate(count, CollectSource.GSFECR))
                 return data;
         }
 

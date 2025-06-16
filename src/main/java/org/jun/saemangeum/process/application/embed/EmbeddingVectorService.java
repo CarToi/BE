@@ -25,18 +25,6 @@ public class EmbeddingVectorService {
     private final VectorService vectorService;
 
     // AI 전처리 로직
-//    public void embeddingVector(List<Content> contents) {
-//        List<Vector> vectors = contents.stream().map(content -> {
-//            String text = content.getTitle() + " " + content.getIntroduction();
-//            EmbeddingResponse response = vectorClient.get(text);
-//            byte[] vectorBytes = floatToByte(response);
-//
-//            return Vector.builder().vector(vectorBytes).content(content).build();
-//        }).toList();
-//
-//        vectorService.saveVectors(vectors);
-//    }
-
     public void embeddingVector(Content content) {
         String text = content.getTitle() + " " + content.getIntroduction();
 

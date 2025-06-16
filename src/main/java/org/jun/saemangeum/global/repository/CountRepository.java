@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface CountRepository extends JpaRepository<Count, Long> {
     Optional<Count> findByCollectSource(CollectSource collectSource);
+    boolean existsByCollectSource(CollectSource collectSource);
 }

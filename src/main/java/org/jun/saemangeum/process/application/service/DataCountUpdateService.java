@@ -1,13 +1,24 @@
-package org.jun.saemangeum.process.application.util;
+package org.jun.saemangeum.process.application.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.global.domain.Count;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.service.CountService;
-import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public class CollectorUtil {
-    public static boolean compareSize(int size, CollectSource collectSource, CountService countService, Logger log, ContentService contentService) {
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class DataCountUpdateService {
+
+    private final CountService countService;
+    private final ContentService contentService;
+
+    @Transactional
+    public boolean isNeedToUpdate(int size, CollectSource collectSource) {
         Count existedCount = countService.findByCollectSource(collectSource);
         int existingSize = existedCount.getCount();
         if (size != existingSize) {
@@ -18,6 +29,7 @@ public class CollectorUtil {
             return true;
         }
 
+        log.info("{} 데이터 카운팅 업데이트 없음", collectSource);
         return false;
     }
 }

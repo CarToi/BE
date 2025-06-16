@@ -27,7 +27,7 @@ public class TitleDuplicateCheckerTest {
     void testTitleDuplicateChecker() {
         TitleDuplicateChecker checker = new TitleDuplicateChecker();
 
-        OpenApiCollector apiCollector = new OpenApiCollector(null, checker, null, null) {
+        OpenApiCollector apiCollector = new OpenApiCollector(null, null, checker) {
             @Override
             public List<RefinedDataDTO> collectData() {
                 return List.of(
@@ -38,7 +38,7 @@ public class TitleDuplicateCheckerTest {
             }
         };
 
-        CrawlingCollector crawlingCollector = new CrawlingCollector(checker, null, null) {
+        CrawlingCollector crawlingCollector = new CrawlingCollector(null, checker) {
             @Override
             public List<RefinedDataDTO> collectData() {
                 return List.of(

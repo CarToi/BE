@@ -9,6 +9,7 @@ import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.service.CountService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,9 @@ public class SeawallTourCollector extends CrawlingCollector {
     private static final String PATH = "https://www.saemangeum.go.kr/sda/content.do?key=2010083671336";
 
     public SeawallTourCollector(
-            TitleDuplicateChecker titleDuplicateChecker,
-            ContentService contentService,
-            CountService countService) {
-        super(titleDuplicateChecker, contentService, countService);
+            DataCountUpdateService dataCountUpdateService,
+            TitleDuplicateChecker titleDuplicateChecker) {
+        super(dataCountUpdateService, titleDuplicateChecker);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class SeawallTourCollector extends CrawlingCollector {
         Elements tabs = doc.select(".tab_area .tablist li");
         Elements panels = doc.select(".tabpanel");
 
-        if (super.isNeedToUpdate(tabs.size() - 1, CollectSource.SWTOCR)) {
+        if (dataCountUpdateService.isNeedToUpdate(tabs.size() - 1, CollectSource.SWTOCR)) {
             for (int i = 0; i < tabs.size(); i++) {
                 String title = tabs.get(i).text().trim();
                 if ("쉼터(포토존)".equals(title)) continue;

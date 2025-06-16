@@ -9,6 +9,7 @@ import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.service.CountService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
@@ -33,10 +34,9 @@ public class CityTourCollector extends CrawlingCollector {
     private static final String PATH = "https://www.saemangeum.go.kr/sda/content.do?key=";
 
     public CityTourCollector(
-            TitleDuplicateChecker titleDuplicateChecker,
-            ContentService contentService,
-            CountService countService) {
-        super(titleDuplicateChecker, contentService, countService);
+            DataCountUpdateService dataCountUpdateService,
+            TitleDuplicateChecker titleDuplicateChecker) {
+        super(dataCountUpdateService, titleDuplicateChecker);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CityTourCollector extends CrawlingCollector {
             Document doc = Jsoup.connect(PATH + city.getValue()).timeout(5 * 1000).get();
             Elements items = doc.select("ul.li_spot." + city.getKey() + " > li");
 
-            if (!super.isNeedToUpdate(items.size(), SOURCES.get(index))) {
+            if (!dataCountUpdateService.isNeedToUpdate(items.size(), SOURCES.get(index))) {
                 index++;
                 continue;
             }

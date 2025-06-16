@@ -7,7 +7,7 @@ import org.jun.saemangeum.global.domain.Count;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.global.service.CountService;
-import org.jun.saemangeum.process.application.util.CollectorUtil;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class CrawlingCollector implements Refiner {
 
+    protected final DataCountUpdateService dataCountUpdateService;
     private final TitleDuplicateChecker titleDuplicateChecker;
-    private final ContentService contentService;
-    private final CountService countService;
 
     @Override
     public List<Content> refine() {
@@ -51,12 +50,5 @@ public abstract class CrawlingCollector implements Refiner {
         }
 
         return List.of(); // 모든 시도 실패
-    }
-
-    // 데이터 업데이트 감지 목적 카운팅 메소드
-    @Override
-    @Transactional
-    public boolean isNeedToUpdate(int size, CollectSource collectSource) {
-        return CollectorUtil.compareSize(size, collectSource, countService, log, contentService);
     }
 }

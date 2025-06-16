@@ -9,6 +9,7 @@ import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.service.CountService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
@@ -25,10 +26,9 @@ public class ArchipelagoCollector extends CrawlingCollector {
     private static final String PATH = "/menu.es?mid=a10104000000";
 
     public ArchipelagoCollector(
-            TitleDuplicateChecker titleDuplicateChecker,
-            ContentService contentService,
-            CountService countService) {
-        super(titleDuplicateChecker, contentService, countService);
+            DataCountUpdateService dataCountUpdateService,
+            TitleDuplicateChecker titleDuplicateChecker) {
+        super(dataCountUpdateService, titleDuplicateChecker);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ArchipelagoCollector extends CrawlingCollector {
         Document doc = Jsoup.connect(URL + PATH).timeout(5 * 1000).get();
         Elements items = doc.select(".list6 .item");
 
-        if (super.isNeedToUpdate(items.size(), CollectSource.ARTOCR)) {
+        if (dataCountUpdateService.isNeedToUpdate(items.size(), CollectSource.ARTOCR)) {
             for (Element item : items) {
                 String title = item.select(".txt_box h5.title1").text();
                 String introduction = item.select(".txt_box p.t1").text();
