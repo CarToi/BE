@@ -1,7 +1,7 @@
 package org.jun.saemangeum.process.application.dto;
 
 import org.jun.saemangeum.global.domain.Category;
-import org.jun.saemangeum.process.application.util.CollectSource;
+import org.jun.saemangeum.global.domain.CollectSource;
 
 public record RefinedDataDTO(
         String title,

@@ -1,4 +1,4 @@
-package org.jun.saemangeum.process.application.util;
+package org.jun.saemangeum.global.domain;
 
 /**
  * 구분용 합성 코드 : 지명 + 분야(카테고리) + 수집 방법(크롤링: CR, API: API)

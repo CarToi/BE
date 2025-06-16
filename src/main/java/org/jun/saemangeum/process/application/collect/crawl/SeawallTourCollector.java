@@ -5,10 +5,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
-import org.jun.saemangeum.global.repository.ContentRepository;
 import org.jun.saemangeum.global.service.ContentService;
+import org.jun.saemangeum.global.service.CountService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
-import org.jun.saemangeum.process.application.util.CollectSource;
+import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,9 @@ public class SeawallTourCollector extends CrawlingCollector {
 
     public SeawallTourCollector(
             TitleDuplicateChecker titleDuplicateChecker,
-            ContentService contentService) {
-        super(titleDuplicateChecker, contentService);
+            ContentService contentService,
+            CountService countService) {
+        super(titleDuplicateChecker, contentService, countService);
     }
 
     @Override

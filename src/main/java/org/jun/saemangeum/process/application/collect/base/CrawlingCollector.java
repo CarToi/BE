@@ -3,11 +3,14 @@ package org.jun.saemangeum.process.application.collect.base;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
-import org.jun.saemangeum.global.repository.ContentRepository;
+import org.jun.saemangeum.global.domain.Count;
 import org.jun.saemangeum.global.service.ContentService;
-import org.jun.saemangeum.process.application.util.CollectSource;
+import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.global.service.CountService;
+import org.jun.saemangeum.process.application.util.CollectorUtil;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +21,7 @@ public abstract class CrawlingCollector implements Refiner {
 
     private final TitleDuplicateChecker titleDuplicateChecker;
     private final ContentService contentService;
+    private final CountService countService;
 
     @Override
     public List<Content> refine() {
@@ -26,7 +30,7 @@ public abstract class CrawlingCollector implements Refiner {
         List<RefinedDataDTO> data = retry(this::collectData);
 
         return data.stream()
-                .filter(e -> titleDuplicateChecker.isDuplicate(e.title()))
+                .filter(e -> titleDuplicateChecker.isDuplicate(e.title())) // 얘, 제목 중복 체커가 새로운 업데이트 개수와 기존 개수 비교를 막네...
                 .map(Content::create).toList();
     }
 
@@ -51,15 +55,8 @@ public abstract class CrawlingCollector implements Refiner {
 
     // 데이터 업데이트 감지 목적 카운팅 메소드
     @Override
+    @Transactional
     public boolean isNeedToUpdate(int size, CollectSource collectSource) {
-        int existingSize = contentService.countByCollectSource(collectSource);
-        if (size != existingSize) {
-            log.info("{} 새로운 개수: {} // 기존 개수: {}", collectSource, size, existingSize);
-            contentService.deleteByCollectSource(collectSource);
-
-            return true;
-        }
-
-        return false;
+        return CollectorUtil.compareSize(size, collectSource, countService, log, contentService);
     }
 }

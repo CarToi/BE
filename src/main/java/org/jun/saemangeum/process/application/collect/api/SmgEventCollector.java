@@ -1,8 +1,9 @@
 package org.jun.saemangeum.process.application.collect.api;
 
 import org.jun.saemangeum.global.service.ContentService;
+import org.jun.saemangeum.global.service.CountService;
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
-import org.jun.saemangeum.process.application.util.CollectSource;
+import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
@@ -23,8 +24,9 @@ public class SmgEventCollector extends OpenApiCollector {
     public SmgEventCollector(
             OpenApiClient openApiClient,
             TitleDuplicateChecker titleDuplicateChecker,
-            ContentService contentService) {
-        super(openApiClient, titleDuplicateChecker, contentService);
+            ContentService contentService,
+            CountService countService) {
+        super(openApiClient, titleDuplicateChecker, contentService, countService);
     }
 
     @Override

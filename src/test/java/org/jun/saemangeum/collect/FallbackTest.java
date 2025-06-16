@@ -42,7 +42,7 @@ public class FallbackTest {
     @Test
     @DisplayName("크롤링 과정에서 3번 재시도 결과 빈 배열을 반환하게 됨")
     void testCrawlingFallbackRetry() {
-        CrawlingCollector crawlingCollector = new CrawlingCollector(titleChecker, service) {
+        CrawlingCollector crawlingCollector = new CrawlingCollector(titleChecker, service, null) {
             @Override
             public List<RefinedDataDTO> collectData() throws IOException {
                 throw new IOException("임의의 입출력 예외 발생");
@@ -67,7 +67,7 @@ public class FallbackTest {
             int callCount = 0;
 
             public CountingCrawlingCollector(TitleDuplicateChecker checker) {
-                super(checker, service);
+                super(checker, service, null);
             }
 
             @Override
@@ -92,7 +92,7 @@ public class FallbackTest {
     @Test
     @DisplayName("API 호출에서 3번 재시도 결과 빈 배열을 반환하게 됨")
     void testApiFallbackRetry() {
-        OpenApiCollector openApiCollector = new OpenApiCollector(openApiClient, titleChecker, service) {
+        OpenApiCollector openApiCollector = new OpenApiCollector(openApiClient, titleChecker, service, null) {
             @Override
             public List<RefinedDataDTO> collectData() {
                 throw new RestClientException("임의의 RestClient 예외 발생");
@@ -118,7 +118,7 @@ public class FallbackTest {
 
             public CountingOpenApiCollector(
                     OpenApiClient client, TitleDuplicateChecker checker) {
-                super(client, checker, service);
+                super(client, checker, service, null);
             }
 
             @Override
