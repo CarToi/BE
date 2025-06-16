@@ -21,4 +21,9 @@ public class CountService {
                 .findByCollectSource(collectSource)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 데이터 소스 식별 코드!"));
     }
+
+    @Transactional
+    public void deleteAll() {
+        countRepository.deleteAll();
+    }
 }

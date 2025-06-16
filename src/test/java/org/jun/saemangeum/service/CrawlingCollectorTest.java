@@ -1,14 +1,25 @@
 package org.jun.saemangeum.service;
 
+import org.jun.saemangeum.global.service.ContentService;
+import org.jun.saemangeum.global.service.CountService;
+import org.jun.saemangeum.global.service.VectorService;
 import org.jun.saemangeum.process.application.collect.crawl.*;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
+import org.junit.jupiter.api.*;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class CrawlingCollectorTest {
@@ -25,8 +36,16 @@ public class CrawlingCollectorTest {
     @Autowired
     private GunsanFestivalCollector gunsanFestivalCollector;
 
-//    @Autowired
-//    private BuanCultureCollector buanCultureCollector;
+    @TestConfiguration
+    static class MockServiceConfig {
+        @Bean
+        @Primary
+        public DataCountUpdateService mockDataCountUpdateService() {
+            DataCountUpdateService mock = Mockito.mock(DataCountUpdateService.class);
+            Mockito.when(mock.isNeedToUpdate(Mockito.anyInt(), Mockito.any())).thenReturn(true);
+            return mock;
+        }
+    }
 
     @Test
     @DisplayName("새만금 개발청 방조제 정보 크롤링 테스트")

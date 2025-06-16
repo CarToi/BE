@@ -25,6 +25,11 @@ public class ContentService {
         contentRepository.deleteByCollectSource(collectSource);
     }
 
+    @Transactional
+    public void deleteAll() {
+        contentRepository.deleteAll();
+    }
+
     @Transactional(readOnly = true)
     public List<Content> getContents() {
         return contentRepository.findAll();

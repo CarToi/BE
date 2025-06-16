@@ -1,17 +1,28 @@
 package org.jun.saemangeum.service;
 
+import org.jun.saemangeum.global.service.ContentService;
+import org.jun.saemangeum.global.service.CountService;
+import org.jun.saemangeum.global.service.VectorService;
 import org.jun.saemangeum.process.application.collect.api.GimjeCultureCollector;
 import org.jun.saemangeum.process.application.collect.api.GunsanCultureCollector;
 import org.jun.saemangeum.process.application.collect.api.SmgEventCollector;
 import org.jun.saemangeum.process.application.collect.api.SmgFestivalCollector;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
+import org.junit.jupiter.api.*;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class OpenApiCollectorTest {
@@ -27,6 +38,18 @@ public class OpenApiCollectorTest {
 
     @Autowired
     private GimjeCultureCollector gimjeCultureCollector;
+
+    // MockBean 어노테이션이 사라질 거라서 임의 내부 클래스로 설정 처리...
+    @TestConfiguration
+    static class MockServiceConfig {
+        @Bean
+        @Primary
+        public DataCountUpdateService mockDataCountUpdateService() {
+            DataCountUpdateService mock = Mockito.mock(DataCountUpdateService.class);
+            Mockito.when(mock.isNeedToUpdate(Mockito.anyInt(), Mockito.any())).thenReturn(true);
+            return mock;
+        }
+    }
 
     @Test
     @DisplayName("공공데이터 축제 정보 정제 테스트")
