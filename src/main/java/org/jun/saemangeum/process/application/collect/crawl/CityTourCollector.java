@@ -39,6 +39,7 @@ public class CityTourCollector extends CrawlingCollector {
     @Override
     public List<RefinedDataDTO> collectData() throws IOException {
         List<RefinedDataDTO> data = new ArrayList<>();
+        int index = 0; // 데이터 소스 열거형 출처 체크용 인덱스
 
         for (Map<String, City> cityMap : CITIES) {
             Map.Entry<String, City> entry = cityMap.entrySet().iterator().next();
@@ -48,7 +49,6 @@ public class CityTourCollector extends CrawlingCollector {
             Document doc = Jsoup.connect(PATH + city.getValue()).timeout(5 * 1000).get();
             Elements items = doc.select("ul.li_spot." + city.getKey() + " > li");
 
-            int index = 0;
             for (Element item : items) {
                 Element element = item.selectFirst("div.info_spot > h5");
                 if (element == null) continue;
@@ -92,8 +92,8 @@ public class CityTourCollector extends CrawlingCollector {
                         introduction,
                         PATH + city.getValue(),
                         SOURCES.get(index)));
-                index++;
             }
+            index++;
         }
         return data;
     }

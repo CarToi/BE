@@ -25,9 +25,9 @@ public class TitleDuplicateCheckerTest {
             @Override
             public List<RefinedDataDTO> collectData() {
                 return List.of(
-                        new RefinedDataDTO("축제 1", "군산", Category.EVENT, "", "", ""),
-                        new RefinedDataDTO("축제1", "군산", Category.EVENT, "", "", ""),
-                        new RefinedDataDTO("축제2", "부안", Category.TOUR, "", "", "")
+                        new RefinedDataDTO("축제 1", "군산", Category.EVENT, "", "", "", null),
+                        new RefinedDataDTO("축제1", "군산", Category.EVENT, "", "", "", null),
+                        new RefinedDataDTO("축제2", "부안", Category.TOUR, "", "", "", null)
                 );
             }
         };
@@ -36,9 +36,9 @@ public class TitleDuplicateCheckerTest {
             @Override
             public List<RefinedDataDTO> collectData() {
                 return List.of(
-                        new RefinedDataDTO("1 행사", "군산", Category.TOUR, "", "", ""),
-                        new RefinedDataDTO("행사1", "김제", Category.EVENT, "", "", ""),
-                        new RefinedDataDTO("축제2", "부안", Category.FESTIVAL, "", "", "")
+                        new RefinedDataDTO("1 행사", "군산", Category.TOUR, "", "", "", null),
+                        new RefinedDataDTO("행사1", "김제", Category.EVENT, "", "", "", null),
+                        new RefinedDataDTO("축제2", "부안", Category.FESTIVAL, "", "", "", null)
                 );
             }
         };

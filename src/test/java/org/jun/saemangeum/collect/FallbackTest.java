@@ -54,7 +54,7 @@ public class FallbackTest {
     @DisplayName("크롤링 과정에서 2번 실패해도 3번째에 성공하면 정상 결과를 반환하게 됨")
     void testCrawlingFinallySuccess() {
         RefinedDataDTO mockDto = new RefinedDataDTO(
-                "임의의 제목", "주소", null, "이미지", "설명", "url");
+                "임의의 제목", "주소", null, "이미지", "설명", "url", null);
         List<RefinedDataDTO> mockList = List.of(mockDto);
 
         // Wrapper class
@@ -104,7 +104,7 @@ public class FallbackTest {
     @DisplayName("API 호출 과정에서 2번 실패해도 3번째에 성공하면 정상 결과를 반환하게 됨")
     void testApiFinallySuccess() {
         RefinedDataDTO mockDto = new RefinedDataDTO(
-                "임의의 제목", "주소", null, "이미지", "설명", "url");
+                "임의의 제목", "주소", null, "이미지", "설명", "url", null);
         List<RefinedDataDTO> mockList = List.of(mockDto);
 
         // Wrapper class

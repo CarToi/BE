@@ -16,7 +16,7 @@ public class Vector {
     private Long id;
 
     @Lob
-    @Column
+    @Column(columnDefinition = "BLOB")
     private byte[] vector;
 
     @OneToOne

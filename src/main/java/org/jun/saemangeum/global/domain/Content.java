@@ -36,7 +36,7 @@ public class Content {
     private String url;
 
     @Lob // MySQL 등에서는 TEXT 등으로
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String introduction;
 
     @Column
