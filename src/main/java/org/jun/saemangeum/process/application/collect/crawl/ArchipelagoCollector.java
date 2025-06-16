@@ -1,12 +1,12 @@
 package org.jun.saemangeum.process.application.collect.crawl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.global.repository.ContentRepository;
+import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
+// 문제 없음
 @Service
 public class ArchipelagoCollector extends CrawlingCollector {
 
@@ -26,8 +26,8 @@ public class ArchipelagoCollector extends CrawlingCollector {
 
     public ArchipelagoCollector(
             TitleDuplicateChecker titleDuplicateChecker,
-            ContentRepository contentRepository) {
-        super(titleDuplicateChecker, contentRepository);
+            ContentService contentService) {
+        super(titleDuplicateChecker, contentService);
     }
 
     @Override
@@ -45,8 +45,6 @@ public class ArchipelagoCollector extends CrawlingCollector {
                 String imgSrc = item.select(".img_box img").attr("src");
 
                 if (!imgSrc.startsWith("http")) imgSrc = URL + imgSrc;
-
-                log.info(introduction);
 
                 data.add(new RefinedDataDTO(title, position, Category.TOUR, imgSrc, introduction, URL + PATH, CollectSource.ARTOCR));
             }

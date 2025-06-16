@@ -1,10 +1,9 @@
 package org.jun.saemangeum.collect;
 
 import org.jun.saemangeum.global.domain.Content;
-import org.jun.saemangeum.global.repository.ContentRepository;
+import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
-import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
@@ -30,20 +29,20 @@ public class FallbackTest {
 
     private TitleDuplicateChecker titleChecker;
 
-    private ContentRepository contentRepository;
+    private ContentService service;
 
     @BeforeEach
     void setUp() {
         titleChecker = mock(TitleDuplicateChecker.class);
         when(titleChecker.isDuplicate(any())).thenReturn(true); // 필터 통과
 
-        contentRepository = mock(ContentRepository.class);
+        service = mock(ContentService.class);
     }
 
     @Test
     @DisplayName("크롤링 과정에서 3번 재시도 결과 빈 배열을 반환하게 됨")
     void testCrawlingFallbackRetry() {
-        CrawlingCollector crawlingCollector = new CrawlingCollector(titleChecker, contentRepository) {
+        CrawlingCollector crawlingCollector = new CrawlingCollector(titleChecker, service) {
             @Override
             public List<RefinedDataDTO> collectData() throws IOException {
                 throw new IOException("임의의 입출력 예외 발생");
@@ -68,7 +67,7 @@ public class FallbackTest {
             int callCount = 0;
 
             public CountingCrawlingCollector(TitleDuplicateChecker checker) {
-                super(checker, contentRepository);
+                super(checker, service);
             }
 
             @Override
@@ -93,7 +92,7 @@ public class FallbackTest {
     @Test
     @DisplayName("API 호출에서 3번 재시도 결과 빈 배열을 반환하게 됨")
     void testApiFallbackRetry() {
-        OpenApiCollector openApiCollector = new OpenApiCollector(openApiClient, titleChecker, contentRepository) {
+        OpenApiCollector openApiCollector = new OpenApiCollector(openApiClient, titleChecker, service) {
             @Override
             public List<RefinedDataDTO> collectData() {
                 throw new RestClientException("임의의 RestClient 예외 발생");
@@ -119,7 +118,7 @@ public class FallbackTest {
 
             public CountingOpenApiCollector(
                     OpenApiClient client, TitleDuplicateChecker checker) {
-                super(client, checker, contentRepository);
+                super(client, checker, service);
             }
 
             @Override

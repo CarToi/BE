@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.repository.ContentRepository;
+import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
@@ -16,7 +17,7 @@ import java.util.List;
 public abstract class CrawlingCollector implements Refiner {
 
     private final TitleDuplicateChecker titleDuplicateChecker;
-    private final ContentRepository contentRepository;
+    private final ContentService contentService;
 
     @Override
     public List<Content> refine() {
@@ -40,7 +41,8 @@ public abstract class CrawlingCollector implements Refiner {
             try {
                 return supplier.get();
             } catch (Exception e) {
-                log.warn("재시도 {}/{} 실패", i, MAX_RETRY);
+                log.error("업데이트에서 어떤 에러가? : {} // {}", e, e.getMessage());
+                log.warn("수집 재시도 {}/{} 실패", i, MAX_RETRY);
             }
         }
 
@@ -50,9 +52,14 @@ public abstract class CrawlingCollector implements Refiner {
     // 데이터 업데이트 감지 목적 카운팅 메소드
     @Override
     public boolean isNeedToUpdate(int size, CollectSource collectSource) {
-        if (size != contentRepository.countByCollectSource(collectSource))
-            contentRepository.deleteByCollectSource(collectSource);
+        int existingSize = contentService.countByCollectSource(collectSource);
+        if (size != existingSize) {
+            log.info("{} 새로운 개수: {} // 기존 개수: {}", collectSource, size, existingSize);
+            contentService.deleteByCollectSource(collectSource);
 
-        return true;
+            return true;
+        }
+
+        return false;
     }
 }

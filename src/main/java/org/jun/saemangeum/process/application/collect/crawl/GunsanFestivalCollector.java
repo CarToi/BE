@@ -1,12 +1,12 @@
 package org.jun.saemangeum.process.application.collect.crawl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.global.repository.ContentRepository;
+import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Slf4j
 @Service
 public class GunsanFestivalCollector extends CrawlingCollector {
 
@@ -30,8 +29,8 @@ public class GunsanFestivalCollector extends CrawlingCollector {
 
     public GunsanFestivalCollector(
             TitleDuplicateChecker titleDuplicateChecker,
-            ContentRepository contentRepository) {
-        super(titleDuplicateChecker, contentRepository);
+            ContentService contentService) {
+        super(titleDuplicateChecker, contentService);
     }
 
     @Override
@@ -87,8 +86,6 @@ public class GunsanFestivalCollector extends CrawlingCollector {
                     }
                 }
             }
-
-            log.info(introduction);
 
             data.add(new RefinedDataDTO(
                     title, position, Category.FESTIVAL, imgSrc, introduction, URL + MENU, CollectSource.GSFECR));

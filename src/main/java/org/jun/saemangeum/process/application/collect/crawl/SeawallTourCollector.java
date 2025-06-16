@@ -1,12 +1,12 @@
 package org.jun.saemangeum.process.application.collect.crawl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.global.repository.ContentRepository;
+import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
 import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
+// 업데이트 로직 통과
 @Service
 public class SeawallTourCollector extends CrawlingCollector {
 
@@ -25,8 +25,8 @@ public class SeawallTourCollector extends CrawlingCollector {
 
     public SeawallTourCollector(
             TitleDuplicateChecker titleDuplicateChecker,
-            ContentRepository contentRepository) {
-        super(titleDuplicateChecker, contentRepository);
+            ContentService contentService) {
+        super(titleDuplicateChecker, contentService);
     }
 
     @Override
@@ -62,8 +62,6 @@ public class SeawallTourCollector extends CrawlingCollector {
                         .replace("&nbsp;", " ")
                         .replace("&#39;", "'")
                         .trim();
-
-                log.info(introduction);
 
                 data.add(new RefinedDataDTO(
                         title, "전북특별자치도 " + title, Category.TOUR, imgSrc, introduction, PATH, CollectSource.SWTOCR));

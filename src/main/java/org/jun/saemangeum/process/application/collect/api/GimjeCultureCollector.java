@@ -1,6 +1,6 @@
 package org.jun.saemangeum.process.application.collect.api;
 
-import org.jun.saemangeum.global.repository.ContentRepository;
+import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
 import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// 업데이트 로직 통과
 @Service
 public class GimjeCultureCollector extends OpenApiCollector {
 
@@ -20,8 +21,8 @@ public class GimjeCultureCollector extends OpenApiCollector {
     public GimjeCultureCollector(
             OpenApiClient openApiClient,
             TitleDuplicateChecker titleDuplicateChecker,
-            ContentRepository contentRepository) {
-        super(openApiClient, titleDuplicateChecker, contentRepository);
+            ContentService contentService) {
+        super(openApiClient, titleDuplicateChecker, contentService);
     }
 
     @Override
