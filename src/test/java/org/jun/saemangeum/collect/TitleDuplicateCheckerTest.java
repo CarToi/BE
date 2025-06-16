@@ -1,4 +1,4 @@
-package org.jun.saemangeum.service;
+package org.jun.saemangeum.collect;
 
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.global.domain.Content;
@@ -14,31 +14,34 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 
 public class TitleDuplicateCheckerTest {
+
     @Test
     @DisplayName("타이틀 기반 수집 데이터 중복 필터링 체크, 숫자와 공백 배제")
     void testTitleDuplicateChecker() {
         TitleDuplicateChecker checker = new TitleDuplicateChecker();
 
-        OpenApiCollector apiCollector = new OpenApiCollector(null, checker) {
+        OpenApiCollector apiCollector = new OpenApiCollector(null, null, checker) {
             @Override
             public List<RefinedDataDTO> collectData() {
                 return List.of(
-                        new RefinedDataDTO("축제 1", "군산", Category.EVENT, "", "", ""),
-                        new RefinedDataDTO("축제1", "군산", Category.EVENT, "", "", ""),
-                        new RefinedDataDTO("축제2", "부안", Category.TOUR, "", "", "")
+                        new RefinedDataDTO("축제 1", "군산", Category.EVENT, "", "", "", null),
+                        new RefinedDataDTO("축제1", "군산", Category.EVENT, "", "", "", null),
+                        new RefinedDataDTO("축제2", "부안", Category.TOUR, "", "", "", null)
                 );
             }
         };
 
-        CrawlingCollector crawlingCollector = new CrawlingCollector(checker) {
+        CrawlingCollector crawlingCollector = new CrawlingCollector(null, checker) {
             @Override
             public List<RefinedDataDTO> collectData() {
                 return List.of(
-                        new RefinedDataDTO("1 행사", "군산", Category.TOUR, "", "", ""),
-                        new RefinedDataDTO("행사1", "김제", Category.EVENT, "", "", ""),
-                        new RefinedDataDTO("축제2", "부안", Category.FESTIVAL, "", "", "")
+                        new RefinedDataDTO("1 행사", "군산", Category.TOUR, "", "", "", null),
+                        new RefinedDataDTO("행사1", "김제", Category.EVENT, "", "", "", null),
+                        new RefinedDataDTO("축제2", "부안", Category.FESTIVAL, "", "", "", null)
                 );
             }
         };

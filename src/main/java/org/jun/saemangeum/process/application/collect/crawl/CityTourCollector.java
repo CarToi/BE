@@ -1,12 +1,15 @@
 package org.jun.saemangeum.process.application.collect.crawl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
+import org.jun.saemangeum.global.service.ContentService;
+import org.jun.saemangeum.global.service.CountService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
+import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
@@ -16,25 +19,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @Service
 public class CityTourCollector extends CrawlingCollector {
 
     private static final List<Map<String, City>> CITIES = List.of(
             Map.of("군산시", City.GUNSAN),
             Map.of("김제시", City.GIMJE),
-            Map.of("부안군", City.BUAN)
-    );
+            Map.of("부안군", City.BUAN));
+    private static final List<CollectSource> SOURCES = List.of(
+            CollectSource.GSTOCR,
+            CollectSource.GJTOCR,
+            CollectSource.BATOCR);
 
     private static final String PATH = "https://www.saemangeum.go.kr/sda/content.do?key=";
 
-    public CityTourCollector(TitleDuplicateChecker titleDuplicateChecker) {
-        super(titleDuplicateChecker);
+    public CityTourCollector(
+            DataCountUpdateService dataCountUpdateService,
+            TitleDuplicateChecker titleDuplicateChecker) {
+        super(dataCountUpdateService, titleDuplicateChecker);
     }
 
     @Override
     public List<RefinedDataDTO> collectData() throws IOException {
         List<RefinedDataDTO> data = new ArrayList<>();
+        int index = 0; // 데이터 소스 열거형 출처 체크용 인덱스
 
         for (Map<String, City> cityMap : CITIES) {
             Map.Entry<String, City> entry = cityMap.entrySet().iterator().next();
@@ -43,6 +51,11 @@ public class CityTourCollector extends CrawlingCollector {
 
             Document doc = Jsoup.connect(PATH + city.getValue()).timeout(5 * 1000).get();
             Elements items = doc.select("ul.li_spot." + city.getKey() + " > li");
+
+            if (!dataCountUpdateService.isNeedToUpdate(items.size(), SOURCES.get(index))) {
+                index++;
+                continue;
+            }
 
             for (Element item : items) {
                 Element element = item.selectFirst("div.info_spot > h5");
@@ -58,8 +71,6 @@ public class CityTourCollector extends CrawlingCollector {
                     descBuilder.append(p.text().trim()).append("\n");
                 }
                 String introduction = descBuilder.toString().trim();
-
-                log.info(introduction);
 
                 // 이미지 URL
                 Element imgEl = item.selectFirst("div.thumb img");
@@ -85,8 +96,10 @@ public class CityTourCollector extends CrawlingCollector {
                         Category.TOUR,
                         imgSrc,
                         introduction,
-                        PATH + city.getValue()));
+                        PATH + city.getValue(),
+                        SOURCES.get(index)));
             }
+            index++;
         }
         return data;
     }

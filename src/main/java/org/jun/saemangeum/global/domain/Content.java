@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 
-// H2의 엔티티로 쓰이게 될 클래스
 @Entity
 @Builder
 @Table(name = "contents")
@@ -36,8 +35,15 @@ public class Content {
     private String url;
 
     @Lob // MySQL 등에서는 TEXT 등으로
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String introduction;
+
+    @Column
+    private CollectSource collectSource;
+
+    @OneToOne(mappedBy = "content", cascade = CascadeType.REMOVE, orphanRemoval = true)
+//    @JoinColumn(name = "vector_id") // 연관관계 주인이 벡터인데 굳이 얜 필요없겠네
+    private Vector vector;
 
     public static Content create(RefinedDataDTO dto) {
         return Content.builder()
@@ -47,6 +53,14 @@ public class Content {
                 .image(dto.image())
                 .introduction(dto.introduction())
                 .url(dto.url())
+                .collectSource(dto.collectSource())
                 .build();
+    }
+
+    public void setVector(Vector vector) {
+        this.vector = vector;
+        if (vector.getContent() != null) {
+            vector.setContent(this);
+        }
     }
 }

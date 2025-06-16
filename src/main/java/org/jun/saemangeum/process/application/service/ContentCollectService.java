@@ -43,11 +43,6 @@ public class ContentCollectService {
                 .forEach(contentService::saveContents);
     }
 
-    @Transactional(readOnly = true)
-    public List<Content> getContents() {
-        return contentService.getContents();
-    }
-
     // 실제 AI 연동 전처리 지연 시뮬레이션
     private void simulateAiPreprocessing() {
         try {

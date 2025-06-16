@@ -24,6 +24,11 @@ public class VectorService {
         vectorRepository.save(vector);
     }
 
+    @Transactional
+    public void deleteAll() {
+        vectorRepository.deleteAll();
+    }
+
     @Transactional(readOnly = true)
     public List<Vector> getVectors() {
         return vectorRepository.findAll();

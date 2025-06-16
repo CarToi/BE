@@ -3,9 +3,15 @@ package org.jun.saemangeum.process.application.collect.base;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
+import org.jun.saemangeum.global.domain.Count;
+import org.jun.saemangeum.global.service.ContentService;
+import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.global.service.CountService;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +20,7 @@ import java.util.List;
 public abstract class OpenApiCollector implements Refiner {
 
     protected final OpenApiClient openApiClient;
+    protected final DataCountUpdateService dataCountUpdateService;
     private final TitleDuplicateChecker titleDuplicateChecker;
 
     @Override

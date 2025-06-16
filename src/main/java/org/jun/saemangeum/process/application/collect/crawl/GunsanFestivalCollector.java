@@ -1,12 +1,15 @@
 package org.jun.saemangeum.process.application.collect.crawl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
+import org.jun.saemangeum.global.service.ContentService;
+import org.jun.saemangeum.global.service.CountService;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
+import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Slf4j
 @Service
 public class GunsanFestivalCollector extends CrawlingCollector {
 
@@ -26,13 +28,26 @@ public class GunsanFestivalCollector extends CrawlingCollector {
             "/3304137?", "/1504859?", "/1449917?", "/1448120?", "/306508?",
             "/306507?", "/306505?", "/306504?", "/306503?", "/306502?");
 
-    public GunsanFestivalCollector(TitleDuplicateChecker titleDuplicateChecker) {
-        super(titleDuplicateChecker);
+    public GunsanFestivalCollector(
+            DataCountUpdateService dataCountUpdateService,
+            TitleDuplicateChecker titleDuplicateChecker) {
+        super(dataCountUpdateService, titleDuplicateChecker);
     }
 
     @Override
     public List<RefinedDataDTO> collectData() throws IOException {
         List<RefinedDataDTO> data = new ArrayList<>();
+
+        Document countDoc = Jsoup.connect(URL + MENU).timeout(5 * 1000).get();
+        Element countEl = countDoc.selectFirst(".boardSearch .v5 p.page span");
+
+        // 솔직히 여긴 그냥 페이지들 하나하나 수작업으로 파싱하는 거라 추후 리팩토링이 요구될듯
+        if (countEl != null) {
+            int count = Integer.parseInt(countEl.text());
+
+            if (!dataCountUpdateService.isNeedToUpdate(count, CollectSource.GSFECR))
+                return data;
+        }
 
         for (String page : PAGES) {
             Document doc = Jsoup.connect(URL + "/tour/m2101/view" + page).timeout(5 * 1000).get();
@@ -73,10 +88,8 @@ public class GunsanFestivalCollector extends CrawlingCollector {
                 }
             }
 
-            log.info(introduction);
-
             data.add(new RefinedDataDTO(
-                    title, position, Category.FESTIVAL, imgSrc, introduction, URL + MENU));
+                    title, position, Category.FESTIVAL, imgSrc, introduction, URL + MENU, CollectSource.GSFECR));
         }
 
         return data;

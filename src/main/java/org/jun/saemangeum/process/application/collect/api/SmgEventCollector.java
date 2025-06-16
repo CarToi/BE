@@ -1,6 +1,10 @@
 package org.jun.saemangeum.process.application.collect.api;
 
+import org.jun.saemangeum.global.service.ContentService;
+import org.jun.saemangeum.global.service.CountService;
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
+import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
@@ -19,8 +23,10 @@ public class SmgEventCollector extends OpenApiCollector {
     private static final String URL = "https://www.saemangeum.go.kr/sda/content.do?key=2010083672101";
 
     public SmgEventCollector(
-            OpenApiClient openApiClient, TitleDuplicateChecker titleDuplicateChecker) {
-        super(openApiClient, titleDuplicateChecker);
+            OpenApiClient openApiClient,
+            DataCountUpdateService dataCountUpdateService,
+            TitleDuplicateChecker titleDuplicateChecker) {
+        super(openApiClient, dataCountUpdateService, titleDuplicateChecker);
     }
 
     @Override
@@ -31,6 +37,9 @@ public class SmgEventCollector extends OpenApiCollector {
                 q -> q.queryParam("page", 1).queryParam("perPage", 100)
         );
 
-        return response.data().stream().map(e -> RefinedDataDTO.to(e, URL)).toList();
+        if (dataCountUpdateService.isNeedToUpdate(response.totalCount(), CollectSource.SMGEVAP))
+            return response.data().stream().map(e -> RefinedDataDTO.to(e, URL, CollectSource.SMGEVAP)).toList();
+
+        return List.of();
     }
 }

@@ -3,8 +3,14 @@ package org.jun.saemangeum.process.application.collect.base;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
+import org.jun.saemangeum.global.domain.Count;
+import org.jun.saemangeum.global.service.ContentService;
+import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.global.service.CountService;
+import org.jun.saemangeum.process.application.service.DataCountUpdateService;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class CrawlingCollector implements Refiner {
 
+    protected final DataCountUpdateService dataCountUpdateService;
     private final TitleDuplicateChecker titleDuplicateChecker;
 
     @Override
@@ -22,7 +29,7 @@ public abstract class CrawlingCollector implements Refiner {
         List<RefinedDataDTO> data = retry(this::collectData);
 
         return data.stream()
-                .filter(e -> titleDuplicateChecker.isDuplicate(e.title()))
+                .filter(e -> titleDuplicateChecker.isDuplicate(e.title())) // 얘, 제목 중복 체커가 새로운 업데이트 개수와 기존 개수 비교를 막네...
                 .map(Content::create).toList();
     }
 
@@ -37,7 +44,8 @@ public abstract class CrawlingCollector implements Refiner {
             try {
                 return supplier.get();
             } catch (Exception e) {
-                log.warn("재시도 {}/{} 실패", i, MAX_RETRY);
+                log.error("업데이트에서 어떤 에러가? : {} // {}", e, e.getMessage());
+                log.warn("수집 재시도 {}/{} 실패", i, MAX_RETRY);
             }
         }
 
