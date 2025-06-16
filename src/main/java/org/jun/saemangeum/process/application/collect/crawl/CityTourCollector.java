@@ -51,6 +51,11 @@ public class CityTourCollector extends CrawlingCollector {
             Document doc = Jsoup.connect(PATH + city.getValue()).timeout(5 * 1000).get();
             Elements items = doc.select("ul.li_spot." + city.getKey() + " > li");
 
+            if (!super.isNeedToUpdate(items.size(), SOURCES.get(index))) {
+                index++;
+                continue;
+            }
+
             for (Element item : items) {
                 Element element = item.selectFirst("div.info_spot > h5");
                 if (element == null) continue;

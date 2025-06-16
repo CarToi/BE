@@ -38,36 +38,40 @@ public class SeawallTourCollector extends CrawlingCollector {
         Elements tabs = doc.select(".tab_area .tablist li");
         Elements panels = doc.select(".tabpanel");
 
-        for (int i = 0; i < tabs.size(); i++) {
-            String title = tabs.get(i).text().trim();
-            if ("쉼터(포토존)".equals(title)) continue;
+        if (super.isNeedToUpdate(tabs.size() - 1, CollectSource.SWTOCR)) {
+            for (int i = 0; i < tabs.size(); i++) {
+                String title = tabs.get(i).text().trim();
+                if ("쉼터(포토존)".equals(title)) continue;
 
-            Element panel = panels.get(i);
+                Element panel = panels.get(i);
 
-            String imgSrc = null;
-            Element img = panel.selectFirst("img");
-            if (img != null) {
-                imgSrc = img.attr("src");
-                if (imgSrc.startsWith("/")) {
-                    imgSrc = "https://www.saemangeum.go.kr" + imgSrc;
+                String imgSrc = null;
+                Element img = panel.selectFirst("img");
+                if (img != null) {
+                    imgSrc = img.attr("src");
+                    if (imgSrc.startsWith("/")) {
+                        imgSrc = "https://www.saemangeum.go.kr" + imgSrc;
+                    }
                 }
+
+                String rawHtml = panel.html();
+                String introduction = rawHtml
+                        .replaceAll("(?s)<img[^>]*>", "")
+                        .replaceAll("(?i)<br\\s*/?>", "\n")
+                        .replaceAll("<[^>]+>", "")
+                        .replace("&nbsp;", " ")
+                        .replace("&#39;", "'")
+                        .trim();
+
+                log.info(introduction);
+
+                data.add(new RefinedDataDTO(
+                        title, "전북특별자치도 " + title, Category.TOUR, imgSrc, introduction, PATH, CollectSource.SWTOCR));
             }
 
-            String rawHtml = panel.html();
-            String introduction = rawHtml
-                    .replaceAll("(?s)<img[^>]*>", "")
-                    .replaceAll("(?i)<br\\s*/?>", "\n")
-                    .replaceAll("<[^>]+>", "")
-                    .replace("&nbsp;", " ")
-                    .replace("&#39;", "'")
-                    .trim();
-
-            log.info(introduction);
-
-            data.add(new RefinedDataDTO(
-                    title, "전북특별자치도 " + title, Category.TOUR, imgSrc, introduction, PATH, CollectSource.SWTOCR));
+            return data;
         }
 
-        return data;
+        return List.of();
     }
 }

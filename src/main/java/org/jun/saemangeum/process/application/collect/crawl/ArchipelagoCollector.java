@@ -37,18 +37,22 @@ public class ArchipelagoCollector extends CrawlingCollector {
         Document doc = Jsoup.connect(URL + PATH).timeout(5 * 1000).get();
         Elements items = doc.select(".list6 .item");
 
-        for (Element item : items) {
-            String title = item.select(".txt_box h5.title1").text();
-            String introduction = item.select(".txt_box p.t1").text();
-            String position = item.select(".txt_box p.loc").text();
-            String imgSrc = item.select(".img_box img").attr("src");
+        if (super.isNeedToUpdate(items.size(), CollectSource.ARTOCR)) {
+            for (Element item : items) {
+                String title = item.select(".txt_box h5.title1").text();
+                String introduction = item.select(".txt_box p.t1").text();
+                String position = item.select(".txt_box p.loc").text();
+                String imgSrc = item.select(".img_box img").attr("src");
 
-            if (!imgSrc.startsWith("http")) imgSrc = URL + imgSrc;
+                if (!imgSrc.startsWith("http")) imgSrc = URL + imgSrc;
 
-            log.info(introduction);
+                log.info(introduction);
 
-            data.add(new RefinedDataDTO(title, position, Category.TOUR, imgSrc, introduction, URL + PATH, CollectSource.ARTOCR));
+                data.add(new RefinedDataDTO(title, position, Category.TOUR, imgSrc, introduction, URL + PATH, CollectSource.ARTOCR));
+            }
+            return data;
         }
-        return data;
+
+        return List.of();
     }
 }

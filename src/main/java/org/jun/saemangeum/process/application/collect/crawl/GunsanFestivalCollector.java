@@ -38,6 +38,17 @@ public class GunsanFestivalCollector extends CrawlingCollector {
     public List<RefinedDataDTO> collectData() throws IOException {
         List<RefinedDataDTO> data = new ArrayList<>();
 
+        Document countDoc = Jsoup.connect(URL + MENU).timeout(5 * 1000).get();
+        Element countEl = countDoc.selectFirst(".boardSearch .v5 p.page span");
+
+        // 솔직히 여긴 그냥 페이지들 하나하나 수작업으로 파싱하는 거라 추후 리팩토링이 요구될듯
+        if (countEl != null) {
+            int count = Integer.parseInt(countEl.text());
+
+            if (!super.isNeedToUpdate(count, CollectSource.GSFECR))
+                return data;
+        }
+
         for (String page : PAGES) {
             Document doc = Jsoup.connect(URL + "/tour/m2101/view" + page).timeout(5 * 1000).get();
 
