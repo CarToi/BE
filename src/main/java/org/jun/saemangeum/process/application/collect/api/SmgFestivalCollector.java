@@ -1,6 +1,7 @@
 package org.jun.saemangeum.process.application.collect.api;
 
 import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
+import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
@@ -31,7 +32,7 @@ public class SmgFestivalCollector extends OpenApiCollector {
                 q -> q.queryParam("page", 1).queryParam("perPage", 100)
         );
 
-        return response.data().stream().map(f -> RefinedDataDTO.to(f, URL)).toList();
+        return response.data().stream().map(f -> RefinedDataDTO.to(f, URL, CollectSource.SMGFEAP)).toList();
     }
 
 }

@@ -1,15 +1,13 @@
 package org.jun.saemangeum.global.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
 @Table(name = "vectors")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vector {

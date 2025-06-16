@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
+import org.jun.saemangeum.process.application.util.CollectSource;
 import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
 import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,11 @@ public class CityTourCollector extends CrawlingCollector {
     private static final List<Map<String, City>> CITIES = List.of(
             Map.of("군산시", City.GUNSAN),
             Map.of("김제시", City.GIMJE),
-            Map.of("부안군", City.BUAN)
-    );
+            Map.of("부안군", City.BUAN));
+    private static final List<CollectSource> SOURCES = List.of(
+            CollectSource.GSTOCR,
+            CollectSource.GJTOCR,
+            CollectSource.BATOCR);
 
     private static final String PATH = "https://www.saemangeum.go.kr/sda/content.do?key=";
 
@@ -44,6 +48,7 @@ public class CityTourCollector extends CrawlingCollector {
             Document doc = Jsoup.connect(PATH + city.getValue()).timeout(5 * 1000).get();
             Elements items = doc.select("ul.li_spot." + city.getKey() + " > li");
 
+            int index = 0;
             for (Element item : items) {
                 Element element = item.selectFirst("div.info_spot > h5");
                 if (element == null) continue;
@@ -85,7 +90,9 @@ public class CityTourCollector extends CrawlingCollector {
                         Category.TOUR,
                         imgSrc,
                         introduction,
-                        PATH + city.getValue()));
+                        PATH + city.getValue(),
+                        SOURCES.get(index)));
+                index++;
             }
         }
         return data;

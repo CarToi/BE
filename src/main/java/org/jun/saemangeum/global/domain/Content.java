@@ -39,6 +39,10 @@ public class Content {
     @Column
     private String introduction;
 
+    @OneToOne(mappedBy = "content", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "vector_id")
+    private Vector vector;
+
     public static Content create(RefinedDataDTO dto) {
         return Content.builder()
                 .title(dto.title())
@@ -48,5 +52,12 @@ public class Content {
                 .introduction(dto.introduction())
                 .url(dto.url())
                 .build();
+    }
+
+    public void setVector(Vector vector) {
+        this.vector = vector;
+        if (vector.getContent() != null) {
+            vector.setContent(this);
+        }
     }
 }

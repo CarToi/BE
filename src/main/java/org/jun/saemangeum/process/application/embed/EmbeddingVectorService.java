@@ -57,6 +57,7 @@ public class EmbeddingVectorService {
         byte[] vectorBytes = floatToByte(response);
         Vector vector = Vector.builder().vector(vectorBytes).content(content).build();
 
+        content.setVector(vector);
         vectorService.saveVector(vector);
     }
 
