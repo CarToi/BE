@@ -17,6 +17,7 @@ jobs:
 
       - name: Build with Gradle And Test
         run: |
+          mkdir -p ./src/main/resources
           echo ${{ secrets.APPLICATION_YML }} | base64 --decode > ./src/main/resources/application.yml
           
           if [ -s ./src/main/resources/application.yml ]; then
@@ -67,20 +68,6 @@ jobs:
               --protocol tcp \
               --port 22 \
               --cidr ${{ steps.ip.outputs.ipv4 }}/32
-
-      - name: Test EC2 Connection And Manipulation
-        uses: appleboy/ssh-action@master
-        with:
-          username: ubuntu
-          host: ${{ secrets.EC2_ELASTIC_IP }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script_stop: true
-          script: |
-            echo "[✔] GitHub Actions Connection Success" | tee -a ~/cicd-log.txt
-            echo "Time: $(date '+%Y-%m-%d %H:%M:%S')" | tee -a ~/cicd-log.txt
-            echo "Branch: ${{ github.ref_name }}" | tee -a ~/cicd-log.txt
-            echo "Commit: ${{ github.sha }}" | tee -a ~/cicd-log.txt
-            echo "-------------------------------" | tee -a ~/cicd-log.txt
 
       - name: Set target IP
         run: |
