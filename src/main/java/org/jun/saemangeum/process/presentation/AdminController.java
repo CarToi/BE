@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/u3920abjd39a")
 @RequiredArgsConstructor
 public class AdminController {
 
@@ -21,7 +21,7 @@ public class AdminController {
 
     private final ContentDataProcessService contentDataProcessService;
 
-    @GetMapping
+    @GetMapping("/admin/process")
     public String collectProcessByAdmin(@RequestBody AdminDTO dto) {
         if (!(dto.username().equals(username) && dto.password().equals(password))) {
             return "잘못된 접근입니다";
