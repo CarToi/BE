@@ -1,6 +1,5 @@
 package org.jun.saemangeum.process.application.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.service.ContentService;
@@ -11,7 +10,6 @@ import org.jun.saemangeum.process.infrastructure.queue.EmbeddingWorkerService;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,7 +22,7 @@ public class ContentDataProcessService {
     private final TaskExecutor virtualThreadExecutor;
     private final ContentService contentService;
     private final EmbeddingWorkerService embeddingWorkerService;
-    private final List<Alarm> alarms;
+    private final AlarmService alarmService;
     private final AtomicBoolean nonUpdate;
 
     public ContentDataProcessService(
@@ -32,12 +30,12 @@ public class ContentDataProcessService {
             TaskExecutor virtualThreadExecutor,
             ContentService contentService,
             EmbeddingWorkerService embeddingWorkerService,
-            List<Alarm> alarms) {
+            AlarmService alarmService) {
         this.refiners = refiners;
         this.virtualThreadExecutor = virtualThreadExecutor;
         this.contentService = contentService;
         this.embeddingWorkerService = embeddingWorkerService;
-        this.alarms = alarms;
+        this.alarmService = alarmService;
         this.nonUpdate = new AtomicBoolean(true);
     }
 
@@ -63,17 +61,7 @@ public class ContentDataProcessService {
                         boolean flag = nonUpdate.get();
                         log.info("모든 데이터 수집 완료, 업데이트 여부: {}", flag);
 
-                        if (flag) {
-                            alarms.forEach(alarm -> alarm.sendAlarm(
-                                    () -> AlarmPayload.builder()
-                                            .process(AlarmProcess.COLLECT)
-                                            .alarmType(AlarmType.SUCCESS)
-                                            .alarmMessage(AlarmMessage.UNCHANGED)
-                                            .threadName("Data Collect Flow")
-                                            .timestamp(Instant.now())
-                                            .build()));
-                        }
-
+                        if (flag) alarmService.sendUnchanged("Data Collect Flow");
                         processEmbeddingVectorFlow();
                     }
                 });
@@ -95,30 +83,14 @@ public class ContentDataProcessService {
                     return;
                 }
 
-                // 업데이트 o
-                // 한 번만 false로 바뀌도록 최적화
+                // 업데이트 o, 한 번만 false로 바뀌도록 최적화
                 nonUpdate.compareAndSet(true, false);
-
                 contentService.saveContents(contents);
-                alarms.forEach(alarm -> alarm.sendAlarm(
-                        () -> AlarmPayload.builder()
-                                .process(AlarmProcess.COLLECT)
-                                .alarmType(AlarmType.SUCCESS)
-                                .alarmMessage(AlarmMessage.COLLECT)
-                                .threadName(refinerName)
-                                .timestamp(Instant.now())
-                                .build(), contents.size()));
+                alarmService.sendCollectSuccess(refinerName, contents.size());
                 contents.forEach(e -> embeddingWorkerService.offerEmbeddingJobQueue(new EmbeddingJob(e)));
             } catch (Exception e) {
                 log.error("플로우 실패: {} - 오류: {}", refinerName, e.getMessage(), e);
-                alarms.forEach(alarm -> alarm.sendAlarm(
-                        () -> AlarmPayload.builder()
-                                .process(AlarmProcess.COLLECT)
-                                .alarmType(AlarmType.ERROR)
-                                .alarmMessage(AlarmMessage.ERROR)
-                                .threadName(refinerName)
-                                .timestamp(Instant.now())
-                                .build(), e.getClass().getSimpleName()));
+                alarmService.sendCollectError(refinerName, e);
             }
         }, virtualThreadExecutor);
     }
@@ -133,14 +105,7 @@ public class ContentDataProcessService {
             try {
                 if (embeddingWorkerService.isEmpty()) {
                     log.info("임베딩 벡터 대상 데이터 없음");
-                    alarms.forEach(alarm -> alarm.sendAlarm(
-                            () -> AlarmPayload.builder()
-                                    .process(AlarmProcess.EMBEDDING)
-                                    .alarmType(AlarmType.SUCCESS)
-                                    .alarmMessage(AlarmMessage.UNCHANGED)
-                                    .threadName("Embedding Vector Flow")
-                                    .timestamp(Instant.now())
-                                    .build()));
+                    alarmService.sendEmbeddingUnchanged("Embedding Vector Flow");
                     return;
                 }
 
@@ -149,28 +114,14 @@ public class ContentDataProcessService {
                 }
                 embeddingWorkerService.stopWorker();
                 log.info("임베딩 워커 플로우 종료");
-                alarms.forEach(alarm -> alarm.sendAlarm(
-                        () -> AlarmPayload.builder()
-                                .process(AlarmProcess.EMBEDDING)
-                                .alarmType(AlarmType.SUCCESS)
-                                .alarmMessage(AlarmMessage.EMBEDDING)
-                                .threadName("Embedding Vector Flow")
-                                .timestamp(Instant.now())
-                                .build(),
-                        embeddingWorkerService.getFailedContents().size()));
+                alarmService.sendEmbeddingSuccess(
+                        "Embedding Vector Flow", embeddingWorkerService.getFailedContents().size());
 
                 Thread.ofVirtual().start(this::retryFailedEmbeddingVectorJobs);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 log.warn("워커 종료 스레드 인터럽트 발생");
-                alarms.forEach(alarm -> alarm.sendAlarm(
-                        () -> AlarmPayload.builder()
-                                .process(AlarmProcess.EMBEDDING)
-                                .alarmType(AlarmType.ERROR)
-                                .alarmMessage(AlarmMessage.ERROR)
-                                .threadName("Embedding Vector Flow")
-                                .timestamp(Instant.now())
-                                .build(), e.getClass().getSimpleName()));
+                alarmService.sendEmbeddingError("Embedding Vector Flow", e.getClass().getSimpleName());
             }
         });
     }
@@ -186,7 +137,7 @@ public class ContentDataProcessService {
                 return;
             }
 
-            log.info("재시도 대기 중 (10초)");
+            log.info("재시도 대기 중 (15초)");
             Thread.sleep(15_000); // 유예 시간 15초
 
             log.info("재시도 시작 - {}개 실패 콘텐츠", failed.size());
@@ -201,25 +152,11 @@ public class ContentDataProcessService {
 
             embeddingWorkerService.stopWorker();
             log.info("재시도 워커 종료 완료");
-            alarms.forEach(alarm -> alarm.sendAlarm(
-                    () -> AlarmPayload.builder()
-                            .process(AlarmProcess.RETRY)
-                            .alarmType(AlarmType.SUCCESS)
-                            .alarmMessage(AlarmMessage.RETRY)
-                            .threadName("Retry Embedding Flow")
-                            .timestamp(Instant.now())
-                            .build()));
+            alarmService.sendRetrySuccess("Retry Embedding Flow");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             log.warn("재시도 스레드 인터럽트 발생");
-            alarms.forEach(alarm -> alarm.sendAlarm(
-                    () -> AlarmPayload.builder()
-                            .process(AlarmProcess.RETRY)
-                            .alarmType(AlarmType.ERROR)
-                            .alarmMessage(AlarmMessage.ERROR)
-                            .threadName("Retry Embedding Flow")
-                            .timestamp(Instant.now())
-                            .build(), e.getClass().getSimpleName()));
+            alarmService.sendRetryError("Retry Embedding Flow", e.getClass().getSimpleName());
         }
     }
 }
