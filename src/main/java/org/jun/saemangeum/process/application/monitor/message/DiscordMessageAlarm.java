@@ -9,9 +9,6 @@ import org.jun.saemangeum.process.application.monitor.alarm.AlarmPayload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
-import java.time.Instant;
-
 @Component
 public class DiscordMessageAlarm implements Alarm {
 
@@ -35,7 +32,7 @@ public class DiscordMessageAlarm implements Alarm {
         AlarmPayload payload = alarmBuilder.build();
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setTitle(payload.getProcess().getProcess() + ": " + payload.getThreadName())
+                .setTitle(payload.getProcess().getProcess() + " - " + payload.getThreadName())
                 .setDescription(payload.getAlarmMessage().format(args))
                 .setColor(payload.getAlarmType().getColor())
                 .setFooter("현재 시각", null)
