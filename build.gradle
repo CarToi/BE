@@ -41,20 +41,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     // selenium
-    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
 //    implementation("org.seleniumhq.selenium:selenium-java:4.33.0")
 
     // JSoup
     implementation 'org.jsoup:jsoup:1.20.1'
 
-    // AI
-//    implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
-//    implementation 'org.springframework.ai:spring-ai-starter-model-openai'
-
     // jmh
     jmh 'org.openjdk.jmh:jmh-core:1.37'
     jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
     jmh 'org.openjdk.jmh:jmh-generator-bytecode:1.37'
+
+    // discord
+    implementation 'net.dv8tion:JDA:5.6.1'
 }
 
 test {
