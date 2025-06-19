@@ -1,0 +1,22 @@
+package org.jun.saemangeum.process.application.monitor.alarm;
+
+import lombok.Getter;
+
+@Getter
+public enum AlarmMessage {
+    COLLECT("\uD83D\uDCC4 데이터 수집 및 업데이트 : %d 건"),
+    EMBEDDING("\uD83D\uDEE0\uFE0F 데이터 벡터 임베딩 : %d 건 // 실패 : %d 건"),
+    RETRY("♻\uFE0F 벡터 임베딩 재시도 완료 : %d 건"),
+    UNCHANGED("\uD83D\uDCA4 데이터 변동 없음"),
+    ERROR("\uD83D\uDEA8 %s 에러 발생!");
+
+    private final String template;
+
+    AlarmMessage(String template) {
+        this.template = template;
+    }
+
+    public String format(Object... args) {
+        return String.format(template, args);
+    }
+}

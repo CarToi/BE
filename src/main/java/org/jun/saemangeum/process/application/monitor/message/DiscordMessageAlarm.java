@@ -1,8 +1,11 @@
-package org.jun.saemangeum.process.application.monitor;
+package org.jun.saemangeum.process.application.monitor.message;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import org.jun.saemangeum.process.application.monitor.alarm.Alarm;
+import org.jun.saemangeum.process.application.monitor.alarm.AlarmBuilder;
+import org.jun.saemangeum.process.application.monitor.alarm.AlarmPayload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -28,15 +31,15 @@ public class DiscordMessageAlarm implements Alarm {
     }
 
     @Override
-    public void sendAlarm() {
+    public void sendAlarm(AlarmBuilder alarmBuilder, Object... args) {
+        AlarmPayload payload = alarmBuilder.build();
+
         EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("📦 수집 완료 (" + "테스트 스레드" + ")")
-                .setDescription("> Saemangeum API에서 데이터를 수집했습니다.")
-                .addField("수집기", "`" + "테스트 수집기" + "`", false)
-                .addField("총 수집", "`" + "count" + "건`", false)
-                .setColor(Color.GREEN)
-                .setFooter("Saemangeum DataBot", null)
-                .setTimestamp(Instant.now());
+                .setTitle(payload.getProcess().getProcess() + ": " + payload.getThreadName())
+                .setDescription(payload.getAlarmMessage().format(args))
+                .setColor(payload.getAlarmType().getColor())
+                .setFooter("현재 시각", null)
+                .setTimestamp(payload.getTimestamp());
 
         textChannel.sendMessageEmbeds(embed.build()).queue();
     }
