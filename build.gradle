@@ -2,6 +2,13 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.0'
     id 'io.spring.dependency-management' version '1.1.7'
+
+    // jmh
+    id "me.champeau.jmh" version "0.7.3"
+}
+
+ext {
+    springAiVersion = "1.0.0"
 }
 
 group = 'org.jun'
@@ -19,10 +26,58 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // MySQL, H2 DB & JPA
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.h2database:h2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // selenium
+//    implementation("org.seleniumhq.selenium:selenium-java:4.33.0")
+
+    // JSoup
+    implementation 'org.jsoup:jsoup:1.20.1'
+
+    // jmh
+    jmh 'org.openjdk.jmh:jmh-core:1.37'
+    jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
+    jmh 'org.openjdk.jmh:jmh-generator-bytecode:1.37'
+
+    // discord
+    implementation 'net.dv8tion:JDA:5.6.1'
+}
+
+test {
+    systemProperty "spring.profiles.active", "test"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.ai:spring-ai-bom:$springAiVersion"
+    }
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jmh {
+    warmupIterations = 2 // 워밍업 반복 횟수
+    iterations = 5 // 측정 반복 횟수
+    fork = 1 // 포크 수
+    failOnError = true
+    resultFormat = 'JSON' // 결과 포맷
+    resultsFile = project.file("${project.buildDir}/reports/jmh/results.json") // 결과 파일 위치
+    timeOnIteration = '1s' // 각 반복당 실행 시간
+    timeUnit = 'ms' // 시간 단위
+    includes = ['.*Benchmark.*'] // 벤치마크 클래스 패턴
+    profilers = ['gc']
 }
