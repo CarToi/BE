@@ -1,7 +1,7 @@
 package org.jun.saemangeum.pipeline.presentation;
 
 import lombok.RequiredArgsConstructor;
-import org.jun.saemangeum.pipeline.application.service.ContentDataProcessService;
+import org.jun.saemangeum.pipeline.application.service.PipelineService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +19,7 @@ public class AdminController {
     @Value("${admin.password}")
     private String password;
 
-    private final ContentDataProcessService contentDataProcessService;
+    private final PipelineService pipelineService;
 
     @GetMapping("/admin/process")
     public String collectProcessByAdmin(@RequestBody AdminDTO dto) {
@@ -27,7 +27,7 @@ public class AdminController {
             return "잘못된 접근입니다";
         }
 
-        contentDataProcessService.collectAndSaveAsync();
+        pipelineService.collectAndSaveAsync();
         return "데이터 수집 시작합니다";
     }
 }

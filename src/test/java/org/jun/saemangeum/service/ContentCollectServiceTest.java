@@ -1,7 +1,7 @@
 package org.jun.saemangeum.service;
 
 import org.jun.saemangeum.global.service.ContentService;
-import org.jun.saemangeum.pipeline.application.service.ContentDataProcessService;
+import org.jun.saemangeum.pipeline.application.service.PipelineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ContentCollectServiceTest {
 
     @Autowired
-    private ContentDataProcessService contentDataProcessService;
+    private PipelineService pipelineService;
 
     @Autowired
     private ContentService contentService;

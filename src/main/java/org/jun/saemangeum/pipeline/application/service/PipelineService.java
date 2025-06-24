@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Service
-public class ContentDataProcessService {
+public class PipelineService {
 
     private final List<Refiner> refiners;
     private final TaskExecutor virtualThreadExecutor;
@@ -25,7 +25,7 @@ public class ContentDataProcessService {
     private final AlarmService alarmService;
     private final AtomicBoolean nonUpdate;
 
-    public ContentDataProcessService(
+    public PipelineService(
             List<Refiner> refiners,
             TaskExecutor virtualThreadExecutor,
             ContentService contentService,
