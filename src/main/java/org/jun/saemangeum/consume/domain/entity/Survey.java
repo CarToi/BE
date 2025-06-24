@@ -1,7 +1,21 @@
 package org.jun.saemangeum.consume.domain.entity;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 // 엔티티 필드를 어떻게 잡아야 평균값 산출이 쉬우려나...
+@Entity
+@Builder
+@Table(name = "recommendation_logs")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Survey {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String clientId; // UUID 클라이언트 id
 
