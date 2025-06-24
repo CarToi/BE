@@ -1,7 +1,6 @@
 package org.jun.saemangeum.consume.domain.dto;
 
-public record SurveyCreateRequest(
-        String clientId, // UUID 문자열 처리
+public record AverageRequest(
         int age, // 연령대
         String gender, // 성별
         String resident, // 실거주지
