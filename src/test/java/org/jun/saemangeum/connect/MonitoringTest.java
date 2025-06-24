@@ -1,10 +1,10 @@
 package org.jun.saemangeum.connect;
 
-import org.jun.saemangeum.pipeline.application.monitor.alarm.AlarmMessage;
-import org.jun.saemangeum.pipeline.application.monitor.alarm.AlarmPayload;
-import org.jun.saemangeum.pipeline.application.monitor.alarm.AlarmProcess;
-import org.jun.saemangeum.pipeline.application.monitor.alarm.AlarmType;
-import org.jun.saemangeum.pipeline.application.monitor.message.DiscordMessageAlarm;
+import org.jun.saemangeum.pipeline.domain.AlarmMessage;
+import org.jun.saemangeum.pipeline.domain.AlarmPayload;
+import org.jun.saemangeum.pipeline.application.alarm.AlarmProcess;
+import org.jun.saemangeum.pipeline.domain.AlarmType;
+import org.jun.saemangeum.pipeline.presentation.DiscordMessageAlarm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

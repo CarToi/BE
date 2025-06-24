@@ -1,4 +1,4 @@
-package org.jun.saemangeum.pipeline.application.monitor.alarm;
+package org.jun.saemangeum.pipeline.application.alarm;
 
 import lombok.Getter;
 

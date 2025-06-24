@@ -1,11 +1,11 @@
-package org.jun.saemangeum.pipeline.application.monitor.message;
+package org.jun.saemangeum.pipeline.presentation;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import org.jun.saemangeum.pipeline.application.monitor.alarm.Alarm;
-import org.jun.saemangeum.pipeline.application.monitor.alarm.AlarmBuilder;
-import org.jun.saemangeum.pipeline.application.monitor.alarm.AlarmPayload;
+import org.jun.saemangeum.pipeline.domain.Alarm;
+import org.jun.saemangeum.pipeline.application.alarm.AlarmBuilder;
+import org.jun.saemangeum.pipeline.domain.AlarmPayload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

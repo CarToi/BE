@@ -1,7 +1,8 @@
-package org.jun.saemangeum.pipeline.application.monitor.alarm;
+package org.jun.saemangeum.pipeline.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.jun.saemangeum.pipeline.application.alarm.AlarmProcess;
 
 import java.time.Instant;
 
