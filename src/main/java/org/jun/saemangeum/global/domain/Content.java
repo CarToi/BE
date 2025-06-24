@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
 
 @Entity
 @Builder

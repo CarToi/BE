@@ -1,7 +1,7 @@
 package org.jun.saemangeum.connect;
 
-import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
-import org.jun.saemangeum.process.application.dto.FestivalResponse;
+import org.jun.saemangeum.pipeline.infrastructure.api.OpenApiClient;
+import org.jun.saemangeum.pipeline.application.dto.FestivalResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

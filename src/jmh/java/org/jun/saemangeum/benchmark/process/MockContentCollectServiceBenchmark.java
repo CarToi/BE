@@ -2,8 +2,8 @@ package org.jun.saemangeum.benchmark.process;
 
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.repository.ContentRepository;
-import org.jun.saemangeum.process.application.collect.base.Refiner;
-import org.jun.saemangeum.process.application.service.ContentCollectService;
+import org.jun.saemangeum.pipeline.application.collect.base.Refiner;
+import org.jun.saemangeum.pipeline.application.service.ContentCollectService;
 import org.jun.saemangeum.global.service.ContentService;
 import org.mockito.Mockito;
 import org.openjdk.jmh.annotations.*;

@@ -1,8 +1,8 @@
 package org.jun.saemangeum.collect;
 
-import org.jun.saemangeum.process.application.collect.crawl.*;
-import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
-import org.jun.saemangeum.process.application.service.DataCountUpdateService;
+import org.jun.saemangeum.pipeline.application.collect.crawl.*;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
+import org.jun.saemangeum.pipeline.application.service.DataCountUpdateService;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
