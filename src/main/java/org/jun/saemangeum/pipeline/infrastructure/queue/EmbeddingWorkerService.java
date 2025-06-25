@@ -2,7 +2,7 @@ package org.jun.saemangeum.pipeline.infrastructure.queue;
 
 import lombok.RequiredArgsConstructor;
 import org.jun.saemangeum.global.domain.Content;
-import org.jun.saemangeum.pipeline.application.embed.EmbeddingVectorService;
+import org.jun.saemangeum.pipeline.application.service.EmbeddingVectorService;
 import org.jun.saemangeum.pipeline.infrastructure.dto.EmbeddingJob;
 import org.springframework.stereotype.Service;
 

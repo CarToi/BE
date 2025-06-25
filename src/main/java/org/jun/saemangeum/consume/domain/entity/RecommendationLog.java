@@ -16,4 +16,10 @@ public class RecommendationLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "content_id")
+    private Long contentId;
+
+    @Column(name = "survey_id")
+    private Long surveyId;
 }

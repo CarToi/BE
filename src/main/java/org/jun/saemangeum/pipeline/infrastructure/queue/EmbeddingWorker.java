@@ -2,7 +2,7 @@ package org.jun.saemangeum.pipeline.infrastructure.queue;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
-import org.jun.saemangeum.pipeline.application.embed.EmbeddingVectorService;
+import org.jun.saemangeum.pipeline.application.service.EmbeddingVectorService;
 import org.jun.saemangeum.pipeline.infrastructure.dto.EmbeddingJob;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -56,7 +56,7 @@ public class EmbeddingWorker implements Runnable {
 
                     if (!success) {
                         // 재시도 큐를 구축하자
-                        log.error("최대 재시도 실패, 해당 컨텐츠는 벡터 임베딩 생략: {}", job.content().getId());
+                        log.error("최대 재시도 실패, 해당 컨텐츠는 일단 벡터 임베딩 생략: {}", job.content().getId());
                         failedContents.add(job.content());
                     }
                 }
