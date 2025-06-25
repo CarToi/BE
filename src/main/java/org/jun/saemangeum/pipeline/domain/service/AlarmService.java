@@ -1,12 +1,11 @@
-package org.jun.saemangeum.pipeline.application.service;
+package org.jun.saemangeum.pipeline.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.jun.saemangeum.pipeline.application.alarm.AlarmProcess;
-import org.jun.saemangeum.pipeline.domain.Alarm;
-import org.jun.saemangeum.pipeline.domain.AlarmMessage;
-import org.jun.saemangeum.pipeline.domain.AlarmPayload;
-import org.jun.saemangeum.pipeline.domain.AlarmType;
-import org.jun.saemangeum.pipeline.presentation.alarm.*;
+import org.jun.saemangeum.pipeline.domain.entity.Alarm;
+import org.jun.saemangeum.pipeline.domain.entity.AlarmMessage;
+import org.jun.saemangeum.pipeline.domain.entity.AlarmPayload;
+import org.jun.saemangeum.pipeline.domain.entity.AlarmType;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

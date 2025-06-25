@@ -1,4 +1,4 @@
-package org.jun.saemangeum.pipeline.domain;
+package org.jun.saemangeum.pipeline.domain.entity;
 
 import lombok.Getter;
 

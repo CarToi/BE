@@ -1,9 +1,9 @@
 package org.jun.saemangeum.connect;
 
-import org.jun.saemangeum.pipeline.domain.AlarmMessage;
-import org.jun.saemangeum.pipeline.domain.AlarmPayload;
+import org.jun.saemangeum.pipeline.domain.entity.AlarmMessage;
+import org.jun.saemangeum.pipeline.domain.entity.AlarmPayload;
 import org.jun.saemangeum.pipeline.application.alarm.AlarmProcess;
-import org.jun.saemangeum.pipeline.domain.AlarmType;
+import org.jun.saemangeum.pipeline.domain.entity.AlarmType;
 import org.jun.saemangeum.pipeline.presentation.DiscordMessageAlarm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
