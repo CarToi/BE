@@ -4,6 +4,6 @@ import java.util.List;
 
 public record SurveyUpdateRequest(
         String clientId,
-        List<Integer> satisfaction
+        List<Integer> satisfactions
 ) {
 }

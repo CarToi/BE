@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.jun.saemangeum.global.domain.Content;
 
 @Entity
 @Builder
@@ -22,4 +23,9 @@ public class RecommendationLog {
 
     @Column(name = "survey_id")
     private Long surveyId;
+
+    public RecommendationLog(Content content, Survey survey) {
+        this.contentId = content.getId();
+        this.surveyId = survey.getId();
+    }
 }

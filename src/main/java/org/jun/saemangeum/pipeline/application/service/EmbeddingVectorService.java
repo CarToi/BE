@@ -62,7 +62,7 @@ public class EmbeddingVectorService {
             double similarity = VectorCalculator.cosineSimilarity(requestVec, storedVec);
 
             ContentSimilarity cs = new ContentSimilarity(vec.getContent(), similarity);
-            if (pq.size() < 5) {
+            if (pq.size() < 10) {
                 pq.offer(cs);
             } else if (similarity > pq.peek().similarity) {
                 pq.poll();
