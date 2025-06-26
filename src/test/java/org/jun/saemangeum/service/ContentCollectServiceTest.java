@@ -1,20 +1,16 @@
 package org.jun.saemangeum.service;
 
-import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.service.ContentService;
-import org.jun.saemangeum.process.application.service.ContentDataProcessService;
-import org.junit.jupiter.api.*;
+import org.jun.saemangeum.pipeline.application.service.PipelineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 // 테스트용 h2는 임베디드가 아니라 인메모리로 세팅해야겠네
 @SpringBootTest
 public class ContentCollectServiceTest {
 
     @Autowired
-    private ContentDataProcessService contentDataProcessService;
+    private PipelineService pipelineService;
 
     @Autowired
     private ContentService contentService;

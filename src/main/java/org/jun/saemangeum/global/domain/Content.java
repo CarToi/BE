@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
+import org.jun.saemangeum.consume.domain.dto.RecommendationResponse;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
 
 @Entity
 @Builder
@@ -62,5 +63,9 @@ public class Content {
         if (vector.getContent() != null) {
             vector.setContent(this);
         }
+    }
+
+    public RecommendationResponse to() {
+        return new RecommendationResponse(title, position, category, image, url);
     }
 }

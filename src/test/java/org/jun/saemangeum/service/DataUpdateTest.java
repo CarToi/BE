@@ -4,7 +4,7 @@ import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.global.domain.Count;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.service.CountService;
-import org.jun.saemangeum.process.application.service.DataCountUpdateService;
+import org.jun.saemangeum.pipeline.application.service.DataCountUpdateService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

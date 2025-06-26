@@ -1,6 +1,6 @@
 package org.jun.saemangeum.benchmark.process;
 
-import org.jun.saemangeum.process.application.service.ContentCollectService;
+import org.jun.saemangeum.pipeline.application.service.ContentCollectService;
 import org.openjdk.jmh.annotations.*;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
