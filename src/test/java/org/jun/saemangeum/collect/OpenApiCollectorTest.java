@@ -1,11 +1,11 @@
 package org.jun.saemangeum.collect;
 
-import org.jun.saemangeum.process.application.collect.api.GimjeCultureCollector;
-import org.jun.saemangeum.process.application.collect.api.GunsanCultureCollector;
-import org.jun.saemangeum.process.application.collect.api.SmgEventCollector;
-import org.jun.saemangeum.process.application.collect.api.SmgFestivalCollector;
-import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
-import org.jun.saemangeum.process.application.service.DataCountUpdateService;
+import org.jun.saemangeum.pipeline.application.collect.api.GimjeCultureCollector;
+import org.jun.saemangeum.pipeline.application.collect.api.GunsanCultureCollector;
+import org.jun.saemangeum.pipeline.application.collect.api.SmgEventCollector;
+import org.jun.saemangeum.pipeline.application.collect.api.SmgFestivalCollector;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
+import org.jun.saemangeum.pipeline.application.service.DataCountUpdateService;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

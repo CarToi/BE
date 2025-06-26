@@ -1,12 +1,11 @@
 package org.jun.saemangeum.collect;
 
 import org.jun.saemangeum.global.domain.Content;
-import org.jun.saemangeum.global.service.ContentService;
-import org.jun.saemangeum.process.application.collect.base.CrawlingCollector;
-import org.jun.saemangeum.process.application.collect.base.OpenApiCollector;
-import org.jun.saemangeum.process.application.util.TitleDuplicateChecker;
-import org.jun.saemangeum.process.application.dto.RefinedDataDTO;
-import org.jun.saemangeum.process.infrastructure.api.OpenApiClient;
+import org.jun.saemangeum.pipeline.application.collect.base.CrawlingCollector;
+import org.jun.saemangeum.pipeline.application.collect.base.OpenApiCollector;
+import org.jun.saemangeum.pipeline.application.util.TitleDuplicateChecker;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
+import org.jun.saemangeum.pipeline.infrastructure.api.OpenApiClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

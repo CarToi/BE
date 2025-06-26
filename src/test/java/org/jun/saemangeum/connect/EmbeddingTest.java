@@ -1,7 +1,7 @@
 package org.jun.saemangeum.connect;
 
-import org.jun.saemangeum.process.infrastructure.api.VectorClient;
-import org.jun.saemangeum.process.infrastructure.dto.EmbeddingResponse;
+import org.jun.saemangeum.pipeline.infrastructure.api.VectorClient;
+import org.jun.saemangeum.pipeline.infrastructure.dto.EmbeddingResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
