@@ -58,7 +58,7 @@ public class SurveyRecommendationService {
     }
 
     /**
-     * 설문 조합에 따른 평균 컨텐츠 추천 수 반환
+     * 설문 조합에 따른 평균 컨텐츠 추천 수 반환 -> 통게용으로만 활용 예정
      */
     @Transactional
     public List<RecommendationResponse> calculateAverageSurvey(AverageRequest request) {
@@ -67,11 +67,11 @@ public class SurveyRecommendationService {
         // 2. 1번에서 얻은 리스트에 해당하는 로그 리스트로부터 컨텐츠 id들 조회
         // 3. 2번에서 컨텐츠 id 출현 빈도 연산해서 상위 10개 산출
 
-        // 조합이 없으면 직접 해당 요소들로 벡터 임베딩을 진행해 나온 결과를 반환한다(폴백)
+        // 조합이 없으면 직접 해당 요소들로 벡터 임베딩을 진행해 나온 결과를 반환한다(폴백) -> 사용자 기능 확장시 고려
 
         List<Long> ids = recommendationLogService.getRecommendationLogIdsJoinSurveys(request);
 
-        // 여기서 조건 분기 가르기? ids 사이즈에 따라? 그리고 캐싱 처리 too?
+        // 여기서 조건 분기 가르기? ids 사이즈에 따라? 그리고 캐싱 처리 too? -> 사용자 기능 확장시 고려
 
         List<Long> top10Ids = getTop10Frequent(ids);
         return contentService.getContentsByParticularId(top10Ids).stream()
