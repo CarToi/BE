@@ -38,6 +38,6 @@ public class SurveyController {
      */
     @GetMapping("/average")
     public List<RecommendationResponse> readAverageSurvey(@RequestBody AverageRequest request) {
-        return null;
+        return surveyRecommendationService.calculateAverageSurvey(request);
     }
 }

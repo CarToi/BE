@@ -34,4 +34,9 @@ public class ContentService {
     public List<Content> getContents() {
         return contentRepository.findAll();
     }
+
+    @Transactional(readOnly = true)
+    public List<Content> getContentsByParticularId(List<Long> id) {
+        return contentRepository.findAllById(id);
+    }
 }
