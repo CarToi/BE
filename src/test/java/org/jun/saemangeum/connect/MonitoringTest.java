@@ -28,6 +28,6 @@ public class MonitoringTest {
                         .threadName("Test Thread_1")
                         .timestamp(Instant.now())
                         .build(),
-                128);
+                0);
     }
 }
