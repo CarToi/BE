@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SwapViewService {
 
@@ -18,6 +18,6 @@ public class SwapViewService {
     private final VectorViewRepository vectorViewRepository;
 
     public List<VectorView> getVectorViews() {
-        return vectorViewRepository.findAll();
+        return vectorViewRepository.findAllWithContentView();
     }
 }
