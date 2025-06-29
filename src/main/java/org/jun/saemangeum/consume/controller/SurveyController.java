@@ -31,12 +31,4 @@ public class SurveyController {
     public void updateSurvey(@RequestBody SurveyUpdateRequest request) {
         surveyRecommendationService.updateSurvey(request);
     }
-
-//    /**
-//     * 평균 사용자 설문 응답 확인 응답 데이터 리스트 반환 -> 1차 MVP에서는 사용 x
-//     */
-//    @GetMapping("/average")
-//    public List<RecommendationResponse> readAverageSurvey(@RequestBody AverageRequest request) {
-//        return surveyRecommendationService.calculateAverageSurvey(request);
-//    }
 }

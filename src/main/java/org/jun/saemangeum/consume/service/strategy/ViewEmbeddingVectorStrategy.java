@@ -1,10 +1,10 @@
-package org.jun.saemangeum.consume.service.application;
+package org.jun.saemangeum.consume.service.strategy;
 
 import lombok.RequiredArgsConstructor;
-import org.jun.saemangeum.global.domain.Content;
+import org.jun.saemangeum.consume.domain.swap.ContentView;
+import org.jun.saemangeum.consume.domain.swap.VectorView;
+import org.jun.saemangeum.consume.service.swap.SwapViewService;
 import org.jun.saemangeum.global.domain.IContent;
-import org.jun.saemangeum.global.domain.Vector;
-import org.jun.saemangeum.global.service.VectorService;
 import org.jun.saemangeum.pipeline.application.util.VectorCalculator;
 import org.jun.saemangeum.pipeline.infrastructure.api.VectorClient;
 import org.jun.saemangeum.pipeline.infrastructure.dto.EmbeddingResponse;
@@ -18,25 +18,25 @@ import java.util.PriorityQueue;
 
 @Component
 @RequiredArgsConstructor
-public class TableEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
+public class ViewEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
 
     private final VectorClient vectorClient;
-    private final VectorService vectorService;
+    private final SwapViewService swapViewService;
 
     @Override
     public List<? extends IContent> calculateSimilarity(String text) {
         EmbeddingResponse response = vectorClient.get(text);
         float[] requestVec = VectorCalculator.addNoise(response.result().embedding());
 
-        List<Vector> vectors = vectorService.getVectors(); // 이거 캐싱 대상이겠는데?
-        PriorityQueue<TableEmbeddingVectorStrategy.ContentSimilarity> pq = new PriorityQueue<>();
+        List<VectorView> vectorViews = swapViewService.getVectorViews(); // 이거 캐싱 대상이겠는데?
+        PriorityQueue<ViewEmbeddingVectorStrategy.ContentSimilarity> pq = new PriorityQueue<>();
 
-        for (Vector vec : vectors) {
+        for (VectorView vec : vectorViews) {
             float[] storedVec = byteToFloat(vec);
             double similarity = VectorCalculator.cosineSimilarity(requestVec, storedVec);
 
-            TableEmbeddingVectorStrategy.ContentSimilarity cs =
-                    new TableEmbeddingVectorStrategy.ContentSimilarity(vec.getContent(), similarity);
+            ViewEmbeddingVectorStrategy.ContentSimilarity cs =
+                    new ViewEmbeddingVectorStrategy.ContentSimilarity(vec.getContentView(), similarity);
             if (pq.size() < 10) {
                 pq.offer(cs);
             } else if (similarity > pq.peek().similarity) {
@@ -45,12 +45,12 @@ public class TableEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
             }
         }
 
-        return pq.stream().sorted(Comparator.reverseOrder()).map(e -> e.content).toList();
+        return pq.stream().sorted(Comparator.reverseOrder()).map(e -> e.contentView).toList();
     }
 
     // 바이트 타입 필드 조회 -> 벡터 플롯 타입 변환
-    private float[] byteToFloat(Vector vector) {
-        byte[] bytes = vector.getVector();
+    private float[] byteToFloat(VectorView vectorView) {
+        byte[] bytes = vectorView.getVector();
         FloatBuffer floatBuffer = ByteBuffer.wrap(bytes).asFloatBuffer();
         float[] floats = new float[floatBuffer.remaining()];
         floatBuffer.get(floats);
@@ -58,10 +58,10 @@ public class TableEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
     }
 
     // 유사도 내부 클래스
-    record ContentSimilarity(Content content, double similarity)
-            implements Comparable<TableEmbeddingVectorStrategy.ContentSimilarity> {
+    record ContentSimilarity(ContentView contentView, double similarity)
+            implements Comparable<ViewEmbeddingVectorStrategy.ContentSimilarity> {
         @Override
-        public int compareTo(TableEmbeddingVectorStrategy.ContentSimilarity o) {
+        public int compareTo(ViewEmbeddingVectorStrategy.ContentSimilarity o) {
             // 유사도 기준 오름차순 정렬
             return Double.compare(this.similarity, o.similarity);
         }

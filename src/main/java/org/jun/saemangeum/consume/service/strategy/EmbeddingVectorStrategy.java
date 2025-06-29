@@ -1,4 +1,4 @@
-package org.jun.saemangeum.consume.service.application;
+package org.jun.saemangeum.consume.service.strategy;
 
 import org.jun.saemangeum.global.domain.IContent;
 

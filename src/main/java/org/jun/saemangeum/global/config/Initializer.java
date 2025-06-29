@@ -4,7 +4,7 @@ package org.jun.saemangeum.global.config;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.jun.saemangeum.consume.service.application.SurveyRecommendationService;
-import org.jun.saemangeum.consume.service.application.TableEmbeddingVectorStrategy;
+import org.jun.saemangeum.consume.service.strategy.TableEmbeddingVectorStrategy;
 import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.global.domain.Count;
 import org.jun.saemangeum.global.repository.CountRepository;
