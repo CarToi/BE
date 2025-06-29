@@ -5,11 +5,12 @@ import lombok.Getter;
 import org.jun.saemangeum.consume.domain.dto.RecommendationResponse;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.global.domain.CollectSource;
+import org.jun.saemangeum.global.domain.IContent;
 
 @Getter
 @Entity
 @Table(name = "contents_view")
-public class ContentView {
+public class ContentView implements IContent {
     @Id
     private Long id;
 
@@ -39,7 +40,13 @@ public class ContentView {
     @OneToOne(mappedBy = "contentView")
     private VectorView vectorView;
 
+    @Override
     public RecommendationResponse to() {
         return new RecommendationResponse(title, position, category, image, url);
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
     }
 }

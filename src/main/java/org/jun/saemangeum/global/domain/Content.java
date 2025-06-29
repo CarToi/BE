@@ -14,7 +14,7 @@ import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Content {
+public class Content implements IContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -65,7 +65,13 @@ public class Content {
         }
     }
 
+    @Override
     public RecommendationResponse to() {
         return new RecommendationResponse(title, position, category, image, url);
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
     }
 }

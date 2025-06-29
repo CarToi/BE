@@ -1,8 +1,10 @@
-package org.jun.saemangeum.pipeline.infrastructure.bean;
+package org.jun.saemangeum.global.config;
 
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.jun.saemangeum.consume.service.application.SurveyRecommendationService;
+import org.jun.saemangeum.consume.service.application.TableEmbeddingVectorStrategy;
 import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.global.domain.Count;
 import org.jun.saemangeum.global.repository.CountRepository;
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class Initializer {
 
     private final CountRepository countRepository;
+    private final TableEmbeddingVectorStrategy tableEmbeddingVectorStrategy;
+    private final SurveyRecommendationService surveyRecommendationService;
 
     @PostConstruct
     @Transactional
@@ -24,5 +28,11 @@ public class Initializer {
                 countRepository.save(Count.of(source, 0));
             }
         }
+    }
+
+    @PostConstruct
+    public void setEmbeddingStrategy() {
+        // 전략 초기화
+        surveyRecommendationService.setEmbeddingVectorStrategy(tableEmbeddingVectorStrategy);
     }
 }
