@@ -1,9 +1,9 @@
-package org.jun.saemangeum.consume.service;
+package org.jun.saemangeum.consume.service.domain;
 
 import lombok.RequiredArgsConstructor;
 import org.jun.saemangeum.consume.domain.dto.AverageRequest;
 import org.jun.saemangeum.consume.domain.entity.RecommendationLog;
-import org.jun.saemangeum.consume.repository.RecommendationLogRepository;
+import org.jun.saemangeum.consume.repository.entity.RecommendationLogRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

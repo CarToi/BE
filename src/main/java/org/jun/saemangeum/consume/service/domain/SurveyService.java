@@ -1,8 +1,8 @@
-package org.jun.saemangeum.consume.service;
+package org.jun.saemangeum.consume.service.domain;
 
 import lombok.RequiredArgsConstructor;
 import org.jun.saemangeum.consume.domain.entity.Survey;
-import org.jun.saemangeum.consume.repository.SurveyRepository;
+import org.jun.saemangeum.consume.repository.entity.SurveyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

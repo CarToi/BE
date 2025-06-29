@@ -1,11 +1,10 @@
 package org.jun.saemangeum.consume.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.jun.saemangeum.consume.domain.dto.AverageRequest;
 import org.jun.saemangeum.consume.domain.dto.RecommendationResponse;
 import org.jun.saemangeum.consume.domain.dto.SurveyCreateRequest;
 import org.jun.saemangeum.consume.domain.dto.SurveyUpdateRequest;
-import org.jun.saemangeum.consume.service.SurveyRecommendationService;
+import org.jun.saemangeum.consume.service.application.SurveyRecommendationService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

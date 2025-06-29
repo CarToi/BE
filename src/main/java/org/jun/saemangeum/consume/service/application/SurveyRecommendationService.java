@@ -1,14 +1,14 @@
-package org.jun.saemangeum.consume.service;
+package org.jun.saemangeum.consume.service.application;
 
 import lombok.RequiredArgsConstructor;
-import org.jun.saemangeum.consume.domain.dto.AverageRequest;
 import org.jun.saemangeum.consume.domain.dto.RecommendationResponse;
 import org.jun.saemangeum.consume.domain.dto.SurveyCreateRequest;
 import org.jun.saemangeum.consume.domain.dto.SurveyUpdateRequest;
 import org.jun.saemangeum.consume.domain.entity.RecommendationLog;
 import org.jun.saemangeum.consume.domain.entity.Survey;
+import org.jun.saemangeum.consume.service.domain.RecommendationLogService;
+import org.jun.saemangeum.consume.service.domain.SurveyService;
 import org.jun.saemangeum.global.domain.Content;
-import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.pipeline.application.service.EmbeddingVectorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
