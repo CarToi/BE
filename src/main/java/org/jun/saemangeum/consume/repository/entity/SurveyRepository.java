@@ -1,4 +1,4 @@
-package org.jun.saemangeum.consume.repository;
+package org.jun.saemangeum.consume.repository.entity;
 
 import org.jun.saemangeum.consume.domain.entity.Survey;
 import org.springframework.data.jpa.repository.JpaRepository;

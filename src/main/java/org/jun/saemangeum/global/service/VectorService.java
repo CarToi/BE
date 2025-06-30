@@ -31,6 +31,6 @@ public class VectorService {
 
     @Transactional(readOnly = true)
     public List<Vector> getVectors() {
-        return vectorRepository.findAll();
+        return vectorRepository.findAllWithContent();
     }
 }

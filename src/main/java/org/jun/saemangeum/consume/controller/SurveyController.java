@@ -1,11 +1,10 @@
 package org.jun.saemangeum.consume.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.jun.saemangeum.consume.domain.dto.AverageRequest;
 import org.jun.saemangeum.consume.domain.dto.RecommendationResponse;
 import org.jun.saemangeum.consume.domain.dto.SurveyCreateRequest;
 import org.jun.saemangeum.consume.domain.dto.SurveyUpdateRequest;
-import org.jun.saemangeum.consume.service.SurveyRecommendationService;
+import org.jun.saemangeum.consume.service.application.SurveyRecommendationService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,13 +30,5 @@ public class SurveyController {
     @PatchMapping("/update")
     public void updateSurvey(@RequestBody SurveyUpdateRequest request) {
         surveyRecommendationService.updateSurvey(request);
-    }
-
-    /**
-     * 평균 사용자 설문 응답 확인 응답 데이터 리스트 반환
-     */
-    @GetMapping("/average")
-    public List<RecommendationResponse> readAverageSurvey(@RequestBody AverageRequest request) {
-        return surveyRecommendationService.calculateAverageSurvey(request);
     }
 }
