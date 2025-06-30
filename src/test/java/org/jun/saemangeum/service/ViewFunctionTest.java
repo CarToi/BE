@@ -11,6 +11,7 @@ import org.jun.saemangeum.global.repository.VectorRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,7 +75,7 @@ public class ViewFunctionTest {
 
     @Test
     @DisplayName("뷰 기반 생성 및 객체 연관관계 설정 테스트")
-    void test() {
+    void testMigration() {
         List<VectorView> vectorViews = swapViewService.getVectorViews();
         Optional<VectorView> vectorViewOptional = vectorViews.stream().findFirst();
         Assertions.assertTrue(vectorViewOptional.isPresent());
