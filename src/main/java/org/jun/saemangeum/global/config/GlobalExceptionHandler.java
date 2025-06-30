@@ -1,8 +1,7 @@
 package org.jun.saemangeum.global.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
-import org.jun.saemangeum.global.domain.dto.ErrorResponse;
+import org.jun.saemangeum.global.exception.ErrorResponse;
 import org.jun.saemangeum.global.exception.SatisfactionsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

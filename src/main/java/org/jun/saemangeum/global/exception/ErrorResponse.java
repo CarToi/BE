@@ -1,4 +1,4 @@
-package org.jun.saemangeum.global.domain.dto;
+package org.jun.saemangeum.global.exception;
 
 public record ErrorResponse(
         String message,
