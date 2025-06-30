@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.jun.saemangeum.global.domain.Content;
+import org.jun.saemangeum.global.domain.IContent;
 
 @Entity
 @Builder
@@ -18,14 +18,14 @@ public class RecommendationLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content_id")
-    private Long contentId;
+    @Column(name = "content_title")
+    private String contentTitle;
 
     @Column(name = "survey_id")
     private Long surveyId;
 
-    public RecommendationLog(Content content, Survey survey) {
-        this.contentId = content.getId();
+    public RecommendationLog(IContent content, Survey survey) {
+        this.contentTitle = content.getTitle();
         this.surveyId = survey.getId();
     }
 }
