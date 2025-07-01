@@ -8,9 +8,9 @@ import org.jun.saemangeum.consume.domain.entity.RecommendationLog;
 import org.jun.saemangeum.consume.domain.entity.Survey;
 import org.jun.saemangeum.consume.service.domain.RecommendationLogService;
 import org.jun.saemangeum.consume.service.domain.SurveyService;
-import org.jun.saemangeum.consume.service.strategy.EmbeddingVectorStrategy;
 import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.global.domain.IContent;
+import org.jun.saemangeum.global.exception.SatisfactionsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +32,6 @@ public class SurveyRecommendationService {
 
         // 전략 패턴 적용
         List<? extends IContent> contents = StrategyContextHolder.executeStrategy(text);
-
         Survey survey =  surveyService.save(Survey.create(request));
 
         List<RecommendationLog> recommendationLogs = contents.stream()
@@ -52,7 +51,7 @@ public class SurveyRecommendationService {
 
         if (satisfaction.size() < 3) {
             // 커스텀 예외로 전환 + 전역 예외 핸들러 처리
-            throw new RuntimeException("잘못된 만족도 조사 요청 양식");
+            throw new SatisfactionsException("잘못된 만족도 조사 요청 양식");
         }
 
         survey.updateEvaluation(satisfaction.get(0), satisfaction.get(1), satisfaction.get(2));
