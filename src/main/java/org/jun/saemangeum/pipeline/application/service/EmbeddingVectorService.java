@@ -49,29 +49,29 @@ public class EmbeddingVectorService {
         vectorService.saveVector(vector);
     }
 
-    // 유사도 계산
-    public List<Content> calculateSimilarity(String text) {
-        EmbeddingResponse response = vectorClient.get(text);
-        float[] requestVec = VectorCalculator.addNoise(response.result().embedding());
-
-        List<Vector> vectors = vectorService.getVectors(); // 이거 캐싱 대상이겠는데?
-        PriorityQueue<ContentSimilarity> pq = new PriorityQueue<>();
-
-        for (Vector vec : vectors) {
-            float[] storedVec = byteToFloat(vec);
-            double similarity = VectorCalculator.cosineSimilarity(requestVec, storedVec);
-
-            ContentSimilarity cs = new ContentSimilarity(vec.getContent(), similarity);
-            if (pq.size() < 10) {
-                pq.offer(cs);
-            } else if (similarity > pq.peek().similarity) {
-                pq.poll();
-                pq.offer(cs);
-            }
-        }
-
-        return pq.stream().sorted(Comparator.reverseOrder()).map(e -> e.content).toList();
-    }
+//    // 유사도 계산
+//    public List<Content> calculateSimilarity(String text) {
+//        EmbeddingResponse response = vectorClient.get(text);
+//        float[] requestVec = VectorCalculator.addNoise(response.result().embedding());
+//
+//        List<Vector> vectors = vectorService.getVectors(); // 이거 캐싱 대상이겠는데?
+//        PriorityQueue<ContentSimilarity> pq = new PriorityQueue<>();
+//
+//        for (Vector vec : vectors) {
+//            float[] storedVec = byteToFloat(vec);
+//            double similarity = VectorCalculator.cosineSimilarity(requestVec, storedVec);
+//
+//            ContentSimilarity cs = new ContentSimilarity(vec.getContent(), similarity);
+//            if (pq.size() < 10) {
+//                pq.offer(cs);
+//            } else if (similarity > pq.peek().similarity) {
+//                pq.poll();
+//                pq.offer(cs);
+//            }
+//        }
+//
+//        return pq.stream().sorted(Comparator.reverseOrder()).map(e -> e.content).toList();
+//    }
 
     // 벡터 플롯 타입 배열 -> 바이트 타입 변환 후 저장
     private byte[] floatToByte(EmbeddingResponse response) {
@@ -81,22 +81,22 @@ public class EmbeddingVectorService {
         return byteBuffer.array();
     }
 
-    // 바이트 타입 필드 조회 -> 벡터 플롯 타입 변환
-    private float[] byteToFloat(Vector vector) {
-        byte[] bytes = vector.getVector();
-        FloatBuffer floatBuffer = ByteBuffer.wrap(bytes).asFloatBuffer();
-        float[] floats = new float[floatBuffer.remaining()];
-        floatBuffer.get(floats);
-        return floats;
-    }
-
-    // 유사도 내부 클래스
-    record ContentSimilarity(Content content, double similarity)
-            implements Comparable<ContentSimilarity> {
-        @Override
-        public int compareTo(ContentSimilarity o) {
-            // 유사도 기준 오름차순 정렬
-            return Double.compare(this.similarity, o.similarity);
-        }
-    }
+//    // 바이트 타입 필드 조회 -> 벡터 플롯 타입 변환
+//    private float[] byteToFloat(Vector vector) {
+//        byte[] bytes = vector.getVector();
+//        FloatBuffer floatBuffer = ByteBuffer.wrap(bytes).asFloatBuffer();
+//        float[] floats = new float[floatBuffer.remaining()];
+//        floatBuffer.get(floats);
+//        return floats;
+//    }
+//
+//    // 유사도 내부 클래스
+//    record ContentSimilarity(Content content, double similarity)
+//            implements Comparable<ContentSimilarity> {
+//        @Override
+//        public int compareTo(ContentSimilarity o) {
+//            // 유사도 기준 오름차순 정렬
+//            return Double.compare(this.similarity, o.similarity);
+//        }
+//    }
 }
