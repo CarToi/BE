@@ -1,5 +1,8 @@
 package org.jun.saemangeum.consume.service.strategy;
 
+import org.jun.saemangeum.global.domain.IContent;
+
+import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class StrategyContextHolder {
@@ -15,10 +18,10 @@ public class StrategyContextHolder {
         }
     }
 
-    public static EmbeddingVectorStrategy getStrategy() {
+    public static List<? extends IContent> executeStrategy(String text) {
         lock.readLock().lock();
         try {
-            return currentStrategy;
+            return currentStrategy.calculateSimilarity(text);
         } finally {
             lock.readLock().unlock();
         }
