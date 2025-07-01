@@ -1,26 +1,26 @@
 package org.jun.saemangeum.consume.service.strategy;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class StrategyContextHolder {
-//    private static final ThreadLocal<EmbeddingVectorStrategy> strategyHolder = new ThreadLocal<>();
-//
-//    public static void setStrategy(EmbeddingVectorStrategy strategy) {
-//        strategyHolder.set(strategy);
-//    }
-//
-//    public static EmbeddingVectorStrategy getStrategy() {
-//        return strategyHolder.get();
-//    }
-//
-//    public static void clear() {
-//        strategyHolder.remove();
-//    }
     private static EmbeddingVectorStrategy currentStrategy;
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     public static void setStrategy(EmbeddingVectorStrategy strategy) {
-        currentStrategy = strategy;
+        lock.writeLock().lock();
+        try {
+            currentStrategy = strategy;
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     public static EmbeddingVectorStrategy getStrategy() {
-        return currentStrategy;
+        lock.readLock().lock();
+        try {
+            return currentStrategy;
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 }
