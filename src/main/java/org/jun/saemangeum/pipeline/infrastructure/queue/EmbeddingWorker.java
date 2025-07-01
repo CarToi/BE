@@ -13,52 +13,47 @@ import java.util.List;
 @Slf4j
 public class EmbeddingWorker implements Runnable {
 
-    private volatile boolean running = true;
     private final EmbeddingJobQueue queue;
     private final EmbeddingVectorService service;
 
     // 실패시 수집용 리스트
-    private final List<Content> failedContents = Collections.synchronizedList(new ArrayList<>());
+    private final List<EmbeddingJob> failedContents = Collections.synchronizedList(new ArrayList<>());
 
     public EmbeddingWorker(EmbeddingJobQueue queue, EmbeddingVectorService service) {
         this.queue = queue;
         this.service = service;
     }
 
-    public void stop() {
-        this.running = false;
-    }
-
     @Override
     public void run() {
-        while (running) {
+        while (true) {
             try {
                 EmbeddingJob job = queue.pollQueue();
-                if (job != null) {
-                    boolean success = false;
-                    int attempts = 0;
+                if (job == null) break;
 
-                    while (!success && attempts < 3) {
-                        try {
-                            service.embeddingVector(job.content());
-                            success = true;
-                            Thread.sleep(500); // 호출 속도 조절
-                        } catch (HttpClientErrorException.TooManyRequests e) {
-                            // 0.5초 -> 1초 -> 2초
-                            long delay = (long) Math.pow(2, attempts) * 500;
-                            log.warn("429 호출 속도 과다: {}", job.content().getId());
-                            Thread.sleep(delay);
-                            attempts++;
-                        } catch (HttpClientErrorException.BadRequest e) {
-                            log.error("토큰 길이 초과: {}", job.content().getId());
-                        }
-                    }
+                boolean success = false;
+                int attempts = 0;
 
-                    if (!success) {
-                        // 재시도 큐를 구축하자
-                        log.error("최대 재시도 실패, 해당 컨텐츠는 일단 벡터 임베딩 생략: {}", job.content().getId());
-                        failedContents.add(job.content());
+                while (!success && attempts < 3) {
+                    try {
+                        service.embeddingVector(job.content());
+                        success = true;
+                        Thread.sleep(500); // 호출 속도 조절
+                    } catch (HttpClientErrorException.TooManyRequests e) {
+                        // 0.5초 -> 1초 -> 2초
+                        long delay = (long) Math.pow(2, attempts) * 500;
+                        log.warn("429 호출 속도 과다: {}", job.content().getId());
+                        Thread.sleep(delay);
+                        attempts++;
+                    } catch (HttpClientErrorException.BadRequest e) {
+                        log.error("토큰 길이 초과: {}", job.content().getId());
                     }
+                }
+
+                if (!success) {
+                    // 재시도 큐를 구축하자
+                    log.error("최대 재시도 실패, 해당 컨텐츠는 일단 벡터 임베딩 생략: {}", job.content().getId());
+                    failedContents.add(job);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -70,7 +65,7 @@ public class EmbeddingWorker implements Runnable {
         }
     }
 
-    public List<Content> getFailedContents() {
+    public List<EmbeddingJob> getFailedContents() {
         return new ArrayList<>(failedContents);
     }
 }
