@@ -4,12 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.pipeline.infrastructure.dto.EmbeddingJob;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@Component
 public class EmbeddingJobQueue {
 
     private final BlockingQueue<EmbeddingJob> queue;
@@ -39,5 +39,10 @@ public class EmbeddingJobQueue {
     // 비었는지 확인
     public boolean isEmptyQueue() {
         return this.queue.isEmpty();
+    }
+
+    // 실패 리스트 교체
+    public void updateFailedList(List<EmbeddingJob> queue) {
+        this.queue.addAll(queue);
     }
 }

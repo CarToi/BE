@@ -4,7 +4,7 @@ package org.jun.saemangeum.global.config;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jun.saemangeum.consume.service.application.SurveyRecommendationService;
+import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.consume.service.strategy.TableEmbeddingVectorStrategy;
 import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.global.domain.Count;
@@ -19,7 +19,6 @@ public class Initializer {
 
     private final CountRepository countRepository;
     private final TableEmbeddingVectorStrategy tableEmbeddingVectorStrategy;
-    private final SurveyRecommendationService surveyRecommendationService;
 
     @PostConstruct
     @Transactional
@@ -36,6 +35,7 @@ public class Initializer {
     public void setEmbeddingStrategy() {
         // 전략 초기화
         log.info("테이블 기반 임베딩 벡터 조회 전략 처리");
-        surveyRecommendationService.setEmbeddingVectorStrategy(tableEmbeddingVectorStrategy);
+        StrategyContextHolder.setStrategy(tableEmbeddingVectorStrategy);
+//        surveyRecommendationService.setEmbeddingVectorStrategy(tableEmbeddingVectorStrategy);
     }
 }
