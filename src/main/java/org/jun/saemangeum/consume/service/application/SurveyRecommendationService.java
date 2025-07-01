@@ -10,6 +10,7 @@ import org.jun.saemangeum.consume.domain.entity.Survey;
 import org.jun.saemangeum.consume.service.domain.RecommendationLogService;
 import org.jun.saemangeum.consume.service.domain.SurveyService;
 import org.jun.saemangeum.consume.service.strategy.EmbeddingVectorStrategy;
+import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.global.domain.IContent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +23,8 @@ public class SurveyRecommendationService {
     private final SurveyService surveyService;
     private final RecommendationLogService recommendationLogService;
 
-    @Setter
-    private EmbeddingVectorStrategy embeddingVectorStrategy;
+//    @Setter
+//    private EmbeddingVectorStrategy embeddingVectorStrategy;
 
     /**
      * 사용자 설문응답 문자열을 일괄 묶어 임베딩 벡터 처리 후, 로그 확보 + 추천 리스트 반환
@@ -34,7 +35,15 @@ public class SurveyRecommendationService {
                 + request.city() + " " + request.mood() + " " + request.want();
 
         // 전략 패턴 적용
-        List<? extends IContent> contents = embeddingVectorStrategy.calculateSimilarity(text);
+//        List<? extends IContent> contents = embeddingVectorStrategy.calculateSimilarity(text);
+
+        EmbeddingVectorStrategy strategy = StrategyContextHolder.getStrategy();
+        if (strategy == null) {
+            throw new IllegalStateException("현재 스레드에 임베딩 전략이 할당되지 않음");
+        }
+
+        List<? extends IContent> contents = strategy.calculateSimilarity(text);
+
         Survey survey =  surveyService.save(Survey.create(request));
 
         List<RecommendationLog> recommendationLogs = contents.stream()

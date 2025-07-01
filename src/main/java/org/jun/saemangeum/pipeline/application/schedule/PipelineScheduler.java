@@ -4,6 +4,7 @@ package org.jun.saemangeum.pipeline.application.schedule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.consume.service.application.SurveyRecommendationService;
+import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.consume.service.strategy.TableEmbeddingVectorStrategy;
 import org.jun.saemangeum.consume.service.strategy.ViewEmbeddingVectorStrategy;
 import org.jun.saemangeum.consume.util.ViewJdbcUtil;
@@ -29,7 +30,8 @@ public class PipelineScheduler {
             viewJdbcUtil.createViews();
 
             log.info("[스케줄러] DB 조회 무중단 처리, 임베딩 벡터 조회 스왑 뷰 전략 교체");
-            surveyRecommendationService.setEmbeddingVectorStrategy(viewEmbeddingVectorStrategy);
+//            surveyRecommendationService.setEmbeddingVectorStrategy(viewEmbeddingVectorStrategy);
+            StrategyContextHolder.setStrategy(viewEmbeddingVectorStrategy);
 
             log.info("[스케줄러] 데이터 파이프라인 프로세스 시작");
             pipelineService.flowPipeline().join();
@@ -38,7 +40,8 @@ public class PipelineScheduler {
             log.error("[스케줄러] 파이프라인 중 {} 예외 발생", e.getClass().getSimpleName(), e);
         } finally {
             log.info("[스케줄러] 임베딩 벡터 조회 전략 테이블 복귀 처리");
-            surveyRecommendationService.setEmbeddingVectorStrategy(tableEmbeddingVectorStrategy);
+//            surveyRecommendationService.setEmbeddingVectorStrategy(tableEmbeddingVectorStrategy);
+            StrategyContextHolder.setStrategy(tableEmbeddingVectorStrategy);
 
             log.info("[스케줄러] 스왑 뷰 삭제");
             viewJdbcUtil.dropViews();

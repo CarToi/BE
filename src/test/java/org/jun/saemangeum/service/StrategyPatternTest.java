@@ -7,6 +7,7 @@ import org.jun.saemangeum.consume.domain.swap.ContentView;
 import org.jun.saemangeum.consume.service.application.SurveyRecommendationService;
 import org.jun.saemangeum.consume.service.domain.RecommendationLogService;
 import org.jun.saemangeum.consume.service.domain.SurveyService;
+import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.consume.service.strategy.TableEmbeddingVectorStrategy;
 import org.jun.saemangeum.consume.service.strategy.ViewEmbeddingVectorStrategy;
 import org.jun.saemangeum.global.domain.Category;
@@ -94,14 +95,14 @@ public class StrategyPatternTest {
                 "want");
 
         // 테이블 조회 전략 세팅
-        mockSurveyRecommendationService.setEmbeddingVectorStrategy(mockTableEmbeddingVectorStrategy);
+        StrategyContextHolder.setStrategy(mockTableEmbeddingVectorStrategy);
         List<RecommendationResponse> result = mockSurveyRecommendationService.createRecommendationsBySurvey(request);
         RecommendationResponse first = result.getFirst();
         Assertions.assertEquals(first.title().getClass(), String.class);
         Assertions.assertEquals(first.title(), "Table Content");
 
         // 스왑 뷰 조회 전략 세팅
-        mockSurveyRecommendationService.setEmbeddingVectorStrategy(mockViewEmbeddingVectorStrategy);
+        StrategyContextHolder.setStrategy(mockViewEmbeddingVectorStrategy);
         result = mockSurveyRecommendationService.createRecommendationsBySurvey(request);
         first = result.getFirst();
         Assertions.assertEquals(first.title().getClass(), String.class);
