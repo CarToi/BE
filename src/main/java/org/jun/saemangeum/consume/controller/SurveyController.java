@@ -1,6 +1,7 @@
 package org.jun.saemangeum.consume.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.consume.domain.dto.RecommendationResponse;
 import org.jun.saemangeum.consume.domain.dto.SurveyCreateRequest;
 import org.jun.saemangeum.consume.domain.dto.SurveyUpdateRequest;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/survey")
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ public class SurveyController {
      */
     @PostMapping("/recommendation")
     public List<RecommendationResponse> createSurvey(@RequestBody SurveyCreateRequest request) {
+        log.info("{} - 데이터 소비 요청응답", Thread.currentThread().getName());
         return surveyRecommendationService.createRecommendationsBySurvey(request);
     }
 
@@ -29,6 +32,7 @@ public class SurveyController {
      */
     @PatchMapping("/update")
     public void updateSurvey(@RequestBody SurveyUpdateRequest request) {
+        log.info("{} - 데이터 소비 업데이트", Thread.currentThread().getName());
         surveyRecommendationService.updateSurvey(request);
     }
 }

@@ -129,8 +129,8 @@ public class StrategyConcurrencyTest {
 
                 List<RecommendationResponse> responses =
                         mockSurveyRecommendationService.createRecommendationsBySurvey(request);
-                observedTitles.add(responses.get(0).title());
-                log.info("[데이터 소비 3티어] 사용된 추천 제목(전략): {}", responses.get(0).title());
+                observedTitles.add(responses.getFirst().title());
+                log.info("[데이터 소비 3티어] 사용된 추천 제목(전략): {}", responses.getFirst().title());
             } catch (InterruptedException e) {
                 log.error("스레드 인터럽트 발생");
             } finally
@@ -142,7 +142,7 @@ public class StrategyConcurrencyTest {
         latch.await();
         executor.shutdown();
 
-        String usedTitle = observedTitles.get(0);
+        String usedTitle = observedTitles.getFirst();
         log.info("최종 추천(조회 전략): {}", usedTitle);
 
         // 1번 실행기에서 전략이 스왑 뷰로 바뀌면 그 전략을 2번 실행기에서 따라가야 한다.

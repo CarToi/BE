@@ -26,6 +26,7 @@ public class EmbeddingWorker implements Runnable {
 
     @Override
     public void run() {
+        log.info("{} - 임베딩 벡터 작업(재시도 포함)", Thread.currentThread().getName());
         while (true) {
             try {
                 EmbeddingJob job = queue.pollQueue();
