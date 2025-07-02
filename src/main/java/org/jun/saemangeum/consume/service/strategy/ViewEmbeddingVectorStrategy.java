@@ -37,7 +37,7 @@ public class ViewEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
 
             ViewEmbeddingVectorStrategy.ContentSimilarity cs =
                     new ViewEmbeddingVectorStrategy.ContentSimilarity(vec.getContentView(), similarity);
-            if (pq.size() < 10) {
+            if (pq.size() < 18) {
                 pq.offer(cs);
             } else if (similarity > pq.peek().similarity) {
                 pq.poll();

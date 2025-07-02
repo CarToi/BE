@@ -36,6 +36,5 @@ public class Initializer {
         // 전략 초기화
         log.info("테이블 기반 임베딩 벡터 조회 전략 처리");
         StrategyContextHolder.setStrategy(tableEmbeddingVectorStrategy);
-//        surveyRecommendationService.setEmbeddingVectorStrategy(tableEmbeddingVectorStrategy);
     }
 }
