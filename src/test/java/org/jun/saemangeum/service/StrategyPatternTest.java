@@ -48,7 +48,7 @@ public class StrategyPatternTest {
             // title : String
             ContentView mockContentView = Mockito.mock(ContentView.class);
             RecommendationResponse dummyResponse =
-                    new RecommendationResponse("View Content", "position", Category.CULTURE, "image", "url");
+                    new RecommendationResponse("View Content", "position", Category.CULTURE, "image", "url", null);
             Mockito.when(mockContentView.to()).thenReturn(dummyResponse);
 
             ViewEmbeddingVectorStrategy mock = Mockito.mock(ViewEmbeddingVectorStrategy.class);
@@ -98,14 +98,14 @@ public class StrategyPatternTest {
         StrategyContextHolder.setStrategy(mockTableEmbeddingVectorStrategy);
         List<RecommendationResponse> result = mockSurveyRecommendationService.createRecommendationsBySurvey(request);
         RecommendationResponse first = result.getFirst();
-        Assertions.assertEquals(first.title().getClass(), String.class);
-        Assertions.assertEquals(first.title(), "Table Content");
+        Assertions.assertEquals(first.getTitle().getClass(), String.class);
+        Assertions.assertEquals(first.getTitle(), "Table Content");
 
         // 스왑 뷰 조회 전략 세팅
         StrategyContextHolder.setStrategy(mockViewEmbeddingVectorStrategy);
         result = mockSurveyRecommendationService.createRecommendationsBySurvey(request);
         first = result.getFirst();
-        Assertions.assertEquals(first.title().getClass(), String.class);
-        Assertions.assertEquals(first.title(), "View Content");
+        Assertions.assertEquals(first.getTitle().getClass(), String.class);
+        Assertions.assertEquals(first.getTitle(), "View Content");
     }
 }

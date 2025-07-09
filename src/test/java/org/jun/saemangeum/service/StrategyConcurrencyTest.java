@@ -59,7 +59,8 @@ public class StrategyConcurrencyTest {
                             "where",
                             Category.CULTURE,
                             "img",
-                            "url"));
+                            "url",
+                            null));
 
             ViewEmbeddingVectorStrategy mock = Mockito.mock(ViewEmbeddingVectorStrategy.class);
             Mockito.when(mock.calculateSimilarity(Mockito.anyString()))
@@ -129,8 +130,8 @@ public class StrategyConcurrencyTest {
 
                 List<RecommendationResponse> responses =
                         mockSurveyRecommendationService.createRecommendationsBySurvey(request);
-                observedTitles.add(responses.getFirst().title());
-                log.info("[데이터 소비 3티어] 사용된 추천 제목(전략): {}", responses.getFirst().title());
+                observedTitles.add(responses.getFirst().getTitle());
+                log.info("[데이터 소비 3티어] 사용된 추천 제목(전략): {}", responses.getFirst().getTitle());
             } catch (InterruptedException e) {
                 log.error("스레드 인터럽트 발생");
             } finally
