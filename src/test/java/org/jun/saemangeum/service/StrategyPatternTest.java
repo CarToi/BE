@@ -10,6 +10,7 @@ import org.jun.saemangeum.consume.service.domain.SurveyService;
 import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.consume.service.strategy.TableEmbeddingVectorStrategy;
 import org.jun.saemangeum.consume.service.strategy.ViewEmbeddingVectorStrategy;
+import org.jun.saemangeum.consume.util.CoordinateCalculator;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.global.domain.Content;
 import org.junit.jupiter.api.Assertions;
@@ -57,6 +58,14 @@ public class StrategyPatternTest {
             return mock;
         }
 
+        @Bean(name = "mockCoordinateCalculator")
+        public CoordinateCalculator mockCoordinateCalculator() {
+            CoordinateCalculator mock = Mockito.mock(CoordinateCalculator.class);
+            Mockito.when(mock.getCoordinate(Mockito.anyString())).thenReturn(null);
+
+            return mock;
+        }
+
         @Bean(name = "mockSurveyRecommendationService")
         public SurveyRecommendationService mockSurveyRecommendationService() {
             SurveyService mockSurveyService = Mockito.mock(SurveyService.class);
@@ -69,7 +78,7 @@ public class StrategyPatternTest {
 
             Mockito.doNothing().when(mockRecommendationLogService).saveALl(Mockito.anyList());
 
-            return new SurveyRecommendationService(mockSurveyService, mockRecommendationLogService);
+            return new SurveyRecommendationService(mockCoordinateCalculator(), mockSurveyService, mockRecommendationLogService);
         }
     }
 

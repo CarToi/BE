@@ -11,6 +11,7 @@ import org.jun.saemangeum.consume.service.domain.SurveyService;
 import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.consume.service.strategy.TableEmbeddingVectorStrategy;
 import org.jun.saemangeum.consume.service.strategy.ViewEmbeddingVectorStrategy;
+import org.jun.saemangeum.consume.util.CoordinateCalculator;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.global.domain.Content;
 import org.junit.jupiter.api.Assertions;
@@ -69,6 +70,14 @@ public class StrategyConcurrencyTest {
             return mock;
         }
 
+        @Bean(name = "mockCoordinateCalculator")
+        public CoordinateCalculator mockCoordinateCalculator() {
+            CoordinateCalculator mock = Mockito.mock(CoordinateCalculator.class);
+            Mockito.when(mock.getCoordinate(Mockito.anyString())).thenReturn(null);
+
+            return mock;
+        }
+
         @Bean
         public SurveyRecommendationService mockSurveyRecommendationService() {
             SurveyService surveyService = Mockito.mock(SurveyService.class);
@@ -79,7 +88,7 @@ public class StrategyConcurrencyTest {
             Mockito.when(surveyService.save(Mockito.any())).thenReturn(mockSurvey);
             Mockito.doNothing().when(logService).saveALl(Mockito.anyList());
 
-            return new SurveyRecommendationService(surveyService, logService);
+            return new SurveyRecommendationService(mockCoordinateCalculator(), surveyService, logService);
         }
     }
 

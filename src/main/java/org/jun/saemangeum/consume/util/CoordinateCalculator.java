@@ -66,7 +66,7 @@ public class CoordinateCalculator {
         return null;
     }
 
-    public String getResponseJson(String position) {
+    private String getResponseJson(String position) {
         String apiUrl = "https://dapi.kakao.com/v2/local/search/address.json";
 
         try {

@@ -10,6 +10,7 @@ import org.jun.saemangeum.consume.domain.entity.Survey;
 import org.jun.saemangeum.consume.service.domain.RecommendationLogService;
 import org.jun.saemangeum.consume.service.domain.SurveyService;
 import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
+import org.jun.saemangeum.consume.util.CoordinateCalculator;
 import org.jun.saemangeum.global.domain.IContent;
 import org.jun.saemangeum.global.exception.SatisfactionsException;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class SurveyRecommendationService {
+    private final CoordinateCalculator coordinateCalculator;
     private final SurveyService surveyService;
     private final RecommendationLogService recommendationLogService;
 
@@ -44,7 +46,7 @@ public class SurveyRecommendationService {
 
         return contents.stream()
                 .map(IContent::to)
-                .peek(e -> e.updateCoordinate(coordinate)) // 서비스 의존성 주입 받아서 여기서 처리하기?
+                .peek(e -> e.updateCoordinate(coordinateCalculator.getCoordinate(e.getPosition())))
                 .toList();
     }
 

@@ -1,7 +1,7 @@
 package org.jun.saemangeum.consume.domain.dto;
 
 public record Coordinate(
-        double x, // 경도(longitude)
-        double y // 위도(latitude)
+        double longitude, // 경도(longitude)
+        double latitude // 위도(latitude)
 ) {
 }

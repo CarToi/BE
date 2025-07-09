@@ -37,7 +37,7 @@ public class TableEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
 
             TableEmbeddingVectorStrategy.ContentSimilarity cs =
                     new TableEmbeddingVectorStrategy.ContentSimilarity(vec.getContent(), similarity);
-            if (pq.size() < 18) {
+            if (pq.size() < 10) {
                 pq.offer(cs);
             } else if (similarity > pq.peek().similarity) {
                 pq.poll();
