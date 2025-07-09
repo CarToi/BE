@@ -18,7 +18,27 @@ public class KakaoResponse {
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Document {
-        private String x;  // 경도
-        private String y;  // 위도
+        private String x;
+        private String y;
+        private Address address;
+        private RoadAddress road_address;
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Address {
+            private String x;
+            private String y;
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class RoadAddress {
+            private String x;
+            private String y;
+        }
     }
 }
