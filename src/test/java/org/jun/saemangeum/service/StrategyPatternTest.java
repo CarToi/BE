@@ -10,6 +10,7 @@ import org.jun.saemangeum.consume.service.domain.SurveyService;
 import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.consume.service.strategy.TableEmbeddingVectorStrategy;
 import org.jun.saemangeum.consume.service.strategy.ViewEmbeddingVectorStrategy;
+import org.jun.saemangeum.consume.util.CoordinateCalculator;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.global.domain.Content;
 import org.junit.jupiter.api.Assertions;
@@ -48,11 +49,19 @@ public class StrategyPatternTest {
             // title : String
             ContentView mockContentView = Mockito.mock(ContentView.class);
             RecommendationResponse dummyResponse =
-                    new RecommendationResponse("View Content", "position", Category.CULTURE, "image", "url");
+                    new RecommendationResponse("View Content", "position", Category.CULTURE, "image", "url", null);
             Mockito.when(mockContentView.to()).thenReturn(dummyResponse);
 
             ViewEmbeddingVectorStrategy mock = Mockito.mock(ViewEmbeddingVectorStrategy.class);
             Mockito.when(mock.calculateSimilarity(Mockito.anyString())).thenReturn((List) List.of(mockContentView));
+
+            return mock;
+        }
+
+        @Bean(name = "mockCoordinateCalculator")
+        public CoordinateCalculator mockCoordinateCalculator() {
+            CoordinateCalculator mock = Mockito.mock(CoordinateCalculator.class);
+            Mockito.when(mock.getCoordinate(Mockito.anyString())).thenReturn(null);
 
             return mock;
         }
@@ -69,7 +78,7 @@ public class StrategyPatternTest {
 
             Mockito.doNothing().when(mockRecommendationLogService).saveALl(Mockito.anyList());
 
-            return new SurveyRecommendationService(mockSurveyService, mockRecommendationLogService);
+            return new SurveyRecommendationService(mockCoordinateCalculator(), mockSurveyService, mockRecommendationLogService);
         }
     }
 
@@ -98,14 +107,14 @@ public class StrategyPatternTest {
         StrategyContextHolder.setStrategy(mockTableEmbeddingVectorStrategy);
         List<RecommendationResponse> result = mockSurveyRecommendationService.createRecommendationsBySurvey(request);
         RecommendationResponse first = result.getFirst();
-        Assertions.assertEquals(first.title().getClass(), String.class);
-        Assertions.assertEquals(first.title(), "Table Content");
+        Assertions.assertEquals(first.getTitle().getClass(), String.class);
+        Assertions.assertEquals(first.getTitle(), "Table Content");
 
         // 스왑 뷰 조회 전략 세팅
         StrategyContextHolder.setStrategy(mockViewEmbeddingVectorStrategy);
         result = mockSurveyRecommendationService.createRecommendationsBySurvey(request);
         first = result.getFirst();
-        Assertions.assertEquals(first.title().getClass(), String.class);
-        Assertions.assertEquals(first.title(), "View Content");
+        Assertions.assertEquals(first.getTitle().getClass(), String.class);
+        Assertions.assertEquals(first.getTitle(), "View Content");
     }
 }
