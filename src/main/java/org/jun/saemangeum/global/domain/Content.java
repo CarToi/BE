@@ -67,7 +67,7 @@ public class Content implements IContent {
 
     @Override
     public RecommendationResponse to() {
-        return new RecommendationResponse(title, position, category, image, url);
+        return new RecommendationResponse(title, position, category, image, url, null);
     }
 
     @Override

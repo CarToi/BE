@@ -11,6 +11,7 @@ import org.jun.saemangeum.consume.service.domain.SurveyService;
 import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.consume.service.strategy.TableEmbeddingVectorStrategy;
 import org.jun.saemangeum.consume.service.strategy.ViewEmbeddingVectorStrategy;
+import org.jun.saemangeum.consume.util.CoordinateCalculator;
 import org.jun.saemangeum.global.domain.Category;
 import org.jun.saemangeum.global.domain.Content;
 import org.junit.jupiter.api.Assertions;
@@ -59,11 +60,20 @@ public class StrategyConcurrencyTest {
                             "where",
                             Category.CULTURE,
                             "img",
-                            "url"));
+                            "url",
+                            null));
 
             ViewEmbeddingVectorStrategy mock = Mockito.mock(ViewEmbeddingVectorStrategy.class);
             Mockito.when(mock.calculateSimilarity(Mockito.anyString()))
                     .thenReturn((List) List.of(contentView));
+
+            return mock;
+        }
+
+        @Bean(name = "mockCoordinateCalculator")
+        public CoordinateCalculator mockCoordinateCalculator() {
+            CoordinateCalculator mock = Mockito.mock(CoordinateCalculator.class);
+            Mockito.when(mock.getCoordinate(Mockito.anyString())).thenReturn(null);
 
             return mock;
         }
@@ -78,7 +88,7 @@ public class StrategyConcurrencyTest {
             Mockito.when(surveyService.save(Mockito.any())).thenReturn(mockSurvey);
             Mockito.doNothing().when(logService).saveALl(Mockito.anyList());
 
-            return new SurveyRecommendationService(surveyService, logService);
+            return new SurveyRecommendationService(mockCoordinateCalculator(), surveyService, logService);
         }
     }
 
@@ -129,8 +139,8 @@ public class StrategyConcurrencyTest {
 
                 List<RecommendationResponse> responses =
                         mockSurveyRecommendationService.createRecommendationsBySurvey(request);
-                observedTitles.add(responses.getFirst().title());
-                log.info("[데이터 소비 3티어] 사용된 추천 제목(전략): {}", responses.getFirst().title());
+                observedTitles.add(responses.getFirst().getTitle());
+                log.info("[데이터 소비 3티어] 사용된 추천 제목(전략): {}", responses.getFirst().getTitle());
             } catch (InterruptedException e) {
                 log.error("스레드 인터럽트 발생");
             } finally
