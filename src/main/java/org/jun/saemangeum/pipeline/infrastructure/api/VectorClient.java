@@ -19,6 +19,8 @@ public class VectorClient {
     }
 
     public EmbeddingResponse get(String text) {
+        // 여기서도 캐시가 있어야 될 것 같은데?
+
         EmbeddingRequest request = new EmbeddingRequest(text);
         return vectorTemplate.postForObject(baseUrl, request, EmbeddingResponse.class);
     }

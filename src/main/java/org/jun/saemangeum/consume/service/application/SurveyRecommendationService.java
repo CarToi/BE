@@ -29,6 +29,13 @@ public class SurveyRecommendationService {
      * 사용자 설문응답 문자열을 일괄 묶어 임베딩 벡터 처리 후, 로그 확보 + 추천 리스트 반환
      */
     public List<RecommendationResponse> createRecommendationsBySurvey(SurveyCreateRequest request) {
+        // 클라이언트 이슈 : 페이지 리랜더링 시 요청이 똑같이 들어오고 있음
+        // 서버에서 어떻게 중복 요청을 막을 수 있을지?
+        // 코드 로직 내에서 요청 자체를 소모시켜버리는 방안으로 생각해보기
+        // 별개의 GET 요청을 만들자?
+        if (surveyService.isExistedClientId(request.clientId()))
+            throw new IllegalArgumentException("해당 클라이언트 ID는 이미 존재합니다. 관리자에게 문의하거나 다시 시도해주세요.");
+
         String age = request.age() > 30 ? "늙은" : "젊은";
         String awareness = ""; // request.resident()
         String text = request.gender() + " " + age + " " + awareness
@@ -41,8 +48,6 @@ public class SurveyRecommendationService {
         List<RecommendationLog> recommendationLogs = contents.stream()
                 .map(e -> new RecommendationLog(e, survey)).toList();
         recommendationLogService.saveALl(recommendationLogs);
-
-        Coordinate coordinate = new Coordinate(0.1, 0.1);
 
         return contents.stream()
                 .map(IContent::to)
