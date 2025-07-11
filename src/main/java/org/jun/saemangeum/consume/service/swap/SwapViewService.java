@@ -1,6 +1,7 @@
 package org.jun.saemangeum.consume.service.swap;
 
 import lombok.RequiredArgsConstructor;
+import org.jun.saemangeum.consume.domain.swap.ContentView;
 import org.jun.saemangeum.consume.domain.swap.VectorView;
 import org.jun.saemangeum.consume.repository.swap.ContentViewRepository;
 import org.jun.saemangeum.consume.repository.swap.VectorViewRepository;
@@ -19,5 +20,9 @@ public class SwapViewService {
 
     public List<VectorView> getVectorViews() {
         return vectorViewRepository.findAllWithContentView();
+    }
+
+    public List<ContentView> getContentViewsByClientId(String clientId) {
+        return contentViewRepository.findRecommendedContentViewsByClientId(clientId);
     }
 }

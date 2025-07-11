@@ -19,20 +19,30 @@ public class SurveyController {
     private final SurveyRecommendationService surveyRecommendationService;
 
     /**
-     * 사용자 설문 결과 추천 응답 데이터 리스트 반환
+     * 사용자 설문 결과 추천 응답 데이터 리스트 생성
      */
     @PostMapping("/recommendation")
-    public List<RecommendationResponse> createSurvey(@RequestBody SurveyCreateRequest request) {
-        log.info("{} - 데이터 소비 요청응답", Thread.currentThread().getName());
-        return surveyRecommendationService.createRecommendationsBySurvey(request);
+    public void createSurvey(@RequestBody SurveyCreateRequest request) {
+        log.info("{} - 데이터 소비 POST 요청", Thread.currentThread().getName());
+        surveyRecommendationService.createRecommendationsBySurvey(request);
     }
+
+    /**
+     * 사용자 설문 결과 추천 응답 데이터 리스트 반환
+     */
+    @GetMapping
+    public List<RecommendationResponse> getSurveyResults(@RequestParam("clientId") String clientId) {
+        log.info("{} - 데이터 조회 GET 요청응답", Thread.currentThread().getName());
+        return surveyRecommendationService.getSurveyRecommendationResults(clientId);
+    }
+
 
     /**
      * 사용자 설문 결과 만족도 반영 요청
      */
     @PatchMapping("/update")
     public void updateSurvey(@RequestBody SurveyUpdateRequest request) {
-        log.info("{} - 데이터 소비 업데이트", Thread.currentThread().getName());
+        log.info("{} - 데이터 업데이트 PATCH 요청", Thread.currentThread().getName());
         surveyRecommendationService.updateSurvey(request);
     }
 }

@@ -19,7 +19,7 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "client_id")
+    @Column(name = "client_id", unique = true)
     private String clientId; // UUID 클라이언트 id
 
     // 설문 응답

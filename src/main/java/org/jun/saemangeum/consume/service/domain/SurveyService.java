@@ -18,6 +18,10 @@ public class SurveyService {
         return surveyRepository.save(survey);
     }
 
+    public boolean isExistedClientId(String clientId) {
+        return surveyRepository.findByClientId(clientId).isPresent();
+    }
+
     public Survey findByClientId(String clientId) {
         return surveyRepository.findByClientId(clientId).orElseThrow(
                 // 커스텀 예외로 전환 + 전역 예외 핸들러 처리

@@ -35,6 +35,8 @@ public class CoordinateCalculator {
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
     public Coordinate getCoordinate(String position) {
+        // 여기도 캐시 추가
+
         String responseJson = getResponseJson(position);
         KakaoResponse body = null;
 

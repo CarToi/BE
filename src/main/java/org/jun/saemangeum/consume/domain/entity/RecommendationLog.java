@@ -21,11 +21,11 @@ public class RecommendationLog {
     @Column(name = "content_title")
     private String contentTitle;
 
-    @Column(name = "survey_id")
-    private Long surveyId;
+    @Column(name = "survey_client_id")
+    private String surveyClientId;
 
     public RecommendationLog(IContent content, Survey survey) {
         this.contentTitle = content.getTitle();
-        this.surveyId = survey.getId();
+        this.surveyClientId = survey.getClientId();
     }
 }
