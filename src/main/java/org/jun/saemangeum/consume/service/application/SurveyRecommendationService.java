@@ -10,9 +10,11 @@ import org.jun.saemangeum.consume.service.domain.RecommendationLogService;
 import org.jun.saemangeum.consume.service.domain.SurveyService;
 import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.consume.util.CoordinateCalculator;
+import org.jun.saemangeum.global.cache.CacheNames;
 import org.jun.saemangeum.global.domain.IContent;
 import org.jun.saemangeum.global.exception.ClientIdException;
 import org.jun.saemangeum.global.exception.SatisfactionsException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +59,7 @@ public class SurveyRecommendationService {
      * 임시 GET 요청 처리 서비스 로직
      */
     // 너도 캐싱 대상이 되겠는데?
+    @Cacheable(cacheNames = CacheNames.RESULTS, key = "#clientId")
     public List<RecommendationResponse> getSurveyRecommendationResults(String clientId) {
         List<? extends IContent> contents = StrategyContextHolder.executeGetStrategy(clientId);
 

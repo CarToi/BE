@@ -1,8 +1,10 @@
 package org.jun.saemangeum.global.service;
 
 import lombok.RequiredArgsConstructor;
+import org.jun.saemangeum.global.cache.CacheNames;
 import org.jun.saemangeum.global.domain.Vector;
 import org.jun.saemangeum.global.repository.VectorRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class VectorService {
     }
 
     // 캐싱 대상
+    @Cacheable(cacheNames = CacheNames.VECTORS)
     @Transactional(readOnly = true)
     public List<Vector> getVectors() {
         return vectorRepository.findAllWithContent();
