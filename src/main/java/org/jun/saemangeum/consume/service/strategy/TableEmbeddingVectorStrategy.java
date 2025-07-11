@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.domain.IContent;
 import org.jun.saemangeum.global.domain.Vector;
+import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.service.VectorService;
 import org.jun.saemangeum.pipeline.application.util.VectorCalculator;
 import org.jun.saemangeum.pipeline.infrastructure.api.VectorClient;
@@ -22,13 +23,14 @@ public class TableEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
 
     private final VectorClient vectorClient;
     private final VectorService vectorService;
+    private final ContentService contentService;
 
     @Override
     public List<? extends IContent> calculateSimilarity(String text) {
-        EmbeddingResponse response = vectorClient.get(text);
+        EmbeddingResponse response = vectorClient.getWithCache(text);
         float[] requestVec = VectorCalculator.addNoise(response.result().embedding());
 
-        List<Vector> vectors = vectorService.getVectors(); // 이거 캐싱 대상이겠는데?
+        List<Vector> vectors = vectorService.getVectors(); // 이놈도 캐시 추가
         PriorityQueue<TableEmbeddingVectorStrategy.ContentSimilarity> pq = new PriorityQueue<>();
 
         for (Vector vec : vectors) {
@@ -55,6 +57,12 @@ public class TableEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
         float[] floats = new float[floatBuffer.remaining()];
         floatBuffer.get(floats);
         return floats;
+    }
+
+    // 클라이언트 ID 기반 사용자 설문 응답 조회하기
+    @Override
+    public List<? extends IContent> getContentsByClientId(String clientId) {
+        return contentService.getContentsByClientId(clientId);
     }
 
     // 유사도 내부 클래스

@@ -25,7 +25,7 @@ public class ViewEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
 
     @Override
     public List<? extends IContent> calculateSimilarity(String text) {
-        EmbeddingResponse response = vectorClient.get(text);
+        EmbeddingResponse response = vectorClient.getWithCache(text);
         float[] requestVec = VectorCalculator.addNoise(response.result().embedding());
 
         List<VectorView> vectorViews = swapViewService.getVectorViews(); // 이거 캐싱 대상이겠는데?
@@ -55,6 +55,12 @@ public class ViewEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
         float[] floats = new float[floatBuffer.remaining()];
         floatBuffer.get(floats);
         return floats;
+    }
+
+    // 클라이언트 ID 기반 사용자 설문 응답 조회하기
+    @Override
+    public List<? extends IContent> getContentsByClientId(String clientId) {
+        return swapViewService.getContentViewsByClientId(clientId);
     }
 
     // 유사도 내부 클래스
