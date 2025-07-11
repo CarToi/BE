@@ -5,16 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.domain.Vector;
 import org.jun.saemangeum.global.service.VectorService;
-import org.jun.saemangeum.pipeline.application.util.VectorCalculator;
 import org.jun.saemangeum.pipeline.infrastructure.api.VectorClient;
 import org.jun.saemangeum.pipeline.infrastructure.dto.EmbeddingResponse;
 import org.springframework.stereotype.Service;
 
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
 
 @Slf4j
 @Service
@@ -41,7 +36,7 @@ public class EmbeddingVectorService {
             text = sb.toString().trim();
         };
 
-        EmbeddingResponse response = vectorClient.get(text);
+        EmbeddingResponse response = vectorClient.getWithRaw(text);
         byte[] vectorBytes = floatToByte(response);
         Vector vector = Vector.builder().vector(vectorBytes).content(content).build();
 

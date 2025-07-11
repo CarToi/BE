@@ -27,7 +27,7 @@ public class TableEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
 
     @Override
     public List<? extends IContent> calculateSimilarity(String text) {
-        EmbeddingResponse response = vectorClient.get(text);
+        EmbeddingResponse response = vectorClient.getWithCache(text);
         float[] requestVec = VectorCalculator.addNoise(response.result().embedding());
 
         List<Vector> vectors = vectorService.getVectors(); // 이놈도 캐시 추가

@@ -23,7 +23,7 @@ public class SurveyController {
      */
     @PostMapping("/recommendation")
     public void createSurvey(@RequestBody SurveyCreateRequest request) {
-        log.info("{} - 데이터 소비 요청응답", Thread.currentThread().getName());
+        log.info("{} - 데이터 소비 POST 요청", Thread.currentThread().getName());
         surveyRecommendationService.createRecommendationsBySurvey(request);
     }
 
@@ -32,6 +32,7 @@ public class SurveyController {
      */
     @GetMapping
     public List<RecommendationResponse> getSurveyResults(@RequestParam("clientId") String clientId) {
+        log.info("{} - 데이터 조회 GET 요청응답", Thread.currentThread().getName());
         return surveyRecommendationService.getSurveyRecommendationResults(clientId);
     }
 
@@ -41,7 +42,7 @@ public class SurveyController {
      */
     @PatchMapping("/update")
     public void updateSurvey(@RequestBody SurveyUpdateRequest request) {
-        log.info("{} - 데이터 소비 업데이트", Thread.currentThread().getName());
+        log.info("{} - 데이터 업데이트 PATCH 요청", Thread.currentThread().getName());
         surveyRecommendationService.updateSurvey(request);
     }
 }

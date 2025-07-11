@@ -29,6 +29,7 @@ public class VectorService {
         vectorRepository.deleteAll();
     }
 
+    // 캐싱 대상
     @Transactional(readOnly = true)
     public List<Vector> getVectors() {
         return vectorRepository.findAllWithContent();

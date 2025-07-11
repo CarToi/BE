@@ -25,7 +25,7 @@ public class ViewEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
 
     @Override
     public List<? extends IContent> calculateSimilarity(String text) {
-        EmbeddingResponse response = vectorClient.get(text);
+        EmbeddingResponse response = vectorClient.getWithCache(text);
         float[] requestVec = VectorCalculator.addNoise(response.result().embedding());
 
         List<VectorView> vectorViews = swapViewService.getVectorViews(); // 이거 캐싱 대상이겠는데?

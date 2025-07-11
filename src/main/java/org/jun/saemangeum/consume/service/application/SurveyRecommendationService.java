@@ -56,6 +56,7 @@ public class SurveyRecommendationService {
     /**
      * 임시 GET 요청 처리 서비스 로직
      */
+    // 너도 캐싱 대상이 되겠는데?
     public List<RecommendationResponse> getSurveyRecommendationResults(String clientId) {
         List<? extends IContent> contents = StrategyContextHolder.executeGetStrategy(clientId);
 

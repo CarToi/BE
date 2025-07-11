@@ -18,9 +18,12 @@ public class VectorClient {
         this.vectorTemplate = vectorTemplate;
     }
 
-    public EmbeddingResponse get(String text) {
-        // 여기서도 캐시가 있어야 될 것 같은데?
+    // 너도 캐싱대상
+    public EmbeddingResponse getWithCache(String text) {
+        return getWithRaw(text);
+    }
 
+    public EmbeddingResponse getWithRaw(String text) {
         EmbeddingRequest request = new EmbeddingRequest(text);
         return vectorTemplate.postForObject(baseUrl, request, EmbeddingResponse.class);
     }
