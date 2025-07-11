@@ -18,10 +18,19 @@ public class StrategyContextHolder {
         }
     }
 
-    public static List<? extends IContent> executeStrategy(String text) {
+    public static List<? extends IContent> executePostStrategy(String text) {
         lock.readLock().lock();
         try {
             return currentStrategy.calculateSimilarity(text);
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    public static List<? extends IContent> executeGetStrategy(String clientId) {
+        lock.readLock().lock();
+        try {
+            return currentStrategy.getContentsByClientId(clientId);
         } finally {
             lock.readLock().unlock();
         }

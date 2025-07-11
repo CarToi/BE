@@ -57,6 +57,12 @@ public class ViewEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
         return floats;
     }
 
+    // 클라이언트 ID 기반 사용자 설문 응답 조회하기
+    @Override
+    public List<? extends IContent> getContentsByClientId(String clientId) {
+        return swapViewService.getContentViewsByClientId(clientId);
+    }
+
     // 유사도 내부 클래스
     record ContentSimilarity(ContentView contentView, double similarity)
             implements Comparable<ViewEmbeddingVectorStrategy.ContentSimilarity> {

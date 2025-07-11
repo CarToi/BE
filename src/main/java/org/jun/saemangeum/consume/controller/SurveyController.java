@@ -19,13 +19,22 @@ public class SurveyController {
     private final SurveyRecommendationService surveyRecommendationService;
 
     /**
-     * 사용자 설문 결과 추천 응답 데이터 리스트 반환
+     * 사용자 설문 결과 추천 응답 데이터 리스트 생성
      */
     @PostMapping("/recommendation")
-    public List<RecommendationResponse> createSurvey(@RequestBody SurveyCreateRequest request) {
+    public void createSurvey(@RequestBody SurveyCreateRequest request) {
         log.info("{} - 데이터 소비 요청응답", Thread.currentThread().getName());
-        return surveyRecommendationService.createRecommendationsBySurvey(request);
+        surveyRecommendationService.createRecommendationsBySurvey(request);
     }
+
+    /**
+     * 사용자 설문 결과 추천 응답 데이터 리스트 반환
+     */
+    @GetMapping
+    public List<RecommendationResponse> getSurveyResults(@RequestParam("clientId") String clientId) {
+        return surveyRecommendationService.getSurveyRecommendationResults(clientId);
+    }
+
 
     /**
      * 사용자 설문 결과 만족도 반영 요청

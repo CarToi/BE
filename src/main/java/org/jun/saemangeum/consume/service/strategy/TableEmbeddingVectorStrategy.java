@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.domain.IContent;
 import org.jun.saemangeum.global.domain.Vector;
+import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.service.VectorService;
 import org.jun.saemangeum.pipeline.application.util.VectorCalculator;
 import org.jun.saemangeum.pipeline.infrastructure.api.VectorClient;
@@ -22,6 +23,7 @@ public class TableEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
 
     private final VectorClient vectorClient;
     private final VectorService vectorService;
+    private final ContentService contentService;
 
     @Override
     public List<? extends IContent> calculateSimilarity(String text) {
@@ -55,6 +57,12 @@ public class TableEmbeddingVectorStrategy implements EmbeddingVectorStrategy {
         float[] floats = new float[floatBuffer.remaining()];
         floatBuffer.get(floats);
         return floats;
+    }
+
+    // 클라이언트 ID 기반 사용자 설문 응답 조회하기
+    @Override
+    public List<? extends IContent> getContentsByClientId(String clientId) {
+        return contentService.getContentsByClientId(clientId);
     }
 
     // 유사도 내부 클래스

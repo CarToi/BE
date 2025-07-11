@@ -19,10 +19,4 @@ public class RecommendationLogService {
     public void saveALl(List<RecommendationLog> recommendationLogs) {
         recommendationLogRepository.saveAll(recommendationLogs);
     }
-
-    // 너도 캐시 적용이 될까?
-    public List<Long> getRecommendationLogIdsJoinSurveys(AverageRequest request) {
-        return recommendationLogRepository.findContentIdsBySurveyConditions(
-                request.age(), request.gender(), request.city(), request.want(), request.mood());
-    }
 }

@@ -1,13 +1,12 @@
 package org.jun.saemangeum.global.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.repository.ContentRepository;
-import org.jun.saemangeum.global.domain.CollectSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +22,11 @@ public class ContentService {
     @Transactional
     public void deleteByCollectSource(CollectSource collectSource) {
         contentRepository.deleteByCollectSource(collectSource);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Content> getContentsByClientId(String clientId) {
+        return contentRepository.findRecommendedContentsByClientId(clientId);
     }
 
     @Transactional

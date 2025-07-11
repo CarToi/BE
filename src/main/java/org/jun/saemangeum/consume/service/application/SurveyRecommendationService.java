@@ -1,7 +1,6 @@
 package org.jun.saemangeum.consume.service.application;
 
 import lombok.RequiredArgsConstructor;
-import org.jun.saemangeum.consume.domain.dto.Coordinate;
 import org.jun.saemangeum.consume.domain.dto.RecommendationResponse;
 import org.jun.saemangeum.consume.domain.dto.SurveyCreateRequest;
 import org.jun.saemangeum.consume.domain.dto.SurveyUpdateRequest;
@@ -12,6 +11,7 @@ import org.jun.saemangeum.consume.service.domain.SurveyService;
 import org.jun.saemangeum.consume.service.strategy.StrategyContextHolder;
 import org.jun.saemangeum.consume.util.CoordinateCalculator;
 import org.jun.saemangeum.global.domain.IContent;
+import org.jun.saemangeum.global.exception.ClientIdException;
 import org.jun.saemangeum.global.exception.SatisfactionsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +34,7 @@ public class SurveyRecommendationService {
         // 코드 로직 내에서 요청 자체를 소모시켜버리는 방안으로 생각해보기
         // 별개의 GET 요청을 만들자?
         if (surveyService.isExistedClientId(request.clientId()))
-            throw new IllegalArgumentException("해당 클라이언트 ID는 이미 존재합니다. 관리자에게 문의하거나 다시 시도해주세요.");
+            throw new ClientIdException("해당 클라이언트 ID는 이미 존재합니다. 관리자에게 문의하거나 다시 시도해주세요.");
 
         String age = request.age() > 30 ? "늙은" : "젊은";
         String awareness = ""; // request.resident()
@@ -42,12 +42,22 @@ public class SurveyRecommendationService {
                 + request.city() + " " + request.mood() + " " + request.want();
 
         // 전략 패턴 적용
-        List<? extends IContent> contents = StrategyContextHolder.executeStrategy(text);
+        List<? extends IContent> contents = StrategyContextHolder.executePostStrategy(text);
         Survey survey =  surveyService.save(Survey.create(request));
 
         List<RecommendationLog> recommendationLogs = contents.stream()
                 .map(e -> new RecommendationLog(e, survey)).toList();
         recommendationLogService.saveALl(recommendationLogs);
+
+        return contents.stream().map(IContent::to)
+                .toList();
+    }
+
+    /**
+     * 임시 GET 요청 처리 서비스 로직
+     */
+    public List<RecommendationResponse> getSurveyRecommendationResults(String clientId) {
+        List<? extends IContent> contents = StrategyContextHolder.executeGetStrategy(clientId);
 
         return contents.stream()
                 .map(IContent::to)

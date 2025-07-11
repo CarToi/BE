@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface EmbeddingVectorStrategy {
     List<? extends IContent> calculateSimilarity(String text);
+    List<? extends IContent> getContentsByClientId(String clientId);
 }
