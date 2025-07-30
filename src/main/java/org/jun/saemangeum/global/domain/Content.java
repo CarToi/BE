@@ -40,6 +40,7 @@ public class Content implements IContent {
     private String introduction;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private CollectSource collectSource;
 
     @OneToOne(mappedBy = "content", cascade = CascadeType.REMOVE, orphanRemoval = true)
