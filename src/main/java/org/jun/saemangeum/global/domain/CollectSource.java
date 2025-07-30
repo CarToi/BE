@@ -8,7 +8,7 @@ public enum CollectSource {
     GSCUAP, // 군산 문화시설 API
     SMGEVAP, // 새만금 행사 API
     SMGFEAP, // 새만금 축제 API
-    ARTOCR, // 새만금 군도 관광지 크롤링
+//    ARTOCR, // 새만금 군도 관광지 크롤링
     GJTOCR, // 김제 관광지 크롤링
     GSTOCR, // 군산 관광지 크롤링
     BATOCR, // 부안 관광지 크롤링
