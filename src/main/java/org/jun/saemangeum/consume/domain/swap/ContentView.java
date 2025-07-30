@@ -35,6 +35,7 @@ public class ContentView implements IContent {
     private String introduction;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private CollectSource collectSource;
 
     @OneToOne(mappedBy = "contentView")
