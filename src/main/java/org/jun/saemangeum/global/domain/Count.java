@@ -18,6 +18,7 @@ public class Count {
     private Long id;
 
     @Column(nullable = false, name = "collect_source")
+    @Enumerated(EnumType.STRING)
     private CollectSource collectSource;
 
     @Column
