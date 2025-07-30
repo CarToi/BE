@@ -22,9 +22,9 @@ public class DeployController {
         return env;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        scheduler.process();
-        return "start";
-    }
+    // @GetMapping("/test")
+    // public String test() {
+    //     scheduler.process();
+    //     return "start";
+    // }
 }
