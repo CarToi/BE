@@ -25,56 +25,21 @@
 >**Java의 가상 스레드(Virtual Thread)** 를 활용해서 단일 프로세스 내에서 데이터 수집과 소비를 병렬 처리하며, 전략 패턴과 팩토리 메소드 패턴을 적용해 유연성과 확장성을 갖췄습니다.\
 >전체 구조는 Spring Boot의 DI / 비동기 처리를 기반으로 한 경량화된 고성능 서버 아키텍처를 지향합니다.
 
-- **🌐 배포 링크** : [설문조사 참여하러 가기](https://saegil.vercel.app/)
-- **🛠️ 사용 스택** : [![Next][Next.js]][Next-url]
+- **🌐 배포 링크** : [설문조사 참여하기](https://saegil.vercel.app/)
+- **🛠️ 사용 스택** : Java 21, Spring Boot, Spring Data JPA, JUnit 5, JMH, MySQL, Docker, Github Actions, AWS
 - **👥 참여 인원** : 총 4명 (BE 1, FE 2, UX/UI 1)
 - **⏳ 개발 기간** : 2025.06 ~ 2025.07
 
-자바
-<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=OpenJDK&logoColor=white">
 
-스프링
-<img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
-
-스프링부트
-<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
-
-스프링 시큐리티
-<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=Spring Security&logoColor=white">
-
-JUnit5
-<img src="https://img.shields.io/badge/JUnit5-25A162?style=for-the-badge&logo=JUnit5&logoColor=white">
-
-Hibernate
-<img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white">
-
-MySQL
-<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
-
-nginx
-<img src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white">
-
-docker
-<img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"> 
-
-GitHub Actions
-<img src="https://img.shields.io/badge/GitHub Actions-2088FF?style=for-the-badge&logo=GitHub Actions&logoColor=white">
-
-EC2
-<img src="https://img.shields.io/badge/Amazon%20EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white">
-
-S3
-<img src="https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white">
-
-Selenium
-<img src="https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=Selenium&logoColor=white">
-
-
-## 2. 핵심 기능
+## 2. 수행 역할
 <!--
   프로젝트에서 구현한 주요 기능을 나열합니다.
   기능 요약, URL (있다면), 설명 포함해도 좋습니다.
 -->
+
+### (1) 멀티 스레드 파이프라인 구축
+### (2) 단위 테스트 및 성능 벤치마킹
+### (3) AWS 배포 자동화 및 실제 운영
 
 
 ## 3. 트러블 슈팅
