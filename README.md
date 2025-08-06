@@ -30,7 +30,7 @@
 <br />
 
 - **🌐 배포 링크** : [설문조사 참여하기](https://saegil.vercel.app/)
-- **🛠️ 사용 스택** : Java 21, Spring Boot, Spring Data JPA, JUnit5, JMH, MySQL, Docker, Github Actions, AWS, CLOVA Studio 임베딩v1
+- **🛠️ 사용 스택** : Java 21, Spring Boot, Spring Data JPA, Spring Caffeine Cache JUnit5, JMH, MySQL, Docker, Github Actions, AWS, CLOVA Studio 임베딩v1
 - **👥 참여 인원** : 총 4명 (BE 1, FE 2, UX/UI 1)
 - **⏳ 개발 기간** : 2025.06 ~ 2025.07
 - **📖 개발 일지** : [노션 참고](https://kimd0ngjun.notion.site/206420aa19408051bad5e9d1e05df172)
@@ -58,6 +58,8 @@
 - Github Actions 스크립트 기반 테스트 및 배포 자동화
 - AWS IAM 권한 위임 스크립트를 통한 CI/CD 과정에서 EC2 IP 보안 확보
 
+---
+
 ## 3. 트러블 슈팅
 <!--
   개발 중 마주한 주요 이슈와 해결 과정을 기술합니다.
@@ -66,6 +68,7 @@
 
 ### 🎯 예시: 트러블 슈팅 1
 
+---
 
 ## 4. 서버 디렉토리 구조
 <!--
@@ -271,6 +274,7 @@ src
 
 </details>
 
+---
 
 ## 5. 기타
 <!--
