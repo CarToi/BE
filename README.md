@@ -30,7 +30,7 @@
 <br />
 
 - **🌐 배포 링크** : [설문조사 참여하기](https://saegil.vercel.app/)
-- **🛠️ 사용 스택** : Java 21, Spring Boot, Spring Data JPA, Spring Caffeine Cache JUnit5, JMH, MySQL, Docker, Github Actions, AWS, CLOVA Studio 임베딩v1
+- **🛠️ 사용 스택** : Java 21, Spring Boot, Spring Data JPA, Spring Caffeine Cache, JUnit5, JMH, MySQL, Docker, Github Actions, AWS, CLOVA Studio 임베딩v1
 - **👥 참여 인원** : 총 4명 (BE 1, FE 2, UX/UI 1)
 - **⏳ 개발 기간** : 2025.06 ~ 2025.07
 - **📖 개발 일지** : [노션 참고](https://kimd0ngjun.notion.site/206420aa19408051bad5e9d1e05df172)
