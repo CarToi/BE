@@ -9,9 +9,9 @@
 <!-- 아키텍처 드로잉 혹은 웹뷰 캡쳐가 있다면 여기에 넣어주세요 -->
 <!-- 예: figma 디자인 / ERD / 시스템 아키텍처 / 화면 캡처 등 -->
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/6eebf717-0339-42d5-a1ab-2eef87af084e" alt="BE 아키텍처" width="85%" />
+  <img src="https://github.com/user-attachments/assets/6eebf717-0339-42d5-a1ab-2eef87af084e" alt="BE 아키텍처" width="47.5%" />
+  <img src="https://github.com/user-attachments/assets/2810c0bf-2003-4ab4-9afb-0b893cfd1820" alt="BE ERD" width="47.5%" />
 </p>
-<p align="center"><em>새길 백엔드 아키텍처</em></p>
 
 <br />
 
@@ -21,14 +21,18 @@
   예: 서비스 목적, 주요 기능 요약, 사용 기술 스택, 참여 인원 등
 -->
 
->**새길**은 사용자 맞춤형 문화 콘텐츠를 추천하고, 이를 지도에 시각화하여 설문조사 데이터를 수집·활용하는 플랫폼입니다.\
->**Java의 가상 스레드(Virtual Thread)** 를 활용해서 단일 프로세스 내에서 데이터 수집과 소비를 병렬 처리하며, 전략 패턴과 팩토리 메소드 패턴을 적용해 유연성과 확장성을 갖췄습니다.\
->전체 구조는 Spring Boot의 DI / 비동기 처리를 기반으로 한 경량화된 고성능 서버 아키텍처를 지향합니다.
+>**새길**은 2025 새만금 공공데이터 공모전 신규데이터 생산 부문에 참가한 웹 개발 프로젝트 출품작입니다.\
+>사용자 맞춤형 문화 콘텐츠를 추천하고, 결과를 지도에 시각화하는 설문조사 데이터 수집 플랫폼입니다.\
+>**Java의 가상 스레드**로 단일 프로세스에서 데이터 수집과 소비를 병렬 처리하며, 전략 패턴과 팩토리 메소드 패턴으로 유연성과 확장성을 갖췄습니다.\
+>전체 구조는 Spring Boot의 DI / 비동기 처리를 기반으로 한 경량화된 저비용 & 고성능 서버 아키텍처를 지향합니다.
+
+<br />
 
 - **🌐 배포 링크** : [설문조사 참여하기](https://saegil.vercel.app/)
-- **🛠️ 사용 스택** : Java 21, Spring Boot, Spring Data JPA, JUnit 5, JMH, MySQL, Docker, Github Actions, AWS
+- **🛠️ 사용 스택** : Java 21, Spring Boot, Spring Data JPA, JUnit5, JMH, MySQL, Docker, Github Actions, AWS, CLOVA Studio 임베딩v1
 - **👥 참여 인원** : 총 4명 (BE 1, FE 2, UX/UI 1)
 - **⏳ 개발 기간** : 2025.06 ~ 2025.07
+- **📖 개발 일지** : [노션 참고](https://kimd0ngjun.notion.site/206420aa19408051bad5e9d1e05df172)
 
 
 ## 2. 수행 역할
@@ -37,9 +41,11 @@
   기능 요약, URL (있다면), 설명 포함해도 좋습니다.
 -->
 
-### (1) 멀티 스레드 파이프라인 구축
-### (2) 단위 테스트 및 성능 벤치마킹
-### (3) AWS 배포 자동화 및 실제 운영
+### (1) 멀티 스레드 기반 데이터 수집 & 소비 서버 구축
+- 단일 서버 프로세스 내에서 데이터 수집과 소비를 멀티 스레드로 구현
+- 데이터 파이프라인 수집기
+### (2) 기능별 단위 테스트 및 주요 성능 벤치마킹
+### (3) AWS 배포 자동화 및 실제 운영하며 데이터 생산
 
 
 ## 3. 트러블 슈팅
@@ -51,20 +57,206 @@
 ### 🎯 예시: 트러블 슈팅 1
 
 
-## 4. 디렉토리 구조
+## 4. 서버 디렉토리 구조
 <!--
   주요 폴더 구조를 간략하게 표현합니다.
   트리 구조 또는 코드 블럭 사용
 -->
 
 <details>
-<summary>📁 구조</summary>
+<summary>펼쳐보기📁</summary>
 
-```
-src/
-├──
-
-# tree 명령어를 쓰면 편해요
+```bash
+src
+├── jmh # 자바 벤치마킹 하네스
+│   └── java
+│       └── org
+│           └── jun
+│               └── saemangeum
+│                   └── benchmark
+│                       └── process
+│                           ├── ContentCollectServiceBenchmark.java # 데이터 수집 벤치마크
+│                           └── MockContentCollectServiceBenchmark.java
+├── main # 메인 애플리케이션
+│   ├── java
+│   │   └── org
+│   │       └── jun
+│   │           └── saemangeum
+│   │               ├── SaemangeumApplication.java
+│   │               ├── consume # 데이터 소비 3계층 아키텍처
+│   │               │   ├── config
+│   │               │   │   └── CoordinateConfig.java
+│   │               │   ├── controller
+│   │               │   │   └── SurveyController.java
+│   │               │   ├── domain
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── AverageRequest.java
+│   │               │   │   │   ├── Coordinate.java
+│   │               │   │   │   ├── KakaoResponse.java
+│   │               │   │   │   ├── RecommendationResponse.java
+│   │               │   │   │   ├── SurveyCreateRequest.java
+│   │               │   │   │   └── SurveyUpdateRequest.java
+│   │               │   │   ├── entity
+│   │               │   │   │   ├── RecommendationLog.java
+│   │               │   │   │   └── Survey.java
+│   │               │   │   └── swap
+│   │               │   │       ├── ContentView.java
+│   │               │   │       └── VectorView.java
+│   │               │   ├── repository
+│   │               │   │   ├── entity
+│   │               │   │   │   ├── RecommendationLogRepository.java
+│   │               │   │   │   └── SurveyRepository.java
+│   │               │   │   └── swap
+│   │               │   │       ├── ContentViewRepository.java
+│   │               │   │       └── VectorViewRepository.java
+│   │               │   ├── service
+│   │               │   │   ├── application
+│   │               │   │   │   └── SurveyRecommendationService.java
+│   │               │   │   ├── domain
+│   │               │   │   │   ├── RecommendationLogService.java
+│   │               │   │   │   └── SurveyService.java
+│   │               │   │   ├── strategy
+│   │               │   │   │   ├── EmbeddingVectorStrategy.java
+│   │               │   │   │   ├── StrategyContextHolder.java
+│   │               │   │   │   ├── TableEmbeddingVectorStrategy.java
+│   │               │   │   │   └── ViewEmbeddingVectorStrategy.java
+│   │               │   │   └── swap
+│   │               │   │       └── SwapViewService.java
+│   │               │   └── util
+│   │               │       ├── CoordinateCalculator.java
+│   │               │       └── ViewJdbcUtil.java
+│   │               │
+│   │               ├── global # 공통 도메인 및 설정정보
+│   │               │   ├── cache
+│   │               │   │   ├── CacheExpirePolicy.java
+│   │               │   │   ├── CacheNames.java
+│   │               │   │   └── CacheType.java
+│   │               │   ├── config
+│   │               │   │   ├── CacheConfig.java
+│   │               │   │   ├── GlobalExceptionHandler.java
+│   │               │   │   ├── Initializer.java
+│   │               │   │   └── WebConfig.java
+│   │               │   ├── controller
+│   │               │   │   └── DeployController.java
+│   │               │   ├── domain
+│   │               │   │   ├── Category.java
+│   │               │   │   ├── CollectSource.java
+│   │               │   │   ├── Content.java
+│   │               │   │   ├── Count.java
+│   │               │   │   ├── IContent.java
+│   │               │   │   └── Vector.java
+│   │               │   ├── exception
+│   │               │   │   ├── ClientIdException.java
+│   │               │   │   ├── ErrorResponse.java
+│   │               │   │   └── SatisfactionsException.java
+│   │               │   ├── repository
+│   │               │   │   ├── ContentRepository.java
+│   │               │   │   ├── CountRepository.java
+│   │               │   │   └── VectorRepository.java
+│   │               │   └── service
+│   │               │       ├── ContentService.java
+│   │               │       ├── CountService.java
+│   │               │       └── VectorService.java
+│   │               │
+│   │               └── pipeline # 데이터 수집 및 전처리 파이프라인
+│   │                   ├── application
+│   │                   │   ├── alarm
+│   │                   │   │   ├── AlarmBuilder.java
+│   │                   │   │   └── AlarmProcess.java
+│   │                   │   ├── collect
+│   │                   │   │   ├── api
+│   │                   │   │   │   ├── GimjeCultureCollector.java
+│   │                   │   │   │   ├── GunsanCultureCollector.java
+│   │                   │   │   │   ├── SmgEventCollector.java
+│   │                   │   │   │   └── SmgFestivalCollector.java
+│   │                   │   │   ├── base
+│   │                   │   │   │   ├── CheckedSupplier.java
+│   │                   │   │   │   ├── CrawlingCollector.java
+│   │                   │   │   │   ├── OpenApiCollector.java
+│   │                   │   │   │   └── Refiner.java
+│   │                   │   │   └── crawl
+│   │                   │   │       ├── ArchipelagoCollector.java
+│   │                   │   │       ├── BuanCultureCollector.java
+│   │                   │   │       ├── City.java
+│   │                   │   │       ├── CityTourCollector.java
+│   │                   │   │       ├── GunsanFestivalCollector.java
+│   │                   │   │       └── SeawallTourCollector.java
+│   │                   │   ├── dto
+│   │                   │   │   ├── ErrorResponse.java
+│   │                   │   │   ├── Event.java
+│   │                   │   │   ├── EventResponse.java
+│   │                   │   │   ├── Festival.java
+│   │                   │   │   ├── FestivalResponse.java
+│   │                   │   │   ├── GimjeCulture.java
+│   │                   │   │   ├── GimjeCultureResponse.java
+│   │                   │   │   ├── GunsanCulture.java
+│   │                   │   │   ├── GunsanCultureResponse.java
+│   │                   │   │   └── RefinedDataDTO.java
+│   │                   │   ├── schedule
+│   │                   │   │   └── PipelineScheduler.java
+│   │                   │   ├── service
+│   │                   │   │   ├── ContentCollectService.java
+│   │                   │   │   ├── DataCountUpdateService.java
+│   │                   │   │   ├── EmbeddingVectorService.java
+│   │                   │   │   └── PipelineService.java
+│   │                   │   └── util
+│   │                   │       ├── TitleDuplicateChecker.java
+│   │                   │       └── VectorCalculator.java
+│   │                   ├── domain
+│   │                   │   ├── entity
+│   │                   │   │   ├── Alarm.java
+│   │                   │   │   ├── AlarmMessage.java
+│   │                   │   │   ├── AlarmPayload.java
+│   │                   │   │   └── AlarmType.java
+│   │                   │   └── service
+│   │                   │       └── AlarmService.java
+│   │                   ├── infrastructure
+│   │                   │   ├── api
+│   │                   │   │   ├── OpenApiClient.java
+│   │                   │   │   └── VectorClient.java
+│   │                   │   ├── config
+│   │                   │   │   ├── AsyncConfig.java
+│   │                   │   │   ├── DiscordConfig.java
+│   │                   │   │   ├── OpenApiConfig.java
+│   │                   │   │   ├── SeleniumConfig.java
+│   │                   │   │   └── VectorConfig.java
+│   │                   │   ├── dto
+│   │                   │   │   ├── EmbeddingJob.java
+│   │                   │   │   ├── EmbeddingRequest.java
+│   │                   │   │   └── EmbeddingResponse.java
+│   │                   │   └── queue
+│   │                   │       ├── EmbeddingJobQueue.java
+│   │                   │       ├── EmbeddingWorker.java
+│   │                   │       └── EmbeddingWorkerService.java
+│   │                   └── presentation
+│   │                       └── DiscordMessageAlarm.java
+│   │
+│   └── resources
+│       └── application.yml # 서버 설정 프로퍼티
+│
+└── test # 단위 테스트 및 통합 테스트
+    └── java
+        └── org
+            └── jun
+                └── saemangeum
+                    ├── SaemangeumApplicationTests.java
+                    ├── collect
+                    │   ├── CrawlingCollectorTest.java
+                    │   ├── FallbackTest.java
+                    │   ├── OpenApiCollectorTest.java
+                    │   └── TitleDuplicateCheckerTest.java
+                    ├── connect
+                    │   ├── CoordinateTest.java
+                    │   ├── EmbeddingTest.java
+                    │   ├── MonitoringTest.java
+                    │   ├── OpenApiTest.java
+                    │   └── SeleniumTest.java
+                    └── service
+                        ├── ContentCollectServiceTest.java
+                        ├── DataUpdateTest.java
+                        ├── StrategyConcurrencyTest.java
+                        ├── StrategyPatternTest.java
+                        └── ViewFunctionTest.java
 ```
 
 </details>
@@ -85,8 +277,8 @@ src/
   추가적으로 기록할 정보 (예: 향후 계획, 라이센스, 협업 도구 등)
 -->
 
-- Notion 문서: [노션 링크](https://kimd0ngjun.notion.site/200420aa1940809faa85e562a0fb1fbf)
-- API 명세: [노션 링크](https://kimd0ngjun.notion.site/API-21c420aa194080199f99cdf97a0a39a1)
+- **Notion 문서** : [노션 링크](https://kimd0ngjun.notion.site/200420aa1940809faa85e562a0fb1fbf)
+- **API 명세** : [노션 링크](https://kimd0ngjun.notion.site/API-21c420aa194080199f99cdf97a0a39a1)
 
 
 <p align="right">(<a href="#readme-top">🔝 back to top</a>)</p>
