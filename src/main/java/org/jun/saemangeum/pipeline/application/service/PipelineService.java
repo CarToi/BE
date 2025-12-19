@@ -1,8 +1,6 @@
 package org.jun.saemangeum.pipeline.application.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jun.saemangeum.global.domain.Content;
-import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.pipeline.application.collect.base.Refiner;
 import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.pipeline.domain.service.AlarmService;
@@ -32,7 +30,6 @@ public class PipelineService {
     public PipelineService(
             List<Refiner> refiners,
             TaskExecutor virtualThreadExecutor,
-            ContentService contentService,
             AlarmService alarmService, EmbeddingVectorService embeddingVectorService) {
         this.refiners = refiners;
         this.virtualThreadExecutor = virtualThreadExecutor;

@@ -22,8 +22,4 @@ public class Vector {
     @OneToOne
     @JoinColumn(name = "content_id")
     private Content content;
-
-    public Vector(byte[] vector) {
-        this.vector = vector;
-    }
 }

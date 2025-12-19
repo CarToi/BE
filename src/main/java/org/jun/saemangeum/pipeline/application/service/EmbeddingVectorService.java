@@ -60,6 +60,14 @@ public class EmbeddingVectorService {
     public void upsertContent(RefinedDataDTO dto, byte[] bytes) {
         Content saveContent = contentService.upsertContent(dto);
         saveContent.updateFrom(dto);
-        saveContent.upsertVector(bytes);
+
+        if (saveContent.getVector() == null) {
+            Vector newVector = vectorService
+                    .saveVector(Vector.builder().vector(bytes).content(saveContent).build());
+            saveContent.updateVector(newVector);
+            return;
+        }
+
+        saveContent.getVector().setVector(bytes);
     }
 }

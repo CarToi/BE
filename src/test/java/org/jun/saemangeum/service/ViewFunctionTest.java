@@ -57,7 +57,7 @@ public class ViewFunctionTest {
                 .content(content)
                 .build();
         vectorRepository.save(vector);
-        savedContent.upsertVector(vector.getVector());
+        savedContent.updateVector(vector);
 
         // JPA DDL 정책 update로 인한 테이블 생성 오류 제거
         jdbcTemplate.execute(SQL_1);

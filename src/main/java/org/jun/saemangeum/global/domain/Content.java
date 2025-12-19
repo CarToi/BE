@@ -68,14 +68,9 @@ public class Content implements IContent {
         this.collectSource = dto.collectSource();
     }
 
-    public void upsertVector(byte[] bytes) {
-        if (this.vector == null) {
-            Vector newVector = new Vector(bytes);
-            newVector.setContent(this);
-            this.vector = newVector;
-        } else {
-            this.vector.setVector(bytes);
-        }
+    public void updateVector(Vector newVector) {
+        newVector.setContent(this);
+        this.vector = newVector;
     }
 
     @Override
