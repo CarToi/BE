@@ -24,7 +24,7 @@ public class DataCountUpdateService {
         if (size != existingSize) {
             log.info("{} 새로운 개수: {} // 기존 개수: {}", collectSource, size, existingSize);
             existedCount.update(size);
-            contentService.deleteByCollectSource(collectSource);
+//            contentService.deleteByCollectSource(collectSource);
 
             return true;
         }
