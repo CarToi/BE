@@ -29,6 +29,7 @@ public class ContentCollectServiceTest {
             pipelineScheduler.process();
         } catch (BadSqlGrammarException e) {
             // H2와 MySQL 문법차이로 인한 어쩔 수 없는 발생 이슈
+            log.error("H2와 MySQL 문법차이로 인한 어쩔 수 없는 발생 이슈");
         }
         log.info("수집된 데이터 개수 : {}", contentRepository.findAll().size());
     }
