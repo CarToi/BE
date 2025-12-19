@@ -1,9 +1,6 @@
 package org.jun.saemangeum.pipeline.application.service;
 
-import java.util.HashSet;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.pipeline.application.collect.base.Refiner;
@@ -30,7 +27,6 @@ public class PipelineService {
 
     private List<EmbeddingJob> failedEmbeddingJobList;
     private EmbeddingJobQueue embeddingJobQueue;
-    private Set<CollectSource> updateSource;
 
     public PipelineService(
             List<Refiner> refiners,
@@ -43,7 +39,6 @@ public class PipelineService {
         this.nonUpdate = new AtomicBoolean(true);
         this.embeddingJobQueue = new EmbeddingJobQueue();
         this.embeddingVectorService = embeddingVectorService;
-        this.updateSource = new HashSet<>();
     }
 
     /**
@@ -89,9 +84,6 @@ public class PipelineService {
                     log.warn("수집된 데이터 없음 or 업데이트 없음: {}", refinerName);
                     return;
                 }
-
-                // 업데이트 소스 수집
-                updateSource.add(contents.stream().findFirst().get().getCollectSource());
 
                 // 업데이트 o, 한 번만 false로 바뀌도록 최적화
                 nonUpdate.compareAndSet(true, false);
