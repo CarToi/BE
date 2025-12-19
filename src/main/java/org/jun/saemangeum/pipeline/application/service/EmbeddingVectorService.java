@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.domain.Vector;
+import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.service.VectorService;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.pipeline.infrastructure.api.VectorClient;
 import org.jun.saemangeum.pipeline.infrastructure.dto.EmbeddingResponse;
 import org.springframework.stereotype.Service;
 
 import java.nio.ByteBuffer;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -18,14 +21,15 @@ public class EmbeddingVectorService {
 
     private final VectorClient vectorClient;
     private final VectorService vectorService;
+    private final ContentService contentService;
 
     // AI 전처리 로직
-    public void embeddingVector(Content content) {
-        String text = content.getTitle() + " " + content.getIntroduction();
+    public void embeddingVector(RefinedDataDTO dto) {
+        String text = dto.title() + " " + dto.introduction();
 
         // 설명 뒷부분 일부를 잘라서라도 토큰 조건 맞추기
         if (text.length() > 800) {
-            log.info("길이 증가한 놈: {} // \n{}", content.getId(), content.getTitle() + " " + content.getIntroduction());
+            log.info("길이 증가한 놈: \n{}", text);
             String[] sentences = text.split("(?<=[.!?\\n])");
             StringBuilder sb = new StringBuilder();
             for (String sentence : sentences) {
@@ -38,35 +42,11 @@ public class EmbeddingVectorService {
 
         EmbeddingResponse response = vectorClient.getWithRaw(text);
         byte[] vectorBytes = floatToByte(response);
-        Vector vector = Vector.builder().vector(vectorBytes).content(content).build();
 
-        content.setVector(vector);
-        vectorService.saveVector(vector);
+        // 트랜잭션 시작
+        upsertContent(dto, vectorBytes);
+        // 트랜잭션 끝
     }
-
-//    // 유사도 계산
-//    public List<Content> calculateSimilarity(String text) {
-//        EmbeddingResponse response = vectorClient.get(text);
-//        float[] requestVec = VectorCalculator.addNoise(response.result().embedding());
-//
-//        List<Vector> vectors = vectorService.getVectors(); // 이거 캐싱 대상이겠는데?
-//        PriorityQueue<ContentSimilarity> pq = new PriorityQueue<>();
-//
-//        for (Vector vec : vectors) {
-//            float[] storedVec = byteToFloat(vec);
-//            double similarity = VectorCalculator.cosineSimilarity(requestVec, storedVec);
-//
-//            ContentSimilarity cs = new ContentSimilarity(vec.getContent(), similarity);
-//            if (pq.size() < 10) {
-//                pq.offer(cs);
-//            } else if (similarity > pq.peek().similarity) {
-//                pq.poll();
-//                pq.offer(cs);
-//            }
-//        }
-//
-//        return pq.stream().sorted(Comparator.reverseOrder()).map(e -> e.content).toList();
-//    }
 
     // 벡터 플롯 타입 배열 -> 바이트 타입 변환 후 저장
     private byte[] floatToByte(EmbeddingResponse response) {
@@ -76,22 +56,18 @@ public class EmbeddingVectorService {
         return byteBuffer.array();
     }
 
-//    // 바이트 타입 필드 조회 -> 벡터 플롯 타입 변환
-//    private float[] byteToFloat(Vector vector) {
-//        byte[] bytes = vector.getVector();
-//        FloatBuffer floatBuffer = ByteBuffer.wrap(bytes).asFloatBuffer();
-//        float[] floats = new float[floatBuffer.remaining()];
-//        floatBuffer.get(floats);
-//        return floats;
-//    }
-//
-//    // 유사도 내부 클래스
-//    record ContentSimilarity(Content content, double similarity)
-//            implements Comparable<ContentSimilarity> {
-//        @Override
-//        public int compareTo(ContentSimilarity o) {
-//            // 유사도 기준 오름차순 정렬
-//            return Double.compare(this.similarity, o.similarity);
-//        }
-//    }
+    @Transactional // 트랜잭션 AOP로 감싸기 위한 퍼블릭 조치
+    public void upsertContent(RefinedDataDTO dto, byte[] bytes) {
+        Content saveContent = contentService.upsertContent(dto);
+        saveContent.updateFrom(dto);
+
+        if (saveContent.getVector() == null) {
+            Vector newVector = vectorService
+                    .saveVector(Vector.builder().vector(bytes).content(saveContent).build());
+            saveContent.updateVector(newVector);
+            return;
+        }
+
+        saveContent.getVector().setVector(bytes);
+    }
 }

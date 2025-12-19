@@ -44,7 +44,7 @@ public class FallbackTest {
             }
         };
 
-        List<Content> result = crawlingCollector.refine();
+        List<RefinedDataDTO> result = crawlingCollector.refine();
 
         assertNotNull(result);
         assertTrue(result.isEmpty(), "3번 재시도 실패 후 빈 리스트 반환해야 함");
@@ -76,12 +76,12 @@ public class FallbackTest {
         }
 
         CountingCrawlingCollector collector = new CountingCrawlingCollector(titleChecker);
-        List<Content> result = collector.refine();
+        List<RefinedDataDTO> result = collector.refine();
 
         assertEquals(3, collector.callCount);
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("임의의 제목", result.getFirst().getTitle());
+        assertEquals("임의의 제목", result.getFirst().title());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class FallbackTest {
             }
         };
 
-        List<Content> result = openApiCollector.refine();
+        List<RefinedDataDTO> result = openApiCollector.refine();
 
         assertNotNull(result);
         assertTrue(result.isEmpty(), "3번 재시도 실패 후 빈 리스트 반환해야 함");
@@ -128,11 +128,11 @@ public class FallbackTest {
 
         CountingOpenApiCollector collector =
                 new CountingOpenApiCollector(openApiClient, titleChecker);
-        List<Content> result = collector.refine();
+        List<RefinedDataDTO> result = collector.refine();
 
         assertEquals(3, collector.callCount);
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("임의의 제목", result.getFirst().getTitle());
+        assertEquals("임의의 제목", result.getFirst().title());
     }
 }

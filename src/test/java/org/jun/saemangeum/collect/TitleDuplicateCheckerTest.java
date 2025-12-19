@@ -46,12 +46,12 @@ public class TitleDuplicateCheckerTest {
             }
         };
 
-        List<Content> result1 = apiCollector.refine(); // "축제 1" 먼저 저장
-        List<Content> result2 = crawlingCollector.refine(); // "1 행사" 먼저 저장
-        List<Content> result = Stream.concat(result1.stream(), result2.stream()).toList();
+        List<RefinedDataDTO> result1 = apiCollector.refine(); // "축제 1" 먼저 저장
+        List<RefinedDataDTO> result2 = crawlingCollector.refine(); // "1 행사" 먼저 저장
+        List<RefinedDataDTO> result = Stream.concat(result1.stream(), result2.stream()).toList();
 
         Assertions.assertEquals(result.size(), 2);
-        assertThat(result).extracting(Content::getTitle).containsExactlyInAnyOrder("축제 1", "1 행사");
+        assertThat(result).extracting(RefinedDataDTO::title).containsExactlyInAnyOrder("축제 1", "1 행사");
 
         checker.reset();
     }

@@ -18,14 +18,14 @@ public abstract class CrawlingCollector implements Refiner {
     private final TitleDuplicateChecker titleDuplicateChecker;
 
     @Override
-    public List<Content> refine() {
+    public List<RefinedDataDTO> refine() {
         // 여기에 추상 메소드들 기반으로 로직 처리처리할 예정
         // 생성한 것들을 바탕으로 프로세스까지 처리하는 걸 여기에 책임을 부여하자(팩토리 메서드 취지)
         List<RefinedDataDTO> data = retry(this::collectData);
 
         return data.stream()
                 .filter(e -> titleDuplicateChecker.isDuplicate(e.title())) // 얘, 제목 중복 체커가 새로운 업데이트 개수와 기존 개수 비교를 막네...
-                .map(Content::create).toList();
+                .toList();
     }
 
     // 각 페이지 크롤링과 관련된 추상메소드들

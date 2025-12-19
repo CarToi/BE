@@ -19,14 +19,14 @@ public abstract class OpenApiCollector implements Refiner {
     private final TitleDuplicateChecker titleDuplicateChecker;
 
     @Override
-    public List<Content> refine() {
+    public List<RefinedDataDTO> refine() {
         // 여기에 추상 메소드들 기반으로 로직 처리처리할 예정
         // 생성한 것들을 바탕으로 프로세스까지 처리하는 걸 여기에 책임을 부여하자(팩토리 메서드 취지)
         List<RefinedDataDTO> data = retry(this::collectData);
 
         return data.stream()
                 .filter(e -> titleDuplicateChecker.isDuplicate(e.title()))
-                .map(Content::create).toList();
+                .toList();
     }
 
     // 각 OpenAPI 호출과 관련된 추상메소드들

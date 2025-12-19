@@ -1,9 +1,8 @@
 package org.jun.saemangeum.pipeline.application.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jun.saemangeum.global.domain.Content;
-import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.pipeline.application.collect.base.Refiner;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.pipeline.domain.service.AlarmService;
 import org.jun.saemangeum.pipeline.infrastructure.dto.EmbeddingJob;
 import org.jun.saemangeum.pipeline.infrastructure.queue.EmbeddingJobQueue;
@@ -21,7 +20,6 @@ public class PipelineService {
 
     private final List<Refiner> refiners;
     private final TaskExecutor virtualThreadExecutor;
-    private final ContentService contentService;
     private final AlarmService alarmService;
     private final AtomicBoolean nonUpdate;
     private final EmbeddingVectorService embeddingVectorService;
@@ -32,11 +30,9 @@ public class PipelineService {
     public PipelineService(
             List<Refiner> refiners,
             TaskExecutor virtualThreadExecutor,
-            ContentService contentService,
             AlarmService alarmService, EmbeddingVectorService embeddingVectorService) {
         this.refiners = refiners;
         this.virtualThreadExecutor = virtualThreadExecutor;
-        this.contentService = contentService;
         this.alarmService = alarmService;
         this.nonUpdate = new AtomicBoolean(true);
         this.embeddingJobQueue = new EmbeddingJobQueue();
@@ -79,7 +75,7 @@ public class PipelineService {
             String refinerName = refiner.getClass().getSimpleName();
 
             try {
-                List<Content> contents = refiner.refine();
+                List<RefinedDataDTO> contents = refiner.refine();
 
                 // 업데이트 x
                 if (contents.isEmpty()) {
@@ -89,7 +85,6 @@ public class PipelineService {
 
                 // 업데이트 o, 한 번만 false로 바뀌도록 최적화
                 nonUpdate.compareAndSet(true, false);
-                contentService.saveContents(contents);
                 alarmService.sendCollectSuccess(refinerName, contents.size());
                 contents.forEach(e -> embeddingJobQueue.offerQueue(new EmbeddingJob(e)));
             } catch (Exception e) {

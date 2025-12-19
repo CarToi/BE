@@ -22,8 +22,8 @@ public class VectorService {
     }
 
     @Transactional
-    public void saveVector(Vector vector) {
-        vectorRepository.save(vector);
+    public Vector saveVector(Vector vector) {
+        return vectorRepository.save(vector);
     }
 
     @Transactional

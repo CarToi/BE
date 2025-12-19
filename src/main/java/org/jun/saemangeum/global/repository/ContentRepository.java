@@ -1,5 +1,6 @@
 package org.jun.saemangeum.global.repository;
 
+import java.util.Optional;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.domain.CollectSource;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,8 @@ import java.util.List;
 public interface ContentRepository extends JpaRepository<Content, Long> {
     List<Content> findByCollectSource(CollectSource collectSource);
     void deleteByCollectSource(CollectSource collectSource);
-    int countByCollectSource(CollectSource collectSource);
+    void deleteByTitle(String title);
+    Optional<Content> findByTitle(String title);
 
     @Query(value = """
         SELECT c.*
