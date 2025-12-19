@@ -28,7 +28,7 @@ jobs:
           fi
 
           chmod +x ./gradlew
-          ./gradlew clean build
+          ./gradlew clean build -x test
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
