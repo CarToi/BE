@@ -19,7 +19,7 @@ public class Content implements IContent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column(nullable = false)
@@ -43,7 +43,7 @@ public class Content implements IContent {
     @Enumerated(EnumType.STRING)
     private CollectSource collectSource;
 
-    @OneToOne(mappedBy = "content", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @JoinColumn(name = "vector_id") // 연관관계 주인이 벡터인데 굳이 얜 필요없겠네
     private Vector vector;
 
@@ -59,10 +59,22 @@ public class Content implements IContent {
                 .build();
     }
 
-    public void setVector(Vector vector) {
-        this.vector = vector;
-        if (vector.getContent() != null) {
-            vector.setContent(this);
+    public void updateFrom(RefinedDataDTO dto) {
+        this.position = dto.position();
+        this.category = dto.category();
+        this.image = dto.image();
+        this.url = dto.url();
+        this.introduction = dto.introduction();
+        this.collectSource = dto.collectSource();
+    }
+
+    public void upsertVector(byte[] bytes) {
+        if (this.vector == null) {
+            Vector newVector = new Vector(bytes);
+            newVector.setContent(this);
+            this.vector = newVector;
+        } else {
+            this.vector.setVector(bytes);
         }
     }
 

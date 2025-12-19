@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.jun.saemangeum.global.domain.CollectSource;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.repository.ContentRepository;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +16,9 @@ public class ContentService {
     private final ContentRepository contentRepository;
 
     @Transactional
-    public void saveContent(Content content) {
-        contentRepository.save(content);
+    public Content upsertContent(RefinedDataDTO dto) {
+        return contentRepository.findByTitle(dto.title())
+                .orElseGet(() -> contentRepository.save(Content.create(dto)));
     }
 
     @Transactional

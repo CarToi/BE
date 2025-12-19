@@ -6,6 +6,7 @@ import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.domain.Vector;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.global.service.VectorService;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.pipeline.infrastructure.api.VectorClient;
 import org.jun.saemangeum.pipeline.infrastructure.dto.EmbeddingResponse;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,12 @@ public class EmbeddingVectorService {
     private final ContentService contentService;
 
     // AI 전처리 로직
-    public void embeddingVector(Content content) {
-        String text = content.getTitle() + " " + content.getIntroduction();
+    public void embeddingVector(RefinedDataDTO dto) {
+        String text = dto.title() + " " + dto.introduction();
 
         // 설명 뒷부분 일부를 잘라서라도 토큰 조건 맞추기
         if (text.length() > 800) {
-            log.info("길이 증가한 놈: {} // \n{}", content.getId(), content.getTitle() + " " + content.getIntroduction());
+            log.info("길이 증가한 놈: \n{}", text);
             String[] sentences = text.split("(?<=[.!?\\n])");
             StringBuilder sb = new StringBuilder();
             for (String sentence : sentences) {
@@ -41,10 +42,9 @@ public class EmbeddingVectorService {
 
         EmbeddingResponse response = vectorClient.getWithRaw(text);
         byte[] vectorBytes = floatToByte(response);
-        Vector vector = Vector.builder().vector(vectorBytes).content(content).build();
 
         // 트랜잭션 시작
-        deleteAndSaveOneTransaction(content, vector);
+        upsertContent(dto, vectorBytes);
         // 트랜잭션 끝
     }
 
@@ -57,10 +57,9 @@ public class EmbeddingVectorService {
     }
 
     @Transactional // 트랜잭션 AOP로 감싸기 위한 퍼블릭 조치
-    public void deleteAndSaveOneTransaction(Content content, Vector vector) {
-        contentService.deleteByTitle(content.getTitle());
-        contentService.saveContent(content);
-        content.setVector(vector);
-        vectorService.saveVector(vector);
+    public void upsertContent(RefinedDataDTO dto, byte[] bytes) {
+        Content saveContent = contentService.upsertContent(dto);
+        saveContent.updateFrom(dto);
+        saveContent.upsertVector(bytes);
     }
 }

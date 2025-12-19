@@ -25,7 +25,7 @@ public class EmbeddingJobQueue {
         try {
             result = queue.offer(job, 150, TimeUnit.MILLISECONDS);
         } catch (InterruptedException ex) {
-            log.warn("큐 삽입 실패: {}", job.content().getId());
+            log.warn("큐 삽입 실패: {}", job.dto().title());
         }
 
         return result;

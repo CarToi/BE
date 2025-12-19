@@ -11,7 +11,6 @@ import org.jun.saemangeum.global.repository.VectorRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,8 +56,8 @@ public class ViewFunctionTest {
         Vector vector = Vector.builder()
                 .content(content)
                 .build();
-        Vector savedVector = vectorRepository.save(vector);
-        savedContent.setVector(savedVector);
+        vectorRepository.save(vector);
+        savedContent.upsertVector(vector.getVector());
 
         // JPA DDL 정책 update로 인한 테이블 생성 오류 제거
         jdbcTemplate.execute(SQL_1);

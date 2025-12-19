@@ -38,23 +38,23 @@ public class EmbeddingWorker implements Runnable {
 
                 while (!success && attempts < 3) {
                     try {
-                        service.embeddingVector(job.content());
+                        service.embeddingVector(job.dto());
                         success = true;
                         Thread.sleep(500); // 호출 속도 조절
                     } catch (HttpClientErrorException.TooManyRequests e) {
                         // 0.5초 -> 1초 -> 2초
                         long delay = (long) Math.pow(2, attempts) * 500;
-                        log.warn("429 호출 속도 과다: {}", job.content().getId());
+                        log.warn("429 호출 속도 과다: {}", job.dto().title());
                         Thread.sleep(delay);
                         attempts++;
                     } catch (HttpClientErrorException.BadRequest e) {
-                        log.error("토큰 길이 초과: {}", job.content().getId());
+                        log.error("토큰 길이 초과: {}", job.dto().title());
                     }
                 }
 
                 if (!success) {
                     // 재시도 큐를 구축하자
-                    log.error("최대 재시도 실패, 해당 컨텐츠는 일단 벡터 임베딩 생략: {}", job.content().getId());
+                    log.error("최대 재시도 실패, 해당 컨텐츠는 일단 벡터 임베딩 생략: {}", job.dto().title());
                     failedContents.add(job);
                 }
             } catch (InterruptedException e) {

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.pipeline.application.collect.base.Refiner;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class ContentCollectService {
                 .map(Refiner::refine)
                 .map(refiner -> refiner.stream()
                         .peek(e -> simulateAiPreprocessing())
+                        .map(Content::create)
                         .toList())
                 .forEach(contentService::saveContents);
     }
@@ -38,6 +40,7 @@ public class ContentCollectService {
                 .map(Refiner::refine)
                 .map(refiner -> refiner.stream()
                         .peek(e -> simulateAiPreprocessing())
+                        .map(Content::create)
                         .toList())
                 .forEach(contentService::saveContents);
     }
@@ -86,7 +89,7 @@ public class ContentCollectService {
 
             try {
                 // 1단계: 데이터 수집
-                List<Content> rawContents = refiner.refine();
+                List<RefinedDataDTO> rawContents = refiner.refine();
 
                 if (rawContents.isEmpty()) {
                     log.warn("수집된 데이터 없음: {}", refinerName);
@@ -96,6 +99,7 @@ public class ContentCollectService {
                 // 2단계: AI 전처리 (각 항목별로 처리)
                 List<Content> processedContents = rawContents.stream()
                         .peek(content -> simulateAiPreprocessing())
+                        .map(Content::create)
                         .toList();
 
                 // 3단계: 데이터베이스 저장

@@ -14,7 +14,7 @@ public class ContentView implements IContent {
     @Id
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column(nullable = false)

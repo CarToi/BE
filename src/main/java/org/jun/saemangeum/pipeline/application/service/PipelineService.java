@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jun.saemangeum.global.domain.Content;
 import org.jun.saemangeum.global.service.ContentService;
 import org.jun.saemangeum.pipeline.application.collect.base.Refiner;
+import org.jun.saemangeum.pipeline.application.dto.RefinedDataDTO;
 import org.jun.saemangeum.pipeline.domain.service.AlarmService;
 import org.jun.saemangeum.pipeline.infrastructure.dto.EmbeddingJob;
 import org.jun.saemangeum.pipeline.infrastructure.queue.EmbeddingJobQueue;
@@ -77,7 +78,7 @@ public class PipelineService {
             String refinerName = refiner.getClass().getSimpleName();
 
             try {
-                List<Content> contents = refiner.refine();
+                List<RefinedDataDTO> contents = refiner.refine();
 
                 // 업데이트 x
                 if (contents.isEmpty()) {
