@@ -15,6 +15,11 @@ public class ContentService {
     private final ContentRepository contentRepository;
 
     @Transactional
+    public void saveContent(Content content) {
+        contentRepository.save(content);
+    }
+
+    @Transactional
     public void saveContents(List<Content> contents) {
         contentRepository.saveAll(contents);
     }
@@ -22,6 +27,11 @@ public class ContentService {
     @Transactional
     public void deleteByCollectSource(CollectSource collectSource) {
         contentRepository.deleteByCollectSource(collectSource);
+    }
+
+    @Transactional
+    public void deleteByTitle(String title) {
+        contentRepository.deleteByTitle(title);
     }
 
     @Transactional(readOnly = true)

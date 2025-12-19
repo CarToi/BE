@@ -24,7 +24,6 @@ public class PipelineService {
 
     private final List<Refiner> refiners;
     private final TaskExecutor virtualThreadExecutor;
-    private final ContentService contentService;
     private final AlarmService alarmService;
     private final AtomicBoolean nonUpdate;
     private final EmbeddingVectorService embeddingVectorService;
@@ -40,7 +39,6 @@ public class PipelineService {
             AlarmService alarmService, EmbeddingVectorService embeddingVectorService) {
         this.refiners = refiners;
         this.virtualThreadExecutor = virtualThreadExecutor;
-        this.contentService = contentService;
         this.alarmService = alarmService;
         this.nonUpdate = new AtomicBoolean(true);
         this.embeddingJobQueue = new EmbeddingJobQueue();
@@ -93,11 +91,10 @@ public class PipelineService {
                 }
 
                 // 업데이트 소스 수집
-
+                updateSource.add(contents.stream().findFirst().get().getCollectSource());
 
                 // 업데이트 o, 한 번만 false로 바뀌도록 최적화
                 nonUpdate.compareAndSet(true, false);
-                contentService.saveContents(contents);
                 alarmService.sendCollectSuccess(refinerName, contents.size());
                 contents.forEach(e -> embeddingJobQueue.offerQueue(new EmbeddingJob(e)));
             } catch (Exception e) {

@@ -17,11 +17,12 @@ public class EmbeddingWorker implements Runnable {
     private final EmbeddingVectorService service;
 
     // 실패시 수집용 리스트
-    private final List<EmbeddingJob> failedContents = Collections.synchronizedList(new ArrayList<>());
+    private final List<EmbeddingJob> failedContents;
 
     public EmbeddingWorker(EmbeddingJobQueue queue, EmbeddingVectorService service) {
         this.queue = queue;
         this.service = service;
+        this.failedContents = Collections.synchronizedList(new ArrayList<>());
     }
 
     @Override
